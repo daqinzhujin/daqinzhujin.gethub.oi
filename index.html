@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPS模块用量计算器（墙厚可切换·修正面积）</title>
+    <style>
+        /* 样式与前次完全一致，此处省略以节省篇幅，实际使用时保留 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 22px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            flex-shrink: 0;
+        }
+        .basic-form-wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+        .openings-section {
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-weight: 500;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .openings-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .opening-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) auto;
+            gap: 8px;
+            align-items: center;
+        }
+        .form-group {
+            margin-bottom: 0;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        input:focus, select:focus {
+            border-color: #4285f4;
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+        }
+        .btn-add {
+            background-color: #34a853;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        .btn-add:hover {
+            background-color: #2d8e46;
+        }
+        .btn-add:active {
+            transform: scale(0.98);
+        }
+        .btn-remove {
+            background-color: #ea4335;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            width: 80px;
+        }
+        .btn-remove:hover {
+            background-color: #d33426;
+        }
+        .btn-remove:active {
+            transform: scale(0.98);
+        }
+        .calculate-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .calculate-btn:hover {
+            background-color: #3367d6;
+        }
+        .calculate-btn:active {
+            transform: scale(0.98);
+        }
+        .result {
+            margin-top: 0;
+            padding-top: 20px;
+            border-top: 2px solid #f0f4f8;
+            flex: 1;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .module-result {
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background-color: #f8fafc;
+        }
+        .module-title {
+            font-size: 16px;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 13px;
+        }
+        .result-label {
+            color: #718096;
+        }
+        .result-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+        .summary-section {
+            padding: 15px;
+            background-color: #e8f4f8;
+            border-radius: 6px;
+            border: 1px solid #d1e7dd;
+            margin-bottom: 15px;
+        }
+        .summary-title {
+            font-size: 16px;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .highlight {
+            color: #4285f4;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .note {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 10px;
+            text-align: right;
+        }
+        @media (max-width: 1024px) {
+            .basic-form-wrapper {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .basic-form-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            .opening-row {
+                grid-template-columns: repeat(2, 1fr) auto;
+            }
+            .btn-remove {
+                width: 60px;
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧱 EPS模块用量计算器（墙厚可切换）</h1>
+        
+        <div class="basic-form-wrapper">
+            <div class="form-group">
+                <label>📏 墙体高度 (米)</label>
+                <input type="number" id="height" step="0.1" min="0" value="3.6" placeholder="例如 3.6">
+            </div>
+            <div class="form-group">
+                <label>🧱 墙面数量 (独立墙段数)</label>
+                <input type="number" id="wallCount" step="1" min="1" value="6" placeholder="例如 6">
+            </div>
+            <div class="form-group">
+                <label>↪️ 拐角数量 (个)</label>
+                <input type="number" id="corners" step="1" min="0" value="7" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>📌 T型墙数量 (个)</label>
+                <input type="number" id="tWalls" step="1" min="0" value="6" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>📐 横墙中心线总长 (米)</label>
+                <input type="text" id="horLength" value="8.7+2.9+2.9+2.9+8.7" placeholder="例如 8.7+2.9+...">
+            </div>
+            <div class="form-group">
+                <label>📏 纵墙中心线总长 (米)</label>
+                <input type="text" id="verLength" value="12.5+4.5+4.5+3.5+12.5" placeholder="例如 12.5+4.5+...">
+            </div>
+            <div class="form-group">
+                <label>🧱 墙体类型</label>
+                <select id="wallType">
+                    <option value="25">25墙</option>
+                    <option value="32" selected>32墙</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>💰 模块单价 (元/㎡)</label>
+                <input type="number" id="price" step="0.1" min="0" value="58" placeholder="例如 58">
+            </div>
+            <div class="form-group">
+                <label>🧩 插板单价 (元/块)</label>
+                <input type="number" id="insertPrice" step="0.1" min="0" value="10" placeholder="例如 10">
+            </div>
+        </div>
+
+        <div class="openings-section">
+            <div class="section-title">🚪 门窗洞口规格 (宽×高×数量)</div>
+            <div class="openings-container" id="openingsContainer"></div>
+            <button class="btn-add" id="addOpeningBtn">➕ 添加洞口</button>
+        </div>
+
+        <button class="calculate-btn" id="calculateBtn">计算模块用量</button>
+
+        <div class="result" id="resultArea">
+            <div class="results-grid" id="modulesResults"></div>
+            <div class="summary-section" id="summaryResults"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const MODULE_HEIGHT = 0.3;
+            const AREA_90 = 0.27;        // 90直板面积
+            const AREA_60 = 0.18;        // 60直板面积
+            const AREA_INSERT = 0.09;     // 插板面积 30×30cm（仅用于计价，不参与模块总面积）
+            const TOL = 1e-6;
+            const EPS = 1e-9;
+            const STORAGE_KEY = 'epsModuleCalculatorData';
+
+            // 根据墙厚定义不同模块的面积
+            const MODULE_AREA = {
+                '25': {
+                    '大角': 0.36,
+                    '小角': 0.18,
+                    '大T': 0.4125,
+                    '小T': 0.3225
+                },
+                '32': {
+                    '大角': 0.456,
+                    '小角': 0.276,
+                    '大T': 0.402,
+                    '小T': 0.312
+                }
+            };
+
+            const heightInput = document.getElementById('height');
+            const wallCountInput = document.getElementById('wallCount');
+            const horInput = document.getElementById('horLength');
+            const verInput = document.getElementById('verLength');
+            const cornersInput = document.getElementById('corners');
+            const tWallsInput = document.getElementById('tWalls');
+            const wallTypeSelect = document.getElementById('wallType');
+            const priceInput = document.getElementById('price');
+            const insertPriceInput = document.getElementById('insertPrice');
+            const openingsContainer = document.getElementById('openingsContainer');
+            const addBtn = document.getElementById('addOpeningBtn');
+            const calcBtn = document.getElementById('calculateBtn');
+            const resultArea = document.getElementById('resultArea');
+            const modulesResults = document.getElementById('modulesResults');
+            const summaryResults = document.getElementById('summaryResults');
+
+            function addOpeningRow(width = 1.0, height = 1.5, count = 1) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'opening-row';
+                rowDiv.innerHTML = `
+                    <input type="number" step="0.01" min="0" class="opening-width" value="${width}" placeholder="宽(米)">
+                    <input type="number" step="0.01" min="0" class="opening-height" value="${height}" placeholder="高(米)">
+                    <input type="number" step="1" min="1" class="opening-count" value="${count}" placeholder="数量">
+                    <button class="btn-remove" type="button">删除</button>
+                `;
+                rowDiv.querySelector('.btn-remove').addEventListener('click', function() {
+                    rowDiv.remove();
+                });
+                openingsContainer.appendChild(rowDiv);
+            }
+
+            addBtn.addEventListener('click', function() {
+                addOpeningRow(1.0, 1.5, 1);
+            });
+
+            function saveInputData() {
+                const data = {
+                    height: heightInput.value,
+                    wallCount: wallCountInput.value,
+                    horLength: horInput.value,
+                    verLength: verInput.value,
+                    corners: cornersInput.value,
+                    tWalls: tWallsInput.value,
+                    wallType: wallTypeSelect.value,
+                    price: priceInput.value,
+                    insertPrice: insertPriceInput.value,
+                    openings: []
+                };
+
+                const rows = openingsContainer.querySelectorAll('.opening-row');
+                rows.forEach(row => {
+                    const width = row.querySelector('.opening-width').value;
+                    const height = row.querySelector('.opening-height').value;
+                    const count = row.querySelector('.opening-count').value;
+                    data.openings.push({ width, height, count });
+                });
+
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+
+            function loadInputData() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (!saved) {
+                    addOpeningRow(1.5, 1.8, 1);
+                    return;
+                }
+
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.height !== undefined) heightInput.value = data.height;
+                    if (data.wallCount !== undefined) wallCountInput.value = data.wallCount;
+                    if (data.horLength !== undefined) horInput.value = data.horLength;
+                    if (data.verLength !== undefined) verInput.value = data.verLength;
+                    if (data.corners !== undefined) cornersInput.value = data.corners;
+                    if (data.tWalls !== undefined) tWallsInput.value = data.tWalls;
+                    if (data.wallType !== undefined) wallTypeSelect.value = data.wallType;
+                    if (data.price !== undefined) priceInput.value = data.price;
+                    if (data.insertPrice !== undefined) insertPriceInput.value = data.insertPrice;
+
+                    openingsContainer.innerHTML = '';
+                    if (data.openings && Array.isArray(data.openings) && data.openings.length > 0) {
+                        data.openings.forEach(op => {
+                            const w = op.width || '1.0';
+                            const h = op.height || '1.5';
+                            const c = op.count || '1';
+                            addOpeningRow(w, h, c);
+                        });
+                    } else {
+                        addOpeningRow(1.5, 1.8, 1);
+                    }
+                } catch (e) {
+                    console.warn('读取保存的数据失败，使用默认值');
+                    openingsContainer.innerHTML = '';
+                    addOpeningRow(1.5, 1.8, 1);
+                }
+            }
+
+            function safeEval(expr) {
+                if (!expr || typeof expr !== 'string') return NaN;
+                let clean = expr.replace(/\s+/g, '');
+                if (clean === '') return NaN;
+                let asNum = parseFloat(clean);
+                if (!isNaN(asNum) && /^[-+]?\d+(\.\d+)?$/.test(clean)) return asNum;
+                if (!/^[0-9+\-*/().]+$/.test(clean)) throw new Error('表达式包含非法字符');
+                return new Function('return (' + clean + ')')();
+            }
+
+            function parseInputValue(str) {
+                if (str.trim() === '') return NaN;
+                try {
+                    let val = safeEval(str);
+                    return (typeof val === 'number' && isFinite(val)) ? val : NaN;
+                } catch (e) {
+                    return NaN;
+                }
+            }
+
+            function calculateOpenings() {
+                const rows = openingsContainer.querySelectorAll('.opening-row');
+                let totalInsertBlocks = 0;
+                let totalWinArea = 0;
+                for (let row of rows) {
+                    const width = parseFloat(row.querySelector('.opening-width').value);
+                    const height = parseFloat(row.querySelector('.opening-height').value);
+                    const count = parseInt(row.querySelector('.opening-count').value, 10);
+                    if (isNaN(width) || width <= 0 || isNaN(height) || height <= 0 || isNaN(count) || count <= 0) continue;
+                    const sideBlocks = Math.ceil(height / 0.3 - EPS);
+                    totalInsertBlocks += count * (2 * sideBlocks);
+                    totalWinArea += count * width * height;
+                }
+                return { totalInsertBlocks, totalWinArea };
+            }
+
+            function calculate() {
+                modulesResults.innerHTML = '<div style="text-align:center;padding:20px;color:#718096;">⏳ 计算中...</div>';
+                summaryResults.innerHTML = '';
+
+                const H_input = parseInputValue(heightInput.value);
+                const wallCount = parseInt(wallCountInput.value, 10);
+                const L_h = parseInputValue(horInput.value);
+                const L_v = parseInputValue(verInput.value);
+                const N_corner = parseInt(cornersInput.value, 10);
+                const N_T = parseInt(tWallsInput.value, 10);
+                const wallType = wallTypeSelect.value;
+                const price = parseFloat(priceInput.value);
+                const insertPrice = parseFloat(insertPriceInput.value);
+
+                if (isNaN(H_input) || H_input <= 0) { alert('墙体高度必须为正数'); return; }
+                if (isNaN(wallCount) || wallCount < 1) { alert('墙面数量必须 ≥1'); return; }
+                if (isNaN(L_h) || L_h <= 0) { alert('横墙总长必须为正数'); return; }
+                if (isNaN(L_v) || L_v <= 0) { alert('纵墙总长必须为正数'); return; }
+                if (isNaN(N_corner) || N_corner < 0) { alert('拐角数量不能为负数'); return; }
+                if (isNaN(N_T) || N_T < 0) { alert('T型墙数量不能为负数'); return; }
+                if (isNaN(price) || price < 0) { alert('模块单价不能为负数'); return; }
+                if (isNaN(insertPrice) || insertPrice < 0) { alert('插板单价不能为负数'); return; }
+
+                saveInputData();
+
+                let layers = Math.ceil(H_input / MODULE_HEIGHT);
+                const H_actual = layers * MODULE_HEIGHT;
+                if (Math.abs(H_input - H_actual) > TOL) {
+                    console.log(`墙高${H_input}米向上取整为${layers}层，实际覆盖高度${H_actual.toFixed(2)}米`);
+                }
+
+                const totalLength = L_h + L_v;
+                const S_total_actual = totalLength * H_actual;
+
+                const openings = calculateOpenings();
+                const totalInsertBlocks = openings.totalInsertBlocks;
+                const totalWinArea = openings.totalWinArea;
+
+                const S_net_actual = S_total_actual - totalWinArea;
+                if (S_net_actual < -TOL) {
+                    alert('门窗总面积超过按实际覆盖高度计算的墙体毛面积，请检查洞口尺寸');
+                    return;
+                }
+
+                let bigPer, smallPer;
+                if (layers % 2 === 0) {
+                    bigPer = layers / 2;
+                    smallPer = layers / 2;
+                } else {
+                    bigPer = Math.ceil(layers / 2);
+                    smallPer = Math.floor(layers / 2);
+                }
+
+                const bigCornerTotal = bigPer * N_corner;
+                const smallCornerTotal = smallPer * N_corner;
+                const bigTTotal = bigPer * N_T;
+                const smallTTotal = smallPer * N_T;
+
+                // 根据墙厚获取对应模块面积
+                const areaMap = {
+                    '90直板': AREA_90,
+                    '60直板': AREA_60,
+                    '大角': MODULE_AREA[wallType]['大角'],
+                    '小角': MODULE_AREA[wallType]['小角'],
+                    '大T': MODULE_AREA[wallType]['大T'],
+                    '小T': MODULE_AREA[wallType]['小T'],
+                    '插板': AREA_INSERT
+                };
+
+                const S_special = bigCornerTotal * areaMap['大角'] +
+                                  smallCornerTotal * areaMap['小角'] +
+                                  bigTTotal * areaMap['大T'] +
+                                  smallTTotal * areaMap['小T'];
+
+                let S_straight = S_net_actual - S_special;
+                if (S_straight < -TOL) {
+                    alert('特殊模块面积超过实际净面积，请检查拐角/T型墙数量');
+                    return;
+                }
+                if (Math.abs(S_straight) < TOL) S_straight = 0;
+
+                const M = Math.ceil(wallCount * layers / 2);
+                if (M * AREA_60 > S_straight + TOL) {
+                    alert(`最小60直板数要求 ${M} 块，对应面积 ${(M*AREA_60).toFixed(2)}㎡，超过直板填充面积 ${S_straight.toFixed(2)}㎡。请调整墙面数量或墙体尺寸。`);
+                    return;
+                }
+
+                let count60 = M;
+                let remain = S_straight - M * AREA_60;
+                if (remain < -TOL) remain = 0;
+                if (Math.abs(remain) < TOL) remain = 0;
+
+                let count90 = Math.floor(remain / AREA_90 + EPS);
+                let remain2 = remain - count90 * AREA_90;
+                if (Math.abs(remain2) < TOL) remain2 = 0;
+
+                if (remain2 > TOL) {
+                    let extra60 = Math.ceil(remain2 / AREA_60 - EPS);
+                    if (extra60 < 0) extra60 = 0;
+                    count60 += extra60;
+                }
+
+                // 钢丝勾计算
+                const cornerHooks = N_corner * (2 * layers - 1);
+                const tHooks = N_T * (6 * layers - 3);
+                const wallHooks = Math.ceil(totalLength * layers / 3);
+                const totalHooks = cornerHooks + tHooks + wallHooks;
+
+                const theoretical = {
+                    '90直板': count90,
+                    '60直板': count60,
+                    '大角': bigCornerTotal,
+                    '小角': smallCornerTotal,
+                    '大T': bigTTotal,
+                    '小T': smallTTotal,
+                    '插板': totalInsertBlocks,
+                    '钢丝勾': totalHooks
+                };
+
+                const totalBlocks = count90 + count60 + bigCornerTotal + smallCornerTotal + bigTTotal + smallTTotal + totalInsertBlocks;
+
+                // 模块总面积 = 所有非插板模块的面积之和（可能大于墙体净面积）
+                const totalModuleArea = count90 * AREA_90 + count60 * AREA_60 +
+                                        bigCornerTotal * areaMap['大角'] +
+                                        smallCornerTotal * areaMap['小角'] +
+                                        bigTTotal * areaMap['大T'] +
+                                        smallTTotal * areaMap['小T'];
+
+                const insertTotalPrice = totalInsertBlocks * insertPrice;
+                const moduleTotalPrice = totalModuleArea * price; // 模块总价按实际模块面积计算
+                const totalPrice = moduleTotalPrice + insertTotalPrice;
+
+                renderResults(theoretical, layers, S_total_actual, totalWinArea, S_net_actual, totalModuleArea, totalBlocks, moduleTotalPrice, insertTotalPrice, totalPrice, areaMap);
+            }
+
+            function renderResults(theo, layers, wallGrossArea, winArea, netArea, totalModuleArea, totalBlocks, moduleTotalPrice, insertTotalPrice, totalPrice, areaMap) {
+                let modulesHtml = '';
+                const moduleList = [
+                    { name: '90直板', value: theo['90直板'] },
+                    { name: '60直板', value: theo['60直板'] },
+                    { name: '大角', value: theo['大角'] },
+                    { name: '小角', value: theo['小角'] },
+                    { name: '大T', value: theo['大T'] },
+                    { name: '小T', value: theo['小T'] },
+                    { name: '插板', value: theo['插板'] },
+                    { name: '钢丝勾', value: theo['钢丝勾'] }
+                ];
+
+                moduleList.forEach(module => {
+                    const count = module.value || 0;
+                    let displayText;
+                    if (module.name === '钢丝勾') {
+                        displayText = `${count} 个`;
+                    } else if (module.name === '插板') {
+                        displayText = `${count} 块`;
+                    } else {
+                        const area = areaMap[module.name] * count;
+                        displayText = `${count} 块 (${area.toFixed(2)} ㎡)`;
+                    }
+                    modulesHtml += `
+                    <div class="module-result">
+                        <div class="module-title">${module.name}</div>
+                        <div class="result-item">
+                            <span class="result-label">用量：</span>
+                            <span class="result-value highlight">${displayText}</span>
+                        </div>
+                    </div>
+                    `;
+                });
+
+                let summaryHtml = `
+                <div class="summary-title">📊 计算汇总</div>
+                <div class="result-item">
+                    <span class="result-label">理论总用量：</span>
+                    <span class="result-value">${totalBlocks} 块 (不含钢丝勾)</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">墙体毛面积：</span>
+                    <span class="result-value">${wallGrossArea.toFixed(2)} ㎡</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">门窗洞口总面积：</span>
+                    <span class="result-value">${winArea.toFixed(2)} ㎡</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">墙体净面积：</span>
+                    <span class="result-value">${netArea.toFixed(2)} ㎡</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">模块总面积：</span>
+                    <span class="result-value">${totalModuleArea.toFixed(2)} ㎡</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">模块层数：</span>
+                    <span class="result-value">${layers} 层</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">模块总价：</span>
+                    <span class="result-value">${moduleTotalPrice.toFixed(2)} 元</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">插板总价：</span>
+                    <span class="result-value">${insertTotalPrice.toFixed(2)} 元</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">总计：</span>
+                    <span class="result-value highlight">${totalPrice.toFixed(2)} 元</span>
+                </div>
+                `;
+
+                modulesResults.innerHTML = modulesHtml;
+                summaryResults.innerHTML = summaryHtml;
+            }
+
+            calcBtn.addEventListener('click', calculate);
+
+            window.addEventListener('load', function() {
+                loadInputData();
+                setTimeout(calculate, 50);
+            });
+        })();
+    </script>
+</body>
+</html>
