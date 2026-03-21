@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块成本价格计算器（墙厚+连接件预设）</title>
+    <style>
+        /* 样式与上一版完全一致，此处省略以节省篇幅，实际使用时保留 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 1200px;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 22px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            flex-shrink: 0;
+        }
+        .form-wrapper {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .form-group {
+            margin-bottom: 0;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        input:focus, select:focus {
+            border-color: #4285f4;
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+        }
+        .flex-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .flex-row > input {
+            flex: 2;
+        }
+        .flex-row > select {
+            flex: 1;
+        }
+        .calculate-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .calculate-btn:hover {
+            background-color: #3367d6;
+        }
+        .calculate-btn:active {
+            transform: scale(0.98);
+        }
+        .result {
+            margin-top: 0;
+            padding-top: 20px;
+            border-top: 2px solid #f0f4f8;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .module-result {
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background-color: #f8fafc;
+        }
+        .module-title {
+            font-size: 16px;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 13px;
+        }
+        .result-label {
+            color: #718096;
+        }
+        .result-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+        .average-section {
+            padding: 15px;
+            background-color: #e8f4f8;
+            border-radius: 6px;
+            border: 1px solid #d1e7dd;
+        }
+        .average-title {
+            font-size: 16px;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .highlight {
+            color: #4285f4;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        @media (max-width: 1024px) {
+            .form-wrapper {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .form-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>模块成本价格计算器（墙厚+连接件预设）</h1>
+        
+        <div class="form-wrapper">
+            <div class="form-group">
+                <label for="wallType">墙体类型</label>
+                <select id="wallType">
+                    <option value="25">25墙</option>
+                    <option value="32" selected>32墙</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="rawMaterialCost">原料成本（元/克）</label>
+                <input type="number" id="rawMaterialCost" step="0.0001" min="0" placeholder="请输入原料成本" value="0.01">
+            </div>
+            <div class="form-group">
+                <label for="productionCost">生产成本（元/克）</label>
+                <input type="number" id="productionCost" step="0.0001" min="0" placeholder="请输入生产成本" value="0.008">
+            </div>
+            <div class="form-group">
+                <label for="moduleDensity">模块密度（千克/立方米）</label>
+                <input type="number" id="moduleDensity" step="0.01" min="0" placeholder="请输入模块密度" value="25">
+            </div>
+            <div class="form-group">
+                <label for="connectorCost">连接件成本（元/个）</label>
+                <div class="flex-row">
+                    <input type="number" id="connectorCost" step="0.01" min="0" value="0.59">
+                    <select id="connectorCostPreset">
+                        <option value="0.59">0.59</option>
+                        <option value="0.45">0.45</option>
+                        <option value="0.77">0.77</option>
+                    </select>
+                </div>
+            </div>
+            <!-- 剩余三个空白占位（由于grid为4列，此处无需额外占位，第5项自动换行） -->
+        </div>
+
+        <button class="calculate-btn" id="calculateBtn">计算所有模块成本</button>
+
+        <div class="result" id="resultArea">
+            <div class="results-grid" id="modulesResults"></div>
+            <div class="average-section" id="averageResults"></div>
+        </div>
+    </div>
+
+    <script>
+        // 25墙模块固定参数
+        const moduleConfig25 = {
+            "90直板": {
+                connectorNum: 6,
+                area: 0.27,
+                volume: 0.027870261
+            },
+            "60直板": {
+                connectorNum: 4,
+                area: 0.18,
+                volume: 0.018595375
+            },
+            "大角": {
+                connectorNum: 8,
+                area: 0.36,
+                volume: 0.037638275
+            },
+            "小角": {
+                connectorNum: 4,
+                area: 0.18,
+                volume: 0.019092729
+            },
+            "大T": {
+                connectorNum: 10,
+                area: 0.4125,
+                volume: 0.040589877
+            },
+            "小T": {
+                connectorNum: 8,
+                area: 0.3225,
+                volume: 0.031314649
+            }
+        };
+
+        // 32墙模块固定参数
+        const moduleConfig32 = {
+            "90直板": {
+                connectorNum: 6,
+                area: 0.27,
+                volume: 0.027942198
+            },
+            "60直板": {
+                connectorNum: 4,
+                area: 0.18,
+                volume: 0.018646211
+            },
+            "大角": {
+                connectorNum: 8,
+                area: 0.456,
+                volume: 0.037745287
+            },
+            "小角": {
+                connectorNum: 4,
+                area: 0.276,
+                volume: 0.0191619
+            },
+            "大T": {
+                connectorNum: 10,
+                area: 0.402,
+                volume: 0.039743652
+            },
+            "小T": {
+                connectorNum: 8,
+                area: 0.312,
+                volume: 0.03043443
+            }
+        };
+
+        // localStorage 存储的键名
+        const STORAGE_KEY = 'moduleCostCalculatorData';
+
+        // 获取DOM元素
+        const wallTypeSelect = document.getElementById('wallType');
+        const rawMaterialCostInput = document.getElementById('rawMaterialCost');
+        const productionCostInput = document.getElementById('productionCost');
+        const moduleDensityInput = document.getElementById('moduleDensity');
+        const connectorCostInput = document.getElementById('connectorCost');
+        const connectorCostPreset = document.getElementById('connectorCostPreset');
+
+        // 预设选择事件
+        connectorCostPreset.addEventListener('change', function() {
+            connectorCostInput.value = this.value;
+        });
+
+        // 保存输入值到 localStorage
+        function saveInputValues() {
+            const data = {
+                wallType: wallTypeSelect.value,
+                rawMaterialCost: rawMaterialCostInput.value,
+                productionCost: productionCostInput.value,
+                moduleDensity: moduleDensityInput.value,
+                connectorCost: connectorCostInput.value
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // 加载输入值并设置到表单
+        function loadInputValues() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    wallTypeSelect.value = data.wallType || "32";
+                    rawMaterialCostInput.value = data.rawMaterialCost || 0.01;
+                    productionCostInput.value = data.productionCost || 0.008;
+                    moduleDensityInput.value = data.moduleDensity || 25;
+                    connectorCostInput.value = data.connectorCost || 0.59; // 默认值改为0.59
+                    // 不自动设置预设下拉，避免覆盖手动输入
+                } catch (e) {
+                    console.warn("读取保存的数据失败，使用默认值");
+                }
+            }
+        }
+
+        // 根据选择的墙厚获取配置
+        function getModuleConfig() {
+            return wallTypeSelect.value === "25" ? moduleConfig25 : moduleConfig32;
+        }
+
+        // 计算所有模块成本并求平均值
+        function calculateAllCost() {
+            // 获取输入值
+            const rawMaterialCost = parseFloat(rawMaterialCostInput.value) || 0;
+            const productionCost = parseFloat(productionCostInput.value) || 0;
+            const moduleDensity = parseFloat(moduleDensityInput.value) || 0;
+            const connectorCost = parseFloat(connectorCostInput.value) || 0;
+
+            // 验证输入
+            if (rawMaterialCost <= 0) {
+                alert("原料成本需大于0，请重新输入！");
+                rawMaterialCostInput.focus();
+                return;
+            }
+            if (moduleDensity <= 0) {
+                alert("模块密度需大于0，请重新输入！");
+                moduleDensityInput.focus();
+                return;
+            }
+            if (productionCost < 0) {
+                alert("生产成本不能为负数，请重新输入！");
+                productionCostInput.focus();
+                return;
+            }
+            if (connectorCost < 0) {
+                alert("连接件成本不能为负数，请重新输入！");
+                connectorCostInput.focus();
+                return;
+            }
+
+            // 验证通过，保存当前输入值
+            saveInputValues();
+
+            const moduleConfig = getModuleConfig();
+
+            // 存储所有模块的计算结果
+            const allResults = [];
+            let totalCostSum = 0;
+            let pricePerSquareSum = 0;
+
+            // 遍历所有模块计算成本
+            for (const [moduleType, config] of Object.entries(moduleConfig)) {
+                const totalWeight = config.volume * moduleDensity * 1000;
+                const totalRawMaterialCost = totalWeight * rawMaterialCost;
+                const totalProductionCost = totalWeight * productionCost;
+                const totalConnectorCost = config.connectorNum * connectorCost;
+                const totalCost = totalRawMaterialCost + totalProductionCost + totalConnectorCost;
+                const pricePerSquare = totalCost / config.area;
+
+                allResults.push({
+                    moduleType,
+                    totalWeight,
+                    totalRawMaterialCost,
+                    totalProductionCost,
+                    totalConnectorCost,
+                    totalCost,
+                    pricePerSquare
+                });
+
+                totalCostSum += totalCost;
+                pricePerSquareSum += pricePerSquare;
+            }
+
+            // 计算平均值
+            const moduleCount = Object.keys(moduleConfig).length;
+            const averageTotalCost = totalCostSum / moduleCount;
+            const averagePricePerSquare = pricePerSquareSum / moduleCount;
+
+            // 渲染结果
+            renderResults(allResults, averageTotalCost, averagePricePerSquare);
+        }
+
+        // 渲染计算结果
+        function renderResults(results, avgTotalCost, avgPricePerSquare) {
+            const modulesResults = document.getElementById('modulesResults');
+            const averageResults = document.getElementById('averageResults');
+            
+            let modulesHtml = "";
+            results.forEach(item => {
+                modulesHtml += `
+                <div class="module-result">
+                    <div class="module-title">${item.moduleType}</div>
+                    <div class="result-item">
+                        <span class="result-label">总质量：</span>
+                        <span class="result-value">${item.totalWeight.toFixed(4)} 克</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">原料成本：</span>
+                        <span class="result-value">${item.totalRawMaterialCost.toFixed(2)} 元</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">生产成本：</span>
+                        <span class="result-value">${item.totalProductionCost.toFixed(2)} 元</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">连接件成本：</span>
+                        <span class="result-value">${item.totalConnectorCost.toFixed(2)} 元</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">总成本：</span>
+                        <span class="result-value highlight">${item.totalCost.toFixed(2)} 元</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">每平价格：</span>
+                        <span class="result-value highlight">${item.pricePerSquare.toFixed(2)} 元/㎡</span>
+                    </div>
+                </div>
+                `;
+            });
+
+            let averageHtml = `
+            <div class="average-title">所有模块平均值</div>
+            <div class="result-item">
+                <span class="result-label">总成本平均值：</span>
+                <span class="result-value highlight">${avgTotalCost.toFixed(2)} 元</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">每平价格平均值：</span>
+                <span class="result-value highlight">${avgPricePerSquare.toFixed(2)} 元/㎡</span>
+            </div>
+            `;
+
+            modulesResults.innerHTML = modulesHtml;
+            averageResults.innerHTML = averageHtml;
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载保存的数据
+            loadInputValues();
+            
+            // 绑定计算按钮事件
+            const calculateBtn = document.getElementById('calculateBtn');
+            calculateBtn.addEventListener('click', calculateAllCost);
+
+            // 自动执行一次计算（显示当前输入对应的结果）
+            calculateAllCost();
+        });
+    </script>
+</body>
+</html>
