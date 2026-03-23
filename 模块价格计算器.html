@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>模块价格计算器（双墙厚+独立单价+辅料）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .sub {
+            font-size: 14px;
+            color: #718096;
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        .info-card {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .info-card p {
+            font-size: 14px;
+            color: #4a5568;
+            margin: 4px 0;
+        }
+        .dual-price-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .price-card {
+            background-color: #f0f9ff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #b9e0f7;
+        }
+        .price-card label {
+            display: block;
+            font-weight: 600;
+            color: #1a4055;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        .price-card input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbdae6;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .price-card input:focus {
+            border-color: #4285f4;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+        }
+        .dual-modules {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .wall-card {
+            background-color: #fafafa;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .wall-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a4055;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #cbdae6;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .wall-badge {
+            background-color: #4285f4;
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .modules-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .module-row {
+            display: grid;
+            grid-template-columns: 90px 1fr 80px;
+            gap: 10px;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .module-name {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 13px;
+        }
+        .module-area {
+            font-size: 11px;
+            color: #718096;
+            margin-top: 2px;
+        }
+        .module-input input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #cbdae6;
+            border-radius: 8px;
+            font-size: 13px;
+            background-color: white;
+            outline: none;
+            text-align: center;
+        }
+        .module-price {
+            font-weight: 600;
+            color: #4285f4;
+            font-size: 13px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .accessory-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .accessory-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            gap: 12px;
+            align-items: center;
+            background-color: #fef9e6;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #f7e6c4;
+        }
+        .accessory-name {
+            font-weight: 600;
+            color: #b45309;
+            font-size: 14px;
+        }
+        .accessory-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .accessory-input label {
+            font-size: 12px;
+            color: #718096;
+        }
+        .accessory-input input {
+            padding: 8px 10px;
+            border: 1px solid #cbdae6;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: white;
+            outline: none;
+        }
+        .result-card {
+            background: linear-gradient(135deg, #1c3c4f, #153545);
+            border-radius: 16px;
+            padding: 20px;
+            color: #edf4fa;
+            margin-top: 20px;
+        }
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #3e6279;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px dashed #3e6279;
+        }
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        .result-label {
+            color: #aacfec;
+        }
+        .result-value {
+            font-weight: 700;
+            color: #ffd966;
+        }
+        .total-row {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid #ffd966;
+            font-size: 16px;
+        }
+        .total-row .result-value {
+            font-size: 20px;
+        }
+        .btn-calc {
+            width: 100%;
+            padding: 14px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+        .btn-calc:active {
+            background-color: #3367d6;
+            transform: scale(0.98);
+        }
+        .note {
+            font-size: 12px;
+            color: #718096;
+            text-align: center;
+            margin-top: 16px;
+        }
+        @media (max-width: 800px) {
+            .dual-price-area {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .dual-modules {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .container {
+                padding: 16px;
+            }
+            .accessory-row {
+                grid-template-columns: 100px 1fr 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 模块价格计算器（双墙厚+独立单价）</h1>
+        <div class="sub">25墙和32墙可分别设置单价，自动保存所有数据</div>
+
+        <!-- 模块固定参数提示 -->
+        <div class="info-card">
+            <p>📐 各模块单块面积：</p>
+            <p>25墙：90直板0.27㎡ | 60直板0.18㎡ | 大角0.36㎡ | 小角0.18㎡ | 大T0.4125㎡ | 小T0.3225㎡</p>
+            <p>32墙：90直板0.27㎡ | 60直板0.18㎡ | 大角0.456㎡ | 小角0.276㎡ | 大T0.402㎡ | 小T0.312㎡</p>
+            <p style="margin-top: 8px; color: #4285f4;">※ 直板面积相同，角/T型面积不同</p>
+        </div>
+
+        <!-- 双墙厚单价输入区（左右并排） -->
+        <div class="dual-price-area">
+            <div class="price-card">
+                <label>💰 25墙模块单价 (元/㎡)</label>
+                <input type="number" id="unitPrice25" step="0.1" min="0" value="78" placeholder="请输入25墙单价">
+            </div>
+            <div class="price-card">
+                <label>💰 32墙模块单价 (元/㎡)</label>
+                <input type="number" id="unitPrice32" step="0.1" min="0" value="85" placeholder="请输入32墙单价">
+            </div>
+        </div>
+
+        <!-- 双墙厚模块输入区（左右并排） -->
+        <div class="dual-modules">
+            <!-- 25墙模块 -->
+            <div class="wall-card">
+                <h3>🧱 25墙模块 <span class="wall-badge">厚度250mm</span></h3>
+                <div class="modules-grid" id="modules25Grid"></div>
+            </div>
+            <!-- 32墙模块 -->
+            <div class="wall-card">
+                <h3>🧱 32墙模块 <span class="wall-badge">厚度320mm</span></h3>
+                <div class="modules-grid" id="modules32Grid"></div>
+            </div>
+        </div>
+
+        <!-- 辅料输入区 -->
+        <div class="section-title" style="font-size: 18px; font-weight: 600; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">🔧 辅料</div>
+        <div class="accessory-grid" id="accessoryGrid">
+            <div class="accessory-row">
+                <div class="accessory-name">卡勾</div>
+                <div class="accessory-input">
+                    <label>数量 (袋)</label>
+                    <input type="number" id="accessory_hook_bags" step="1" min="0" value="0" placeholder="数量">
+                </div>
+                <div class="accessory-input">
+                    <label>单价 (元/袋)</label>
+                    <input type="number" id="accessory_hook_price" step="0.1" min="0" value="0" placeholder="单价">
+                </div>
+            </div>
+            <div class="accessory-row">
+                <div class="accessory-name">25破口卡</div>
+                <div class="accessory-input">
+                    <label>数量 (袋)</label>
+                    <input type="number" id="accessory_25_broken" step="1" min="0" value="0" placeholder="数量">
+                </div>
+                <div class="accessory-input">
+                    <label>单价 (元/袋)</label>
+                    <input type="number" id="accessory_25_price" step="0.1" min="0" value="0" placeholder="单价">
+                </div>
+            </div>
+            <div class="accessory-row">
+                <div class="accessory-name">32破口卡</div>
+                <div class="accessory-input">
+                    <label>数量 (袋)</label>
+                    <input type="number" id="accessory_32_broken" step="1" min="0" value="0" placeholder="数量">
+                </div>
+                <div class="accessory-input">
+                    <label>单价 (元/袋)</label>
+                    <input type="number" id="accessory_32_price" step="0.1" min="0" value="0" placeholder="单价">
+                </div>
+            </div>
+        </div>
+
+        <!-- 计算按钮 -->
+        <button class="btn-calc" id="calcBtn">✨ 计算价格</button>
+
+        <!-- 结果展示区 -->
+        <div class="result-card" id="resultArea">
+            <div class="result-title">📊 计算结果</div>
+            <div id="resultContent">
+                <div class="result-row">
+                    <span class="result-label">请输入数量并点击计算</span>
+                    <span class="result-value">——</span>
+                </div>
+            </div>
+        </div>
+        <div class="note">* 模块数量按整块输入，所有数据会自动保存，下次打开自动恢复</div>
+    </div>
+
+    <script>
+        (function() {
+            // localStorage存储键名
+            const STORAGE_KEY = 'modulePriceCalculatorDataV2';
+            
+            // 不同墙厚的模块面积配置
+            const moduleAreaConfig = {
+                '25': {
+                    '90直板': 0.27,
+                    '60直板': 0.18,
+                    '大角': 0.36,
+                    '小角': 0.18,
+                    '大T': 0.4125,
+                    '小T': 0.3225
+                },
+                '32': {
+                    '90直板': 0.27,
+                    '60直板': 0.18,
+                    '大角': 0.456,
+                    '小角': 0.276,
+                    '大T': 0.402,
+                    '小T': 0.312
+                }
+            };
+
+            const moduleNames = ['90直板', '60直板', '大角', '小角', '大T', '小T'];
+            
+            // 存储输入框引用
+            let inputs25 = {};
+            let inputs32 = {};
+            let priceSpans25 = {};
+            let priceSpans32 = {};
+
+            // 保存所有输入数据到localStorage
+            function saveAllData() {
+                const data = {
+                    unitPrice25: document.getElementById('unitPrice25').value,
+                    unitPrice32: document.getElementById('unitPrice32').value,
+                    accessories: {
+                        hookBags: document.getElementById('accessory_hook_bags').value,
+                        hookPrice: document.getElementById('accessory_hook_price').value,
+                        broken25: document.getElementById('accessory_25_broken').value,
+                        broken25Price: document.getElementById('accessory_25_price').value,
+                        broken32: document.getElementById('accessory_32_broken').value,
+                        broken32Price: document.getElementById('accessory_32_price').value
+                    },
+                    modules25: {},
+                    modules32: {}
+                };
+                
+                // 保存25墙模块数量
+                moduleNames.forEach(name => {
+                    if (inputs25[name]) {
+                        data.modules25[name] = inputs25[name].value;
+                    }
+                });
+                
+                // 保存32墙模块数量
+                moduleNames.forEach(name => {
+                    if (inputs32[name]) {
+                        data.modules32[name] = inputs32[name].value;
+                    }
+                });
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+            
+            // 从localStorage加载数据
+            function loadAllData() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (!saved) return false;
+                
+                try {
+                    const data = JSON.parse(saved);
+                    
+                    // 加载单价
+                    if (data.unitPrice25 !== undefined) document.getElementById('unitPrice25').value = data.unitPrice25;
+                    if (data.unitPrice32 !== undefined) document.getElementById('unitPrice32').value = data.unitPrice32;
+                    
+                    // 加载辅料
+                    if (data.accessories) {
+                        if (data.accessories.hookBags !== undefined) document.getElementById('accessory_hook_bags').value = data.accessories.hookBags;
+                        if (data.accessories.hookPrice !== undefined) document.getElementById('accessory_hook_price').value = data.accessories.hookPrice;
+                        if (data.accessories.broken25 !== undefined) document.getElementById('accessory_25_broken').value = data.accessories.broken25;
+                        if (data.accessories.broken25Price !== undefined) document.getElementById('accessory_25_price').value = data.accessories.broken25Price;
+                        if (data.accessories.broken32 !== undefined) document.getElementById('accessory_32_broken').value = data.accessories.broken32;
+                        if (data.accessories.broken32Price !== undefined) document.getElementById('accessory_32_price').value = data.accessories.broken32Price;
+                    }
+                    
+                    // 加载25墙模块数量
+                    if (data.modules25) {
+                        moduleNames.forEach(name => {
+                            if (data.modules25[name] !== undefined && inputs25[name]) {
+                                inputs25[name].value = data.modules25[name];
+                            }
+                        });
+                    }
+                    
+                    // 加载32墙模块数量
+                    if (data.modules32) {
+                        moduleNames.forEach(name => {
+                            if (data.modules32[name] !== undefined && inputs32[name]) {
+                                inputs32[name].value = data.modules32[name];
+                            }
+                        });
+                    }
+                    
+                    return true;
+                } catch (e) {
+                    console.warn('读取保存的数据失败', e);
+                    return false;
+                }
+            }
+
+            // 动态生成模块输入行（指定墙厚）
+            function buildModuleGrid(containerId, wallType, inputsObj, priceSpansObj) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const areas = moduleAreaConfig[wallType];
+                let html = '';
+                moduleNames.forEach(name => {
+                    html += `
+                        <div class="module-row">
+                            <div class="module-name">
+                                ${name}
+                                <div class="module-area">${areas[name].toFixed(4)}㎡/块</div>
+                            </div>
+                            <div class="module-input">
+                                <input type="number" id="input_${wallType}_${name}" step="1" min="0" value="0" placeholder="数量">
+                            </div>
+                            <div class="module-price" id="price_${wallType}_${name}">0.00元</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                
+                // 保存输入框和价格显示引用
+                moduleNames.forEach(name => {
+                    const input = document.getElementById(`input_${wallType}_${name}`);
+                    const priceSpan = document.getElementById(`price_${wallType}_${name}`);
+                    if (input) inputsObj[name] = input;
+                    if (priceSpan) priceSpansObj[name] = priceSpan;
+                    
+                    if (input) {
+                        input.addEventListener('input', function() {
+                            updateAllPrices();
+                            saveAllData();
+                            calculate();
+                        });
+                    }
+                });
+            }
+
+            // 更新所有模块的价格预览
+            function updateAllPrices() {
+                const unitPrice25 = parseFloat(document.getElementById('unitPrice25').value) || 0;
+                const unitPrice32 = parseFloat(document.getElementById('unitPrice32').value) || 0;
+                
+                // 更新25墙预览
+                const areas25 = moduleAreaConfig['25'];
+                moduleNames.forEach(name => {
+                    const input = inputs25[name];
+                    const priceSpan = priceSpans25[name];
+                    if (input && priceSpan) {
+                        const count = parseInt(input.value, 10) || 0;
+                        const area = count * areas25[name];
+                        const price = area * unitPrice25;
+                        priceSpan.textContent = price.toFixed(2) + '元';
+                    }
+                });
+                
+                // 更新32墙预览
+                const areas32 = moduleAreaConfig['32'];
+                moduleNames.forEach(name => {
+                    const input = inputs32[name];
+                    const priceSpan = priceSpans32[name];
+                    if (input && priceSpan) {
+                        const count = parseInt(input.value, 10) || 0;
+                        const area = count * areas32[name];
+                        const price = area * unitPrice32;
+                        priceSpan.textContent = price.toFixed(2) + '元';
+                    }
+                });
+            }
+
+            // 获取辅料数据
+            function getAccessoryData() {
+                return {
+                    hookBags: {
+                        count: parseInt(document.getElementById('accessory_hook_bags').value, 10) || 0,
+                        price: parseFloat(document.getElementById('accessory_hook_price').value) || 0
+                    },
+                    broken25: {
+                        count: parseInt(document.getElementById('accessory_25_broken').value, 10) || 0,
+                        price: parseFloat(document.getElementById('accessory_25_price').value) || 0
+                    },
+                    broken32: {
+                        count: parseInt(document.getElementById('accessory_32_broken').value, 10) || 0,
+                        price: parseFloat(document.getElementById('accessory_32_price').value) || 0
+                    }
+                };
+            }
+
+            // 主计算函数
+            function calculate() {
+                const unitPrice25 = parseFloat(document.getElementById('unitPrice25').value) || 0;
+                const unitPrice32 = parseFloat(document.getElementById('unitPrice32').value) || 0;
+                const accessories = getAccessoryData();
+                
+                // 计算25墙模块
+                const areas25 = moduleAreaConfig['25'];
+                let results25 = [];
+                let totalArea25 = 0;
+                let totalPrice25 = 0;
+                
+                moduleNames.forEach(name => {
+                    const input = inputs25[name];
+                    const count = parseInt(input ? input.value : 0, 10) || 0;
+                    const area = count * areas25[name];
+                    const price = area * unitPrice25;
+                    
+                    if (count > 0) {
+                        results25.push({ name, count, area, price });
+                    }
+                    totalArea25 += area;
+                    totalPrice25 += price;
+                });
+                
+                // 计算32墙模块
+                const areas32 = moduleAreaConfig['32'];
+                let results32 = [];
+                let totalArea32 = 0;
+                let totalPrice32 = 0;
+                
+                moduleNames.forEach(name => {
+                    const input = inputs32[name];
+                    const count = parseInt(input ? input.value : 0, 10) || 0;
+                    const area = count * areas32[name];
+                    const price = area * unitPrice32;
+                    
+                    if (count > 0) {
+                        results32.push({ name, count, area, price });
+                    }
+                    totalArea32 += area;
+                    totalPrice32 += price;
+                });
+                
+                // 计算辅料
+                const hookTotal = accessories.hookBags.count * accessories.hookBags.price;
+                const broken25Total = accessories.broken25.count * accessories.broken25.price;
+                const broken32Total = accessories.broken32.count * accessories.broken32.price;
+                const totalAccessoryPrice = hookTotal + broken25Total + broken32Total;
+                
+                // 总价
+                const totalModulePrice = totalPrice25 + totalPrice32;
+                const grandTotal = totalModulePrice + totalAccessoryPrice;
+                
+                // 渲染结果
+                renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, totalAccessoryPrice, grandTotal);
+            }
+            
+            // 渲染详细结果
+            function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, totalAccessoryPrice, grandTotal) {
+                const resultContainer = document.getElementById('resultContent');
+                if (!resultContainer) return;
+                
+                let html = '';
+                
+                // 25墙模块明细
+                html += `<div style="margin-bottom: 8px;"><span class="result-label" style="font-weight: 600;">🧱 25墙模块 (单价 ${unitPrice25.toFixed(2)}元/㎡)</span></div>`;
+                if (results25.length > 0) {
+                    results25.forEach(res => {
+                        html += `
+                            <div class="result-row">
+                                <span class="result-label">${res.name} (${res.count}块)</span>
+                                <span class="result-value">${res.area.toFixed(2)}㎡ × ${unitPrice25.toFixed(2)} = ${res.price.toFixed(2)}元</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="result-row"><span class="result-label">暂未输入25墙模块数量</span><span class="result-value">0.00元</span></div>';
+                }
+                html += `
+                    <div class="result-row" style="margin-top: 4px;">
+                        <span class="result-label">📦 25墙模块总面积</span>
+                        <span class="result-value">${totalArea25.toFixed(2)} ㎡</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">💰 25墙模块总价</span>
+                        <span class="result-value">${totalPrice25.toFixed(2)} 元</span>
+                    </div>
+                `;
+                
+                // 32墙模块明细
+                html += `<div style="margin: 12px 0 8px 0;"><span class="result-label" style="font-weight: 600;">🧱 32墙模块 (单价 ${unitPrice32.toFixed(2)}元/㎡)</span></div>`;
+                if (results32.length > 0) {
+                    results32.forEach(res => {
+                        html += `
+                            <div class="result-row">
+                                <span class="result-label">${res.name} (${res.count}块)</span>
+                                <span class="result-value">${res.area.toFixed(2)}㎡ × ${unitPrice32.toFixed(2)} = ${res.price.toFixed(2)}元</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div class="result-row"><span class="result-label">暂未输入32墙模块数量</span><span class="result-value">0.00元</span></div>';
+                }
+                html += `
+                    <div class="result-row" style="margin-top: 4px;">
+                        <span class="result-label">📦 32墙模块总面积</span>
+                        <span class="result-value">${totalArea32.toFixed(2)} ㎡</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">💰 32墙模块总价</span>
+                        <span class="result-value">${totalPrice32.toFixed(2)} 元</span>
+                    </div>
+                `;
+                
+                // 模块汇总
+                html += `<div style="margin: 12px 0 8px 0;"><span class="result-label" style="font-weight: 600;">📊 模块汇总</span></div>`;
+                html += `
+                    <div class="result-row">
+                        <span class="result-label">📦 模块总面积合计</span>
+                        <span class="result-value">${(totalArea25 + totalArea32).toFixed(2)} ㎡</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">💰 模块总价合计</span>
+                        <span class="result-value">${totalModulePrice.toFixed(2)} 元</span>
+                    </div>
+                `;
+                
+                // 辅料明细
+                html += `<div style="margin: 12px 0 8px 0;"><span class="result-label" style="font-weight: 600;">🔧 辅料部分</span></div>`;
+                
+                let hasAccessory = false;
+                if (accessories.hookBags.count > 0) {
+                    hasAccessory = true;
+                    html += `
+                        <div class="result-row">
+                            <span class="result-label">卡勾 (${accessories.hookBags.count}袋 × ${accessories.hookBags.price}元)</span>
+                            <span class="result-value">${hookTotal.toFixed(2)} 元</span>
+                        </div>
+                    `;
+                }
+                if (accessories.broken25.count > 0) {
+                    hasAccessory = true;
+                    html += `
+                        <div class="result-row">
+                            <span class="result-label">25破口卡 (${accessories.broken25.count}袋 × ${accessories.broken25.price}元)</span>
+                            <span class="result-value">${broken25Total.toFixed(2)} 元</span>
+                        </div>
+                    `;
+                }
+                if (accessories.broken32.count > 0) {
+                    hasAccessory = true;
+                    html += `
+                        <div class="result-row">
+                            <span class="result-label">32破口卡 (${accessories.broken32.count}袋 × ${accessories.broken32.price}元)</span>
+                            <span class="result-value">${broken32Total.toFixed(2)} 元</span>
+                        </div>
+                    `;
+                }
+                
+                if (!hasAccessory) {
+                    html += '<div class="result-row"><span class="result-label">暂未输入辅料数量</span><span class="result-value">0.00元</span></div>';
+                }
+                
+                html += `
+                    <div class="result-row" style="margin-top: 8px;">
+                        <span class="result-label">🔧 辅料总价</span>
+                        <span class="result-value">${totalAccessoryPrice.toFixed(2)} 元</span>
+                    </div>
+                `;
+                
+                // 总计
+                html += `
+                    <div class="result-row total-row">
+                        <span class="result-label">💰 合计总价</span>
+                        <span class="result-value">${grandTotal.toFixed(2)} 元</span>
+                    </div>
+                `;
+                
+                resultContainer.innerHTML = html;
+            }
+            
+            // 单价变化时的处理
+            function onPriceChange() {
+                updateAllPrices();
+                saveAllData();
+                calculate();
+            }
+            
+            // 辅料变化时的处理
+            function onAccessoryChange() {
+                saveAllData();
+                calculate();
+            }
+            
+            // 初始化
+            function init() {
+                // 生成25墙和32墙的模块输入区
+                buildModuleGrid('modules25Grid', '25', inputs25, priceSpans25);
+                buildModuleGrid('modules32Grid', '32', inputs32, priceSpans32);
+                
+                // 获取DOM元素
+                const priceInput25 = document.getElementById('unitPrice25');
+                const priceInput32 = document.getElementById('unitPrice32');
+                const calcBtn = document.getElementById('calcBtn');
+                
+                // 绑定事件
+                if (priceInput25) {
+                    priceInput25.addEventListener('input', onPriceChange);
+                }
+                if (priceInput32) {
+                    priceInput32.addEventListener('input', onPriceChange);
+                }
+                if (calcBtn) {
+                    calcBtn.addEventListener('click', calculate);
+                }
+                
+                // 绑定辅料输入事件
+                const accessoryInputs = [
+                    'accessory_hook_bags', 'accessory_hook_price',
+                    'accessory_25_broken', 'accessory_25_price',
+                    'accessory_32_broken', 'accessory_32_price'
+                ];
+                accessoryInputs.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', onAccessoryChange);
+                    }
+                });
+                
+                // 加载保存的数据
+                const hasSavedData = loadAllData();
+                
+                // 更新价格预览
+                updateAllPrices();
+                
+                // 如果加载了数据，自动计算；否则初始计算
+                calculate();
+            }
+            
+            init();
+        })();
+    </script>
+</body>
+</html>
