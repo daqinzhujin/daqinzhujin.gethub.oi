@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>模块价格计算器（双墙厚+独立单价+辅料）</title>
+    <title>模块价格计算器（双墙厚+独立单价+插板）</title>
     <style>
         * {
             margin: 0;
@@ -282,7 +282,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧮 模块价格计算器（双墙厚+独立单价）</h1>
+        <h1>🧮 模块价格计算器（双墙厚+独立单价+插板）</h1>
         <div class="sub">25墙和32墙可分别设置单价，自动保存所有数据</div>
 
         <!-- 模块固定参数提示 -->
@@ -319,7 +319,7 @@
             </div>
         </div>
 
-        <!-- 辅料输入区 -->
+        <!-- 辅料输入区（包含插板） -->
         <div class="section-title" style="font-size: 18px; font-weight: 600; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">🔧 辅料</div>
         <div class="accessory-grid" id="accessoryGrid">
             <div class="accessory-row">
@@ -355,6 +355,30 @@
                     <input type="number" id="accessory_32_price" step="0.1" min="0" value="0" placeholder="单价">
                 </div>
             </div>
+            <!-- 新增：25插板 -->
+            <div class="accessory-row">
+                <div class="accessory-name">25插板</div>
+                <div class="accessory-input">
+                    <label>数量 (个)</label>
+                    <input type="number" id="accessory_25_plate" step="1" min="0" value="0" placeholder="数量">
+                </div>
+                <div class="accessory-input">
+                    <label>单价 (元/个)</label>
+                    <input type="number" id="accessory_25_plate_price" step="0.1" min="0" value="0" placeholder="单价">
+                </div>
+            </div>
+            <!-- 新增：32插板 -->
+            <div class="accessory-row">
+                <div class="accessory-name">32插板</div>
+                <div class="accessory-input">
+                    <label>数量 (个)</label>
+                    <input type="number" id="accessory_32_plate" step="1" min="0" value="0" placeholder="数量">
+                </div>
+                <div class="accessory-input">
+                    <label>单价 (元/个)</label>
+                    <input type="number" id="accessory_32_plate_price" step="0.1" min="0" value="0" placeholder="单价">
+                </div>
+            </div>
         </div>
 
         <!-- 计算按钮 -->
@@ -376,7 +400,7 @@
     <script>
         (function() {
             // localStorage存储键名
-            const STORAGE_KEY = 'modulePriceCalculatorDataV2';
+            const STORAGE_KEY = 'modulePriceCalculatorDataV3';
             
             // 不同墙厚的模块面积配置
             const moduleAreaConfig = {
@@ -417,7 +441,11 @@
                         broken25: document.getElementById('accessory_25_broken').value,
                         broken25Price: document.getElementById('accessory_25_price').value,
                         broken32: document.getElementById('accessory_32_broken').value,
-                        broken32Price: document.getElementById('accessory_32_price').value
+                        broken32Price: document.getElementById('accessory_32_price').value,
+                        plate25: document.getElementById('accessory_25_plate').value,
+                        plate25Price: document.getElementById('accessory_25_plate_price').value,
+                        plate32: document.getElementById('accessory_32_plate').value,
+                        plate32Price: document.getElementById('accessory_32_plate_price').value
                     },
                     modules25: {},
                     modules32: {}
@@ -460,6 +488,10 @@
                         if (data.accessories.broken25Price !== undefined) document.getElementById('accessory_25_price').value = data.accessories.broken25Price;
                         if (data.accessories.broken32 !== undefined) document.getElementById('accessory_32_broken').value = data.accessories.broken32;
                         if (data.accessories.broken32Price !== undefined) document.getElementById('accessory_32_price').value = data.accessories.broken32Price;
+                        if (data.accessories.plate25 !== undefined) document.getElementById('accessory_25_plate').value = data.accessories.plate25;
+                        if (data.accessories.plate25Price !== undefined) document.getElementById('accessory_25_plate_price').value = data.accessories.plate25Price;
+                        if (data.accessories.plate32 !== undefined) document.getElementById('accessory_32_plate').value = data.accessories.plate32;
+                        if (data.accessories.plate32Price !== undefined) document.getElementById('accessory_32_plate_price').value = data.accessories.plate32Price;
                     }
                     
                     // 加载25墙模块数量
@@ -573,6 +605,14 @@
                     broken32: {
                         count: parseInt(document.getElementById('accessory_32_broken').value, 10) || 0,
                         price: parseFloat(document.getElementById('accessory_32_price').value) || 0
+                    },
+                    plate25: {
+                        count: parseInt(document.getElementById('accessory_25_plate').value, 10) || 0,
+                        price: parseFloat(document.getElementById('accessory_25_plate_price').value) || 0
+                    },
+                    plate32: {
+                        count: parseInt(document.getElementById('accessory_32_plate').value, 10) || 0,
+                        price: parseFloat(document.getElementById('accessory_32_plate_price').value) || 0
                     }
                 };
             }
@@ -625,18 +665,20 @@
                 const hookTotal = accessories.hookBags.count * accessories.hookBags.price;
                 const broken25Total = accessories.broken25.count * accessories.broken25.price;
                 const broken32Total = accessories.broken32.count * accessories.broken32.price;
-                const totalAccessoryPrice = hookTotal + broken25Total + broken32Total;
+                const plate25Total = accessories.plate25.count * accessories.plate25.price;
+                const plate32Total = accessories.plate32.count * accessories.plate32.price;
+                const totalAccessoryPrice = hookTotal + broken25Total + broken32Total + plate25Total + plate32Total;
                 
                 // 总价
                 const totalModulePrice = totalPrice25 + totalPrice32;
                 const grandTotal = totalModulePrice + totalAccessoryPrice;
                 
                 // 渲染结果
-                renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, totalAccessoryPrice, grandTotal);
+                renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, grandTotal);
             }
             
             // 渲染详细结果
-            function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, totalAccessoryPrice, grandTotal) {
+            function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, grandTotal) {
                 const resultContainer = document.getElementById('resultContent');
                 if (!resultContainer) return;
                 
@@ -736,6 +778,24 @@
                         </div>
                     `;
                 }
+                if (accessories.plate25.count > 0) {
+                    hasAccessory = true;
+                    html += `
+                        <div class="result-row">
+                            <span class="result-label">25插板 (${accessories.plate25.count}个 × ${accessories.plate25.price}元)</span>
+                            <span class="result-value">${plate25Total.toFixed(2)} 元</span>
+                        </div>
+                    `;
+                }
+                if (accessories.plate32.count > 0) {
+                    hasAccessory = true;
+                    html += `
+                        <div class="result-row">
+                            <span class="result-label">32插板 (${accessories.plate32.count}个 × ${accessories.plate32.price}元)</span>
+                            <span class="result-value">${plate32Total.toFixed(2)} 元</span>
+                        </div>
+                    `;
+                }
                 
                 if (!hasAccessory) {
                     html += '<div class="result-row"><span class="result-label">暂未输入辅料数量</span><span class="result-value">0.00元</span></div>';
@@ -798,7 +858,9 @@
                 const accessoryInputs = [
                     'accessory_hook_bags', 'accessory_hook_price',
                     'accessory_25_broken', 'accessory_25_price',
-                    'accessory_32_broken', 'accessory_32_price'
+                    'accessory_32_broken', 'accessory_32_price',
+                    'accessory_25_plate', 'accessory_25_plate_price',
+                    'accessory_32_plate', 'accessory_32_plate_price'
                 ];
                 accessoryInputs.forEach(id => {
                     const el = document.getElementById(id);
