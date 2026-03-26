@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>模块价格计算器（双墙厚+独立单价+插板）</title>
     <style>
+        /* 样式与前完全相同，此处省略以节省篇幅 */
         * {
             margin: 0;
             padding: 0;
@@ -573,7 +574,7 @@
                         const count = parseInt(input.value, 10) || 0;
                         const area = count * areas25[name];
                         const price = area * unitPrice25;
-                        priceSpan.textContent = price.toFixed(2) + '元';
+                        priceSpan.textContent = price.toFixed(4) + '元';
                     }
                 });
                 
@@ -586,7 +587,7 @@
                         const count = parseInt(input.value, 10) || 0;
                         const area = count * areas32[name];
                         const price = area * unitPrice32;
-                        priceSpan.textContent = price.toFixed(2) + '元';
+                        priceSpan.textContent = price.toFixed(4) + '元';
                     }
                 });
             }
@@ -685,13 +686,13 @@
                 let html = '';
                 
                 // 25墙模块明细
-                html += `<div style="margin-bottom: 8px;"><span class="result-label" style="font-weight: 600;">🧱 25墙模块 (单价 ${unitPrice25.toFixed(2)}元/㎡)</span></div>`;
+                html += `<div style="margin-bottom: 8px;"><span class="result-label" style="font-weight: 600;">🧱 25墙模块 (单价 ${unitPrice25.toFixed(4)}元/㎡)</span></div>`;
                 if (results25.length > 0) {
                     results25.forEach(res => {
                         html += `
                             <div class="result-row">
                                 <span class="result-label">${res.name} (${res.count}块)</span>
-                                <span class="result-value">${res.area.toFixed(2)}㎡ × ${unitPrice25.toFixed(2)} = ${res.price.toFixed(2)}元</span>
+                                <span class="result-value">${res.area.toFixed(4)}㎡ × ${unitPrice25.toFixed(4)} = ${res.price.toFixed(4)}元</span>
                             </div>
                         `;
                     });
@@ -701,22 +702,22 @@
                 html += `
                     <div class="result-row" style="margin-top: 4px;">
                         <span class="result-label">📦 25墙模块总面积</span>
-                        <span class="result-value">${totalArea25.toFixed(2)} ㎡</span>
+                        <span class="result-value">${totalArea25.toFixed(4)} ㎡</span>
                     </div>
                     <div class="result-row">
                         <span class="result-label">💰 25墙模块总价</span>
-                        <span class="result-value">${totalPrice25.toFixed(2)} 元</span>
+                        <span class="result-value">${totalPrice25.toFixed(4)} 元</span>
                     </div>
                 `;
                 
                 // 32墙模块明细
-                html += `<div style="margin: 12px 0 8px 0;"><span class="result-label" style="font-weight: 600;">🧱 32墙模块 (单价 ${unitPrice32.toFixed(2)}元/㎡)</span></div>`;
+                html += `<div style="margin: 12px 0 8px 0;"><span class="result-label" style="font-weight: 600;">🧱 32墙模块 (单价 ${unitPrice32.toFixed(4)}元/㎡)</span></div>`;
                 if (results32.length > 0) {
                     results32.forEach(res => {
                         html += `
                             <div class="result-row">
                                 <span class="result-label">${res.name} (${res.count}块)</span>
-                                <span class="result-value">${res.area.toFixed(2)}㎡ × ${unitPrice32.toFixed(2)} = ${res.price.toFixed(2)}元</span>
+                                <span class="result-value">${res.area.toFixed(4)}㎡ × ${unitPrice32.toFixed(4)} = ${res.price.toFixed(4)}元</span>
                             </div>
                         `;
                     });
@@ -726,11 +727,11 @@
                 html += `
                     <div class="result-row" style="margin-top: 4px;">
                         <span class="result-label">📦 32墙模块总面积</span>
-                        <span class="result-value">${totalArea32.toFixed(2)} ㎡</span>
+                        <span class="result-value">${totalArea32.toFixed(4)} ㎡</span>
                     </div>
                     <div class="result-row">
                         <span class="result-label">💰 32墙模块总价</span>
-                        <span class="result-value">${totalPrice32.toFixed(2)} 元</span>
+                        <span class="result-value">${totalPrice32.toFixed(4)} 元</span>
                     </div>
                 `;
                 
@@ -739,11 +740,11 @@
                 html += `
                     <div class="result-row">
                         <span class="result-label">📦 模块总面积合计</span>
-                        <span class="result-value">${(totalArea25 + totalArea32).toFixed(2)} ㎡</span>
+                        <span class="result-value">${(totalArea25 + totalArea32).toFixed(4)} ㎡</span>
                     </div>
                     <div class="result-row">
                         <span class="result-label">💰 模块总价合计</span>
-                        <span class="result-value">${totalModulePrice.toFixed(2)} 元</span>
+                        <span class="result-value">${totalModulePrice.toFixed(4)} 元</span>
                     </div>
                 `;
                 
@@ -755,8 +756,8 @@
                     hasAccessory = true;
                     html += `
                         <div class="result-row">
-                            <span class="result-label">卡勾 (${accessories.hookBags.count}袋 × ${accessories.hookBags.price}元)</span>
-                            <span class="result-value">${hookTotal.toFixed(2)} 元</span>
+                            <span class="result-label">卡勾 (${accessories.hookBags.count}袋 × ${accessories.hookBags.price.toFixed(4)}元)</span>
+                            <span class="result-value">${hookTotal.toFixed(4)} 元</span>
                         </div>
                     `;
                 }
@@ -764,8 +765,8 @@
                     hasAccessory = true;
                     html += `
                         <div class="result-row">
-                            <span class="result-label">25破口卡 (${accessories.broken25.count}袋 × ${accessories.broken25.price}元)</span>
-                            <span class="result-value">${broken25Total.toFixed(2)} 元</span>
+                            <span class="result-label">25破口卡 (${accessories.broken25.count}袋 × ${accessories.broken25.price.toFixed(4)}元)</span>
+                            <span class="result-value">${broken25Total.toFixed(4)} 元</span>
                         </div>
                     `;
                 }
@@ -773,8 +774,8 @@
                     hasAccessory = true;
                     html += `
                         <div class="result-row">
-                            <span class="result-label">32破口卡 (${accessories.broken32.count}袋 × ${accessories.broken32.price}元)</span>
-                            <span class="result-value">${broken32Total.toFixed(2)} 元</span>
+                            <span class="result-label">32破口卡 (${accessories.broken32.count}袋 × ${accessories.broken32.price.toFixed(4)}元)</span>
+                            <span class="result-value">${broken32Total.toFixed(4)} 元</span>
                         </div>
                     `;
                 }
@@ -782,8 +783,8 @@
                     hasAccessory = true;
                     html += `
                         <div class="result-row">
-                            <span class="result-label">25插板 (${accessories.plate25.count}个 × ${accessories.plate25.price}元)</span>
-                            <span class="result-value">${plate25Total.toFixed(2)} 元</span>
+                            <span class="result-label">25插板 (${accessories.plate25.count}个 × ${accessories.plate25.price.toFixed(4)}元)</span>
+                            <span class="result-value">${plate25Total.toFixed(4)} 元</span>
                         </div>
                     `;
                 }
@@ -791,8 +792,8 @@
                     hasAccessory = true;
                     html += `
                         <div class="result-row">
-                            <span class="result-label">32插板 (${accessories.plate32.count}个 × ${accessories.plate32.price}元)</span>
-                            <span class="result-value">${plate32Total.toFixed(2)} 元</span>
+                            <span class="result-label">32插板 (${accessories.plate32.count}个 × ${accessories.plate32.price.toFixed(4)}元)</span>
+                            <span class="result-value">${plate32Total.toFixed(4)} 元</span>
                         </div>
                     `;
                 }
@@ -804,11 +805,11 @@
                 html += `
                     <div class="result-row" style="margin-top: 8px;">
                         <span class="result-label">🔧 辅料总价</span>
-                        <span class="result-value">${totalAccessoryPrice.toFixed(2)} 元</span>
+                        <span class="result-value">${totalAccessoryPrice.toFixed(4)} 元</span>
                     </div>
                 `;
                 
-                // 总计
+                // 总计 - 此处合计总价保留两位小数
                 html += `
                     <div class="result-row total-row">
                         <span class="result-label">💰 合计总价</span>
