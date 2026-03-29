@@ -2,20 +2,18 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EPS模块用量计算器（墙厚可切换·修正面积）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>EPS模块用量计算器（墙厚可切换·手机优化）</title>
     <style>
-        /* 样式与前次完全一致，此处省略以节省篇幅，实际使用时保留 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
         }
         body {
             background-color: #f5f7fa;
-            padding: 20px;
-            line-height: 1.5;
+            padding: 12px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,42 +21,37 @@
         }
         .container {
             background-color: white;
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 20px;
+            padding: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 1200px;
-            height: auto;
-            display: flex;
-            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
         }
         h1 {
-            font-size: 22px;
+            font-size: 1.5rem;
             color: #2d3748;
-            margin-bottom: 20px;
             text-align: center;
+            margin-bottom: 12px;
             font-weight: 600;
             border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 15px;
-            flex-shrink: 0;
+            padding-bottom: 10px;
         }
         .basic-form-wrapper {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 15px;
-            flex-shrink: 0;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         .openings-section {
-            margin-bottom: 15px;
-            flex-shrink: 0;
+            margin-bottom: 16px;
         }
         .section-title {
-            font-size: 14px;
+            font-size: 0.9rem;
             color: #4a5568;
             margin-bottom: 8px;
             font-weight: 500;
-            padding-bottom: 5px;
+            padding-bottom: 4px;
             border-bottom: 1px solid #e2e8f0;
         }
         .openings-container {
@@ -81,40 +74,37 @@
         }
         label {
             display: block;
-            font-size: 14px;
+            font-size: 0.8rem;
             color: #4a5568;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-weight: 500;
         }
         input, select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
             background-color: #f8fafc;
-            transition: all 0.2s ease;
             outline: none;
+            transition: all 0.2s;
         }
         input:focus, select:focus {
             border-color: #4285f4;
             background-color: white;
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+            box-shadow: 0 0 0 2px rgba(66,133,244,0.1);
         }
         .btn-add {
             background-color: #34a853;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 14px;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
             width: 100%;
-        }
-        .btn-add:hover {
-            background-color: #2d8e46;
+            touch-action: manipulation;
         }
         .btn-add:active {
             transform: scale(0.98);
@@ -123,16 +113,13 @@
             background-color: #ea4335;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 14px;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s ease;
             white-space: nowrap;
-            width: 80px;
-        }
-        .btn-remove:hover {
-            background-color: #d33426;
+            width: 70px;
+            touch-action: manipulation;
         }
         .btn-remove:active {
             transform: scale(0.98);
@@ -143,52 +130,48 @@
             background-color: #4285f4;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin-bottom: 20px;
-            flex-shrink: 0;
-        }
-        .calculate-btn:hover {
-            background-color: #3367d6;
+            margin: 16px 0;
+            touch-action: manipulation;
         }
         .calculate-btn:active {
+            background-color: #3367d6;
             transform: scale(0.98);
         }
         .result {
-            margin-top: 0;
-            padding-top: 20px;
+            margin-top: 8px;
+            padding-top: 16px;
             border-top: 2px solid #f0f4f8;
-            flex: 1;
         }
         .results-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         .module-result {
-            padding: 15px;
+            padding: 12px;
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
+            border-radius: 12px;
             background-color: #f8fafc;
         }
         .module-title {
-            font-size: 16px;
+            font-size: 0.9rem;
             color: #2d3748;
             font-weight: 600;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #e2e8f0;
         }
         .result-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 0;
-            font-size: 13px;
+            padding: 4px 0;
+            font-size: 0.75rem;
         }
         .result-label {
             color: #718096;
@@ -198,39 +181,43 @@
             font-weight: 600;
         }
         .summary-section {
-            padding: 15px;
+            padding: 12px;
             background-color: #e8f4f8;
-            border-radius: 6px;
+            border-radius: 12px;
             border: 1px solid #d1e7dd;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
         .summary-title {
-            font-size: 16px;
+            font-size: 0.95rem;
             color: #2d3748;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
         }
         .highlight {
             color: #4285f4;
-            font-size: 14px;
             font-weight: 700;
         }
         .note {
-            font-size: 12px;
+            font-size: 0.7rem;
             color: #718096;
-            margin-top: 10px;
             text-align: right;
+            margin-top: 8px;
         }
-        @media (max-width: 1024px) {
+        /* 响应式布局 */
+        @media (max-width: 800px) {
             .basic-form-wrapper {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
             .results-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
+            .container {
+                padding: 12px;
+            }
             .basic-form-wrapper {
                 grid-template-columns: 1fr;
             }
@@ -239,18 +226,36 @@
             }
             .opening-row {
                 grid-template-columns: repeat(2, 1fr) auto;
+                gap: 6px;
             }
             .btn-remove {
                 width: 60px;
-                padding: 8px 6px;
-                font-size: 12px;
+                padding: 6px;
+                font-size: 0.7rem;
+            }
+            .module-result {
+                padding: 10px;
+            }
+            .result-item {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+        }
+        @media (max-width: 480px) {
+            .opening-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .opening-row .btn-remove {
+                grid-column: span 2;
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧱 EPS模块用量计算器（墙厚可切换）</h1>
+        <h1>🧱 EPS模块用量计算器</h1>
         
         <div class="basic-form-wrapper">
             <div class="form-group">
@@ -306,19 +311,19 @@
             <div class="results-grid" id="modulesResults"></div>
             <div class="summary-section" id="summaryResults"></div>
         </div>
+        <div class="note">* 数据自动保存，下次打开自动恢复</div>
     </div>
 
     <script>
         (function() {
             const MODULE_HEIGHT = 0.3;
-            const AREA_90 = 0.27;        // 90直板面积
-            const AREA_60 = 0.18;        // 60直板面积
-            const AREA_INSERT = 0.09;     // 插板面积 30×30cm（仅用于计价，不参与模块总面积）
+            const AREA_90 = 0.27;
+            const AREA_60 = 0.18;
+            const AREA_INSERT = 0.09;
             const TOL = 1e-6;
             const EPS = 1e-9;
             const STORAGE_KEY = 'epsModuleCalculatorData';
 
-            // 根据墙厚定义不同模块的面积
             const MODULE_AREA = {
                 '25': {
                     '大角': 0.36,
@@ -346,7 +351,6 @@
             const openingsContainer = document.getElementById('openingsContainer');
             const addBtn = document.getElementById('addOpeningBtn');
             const calcBtn = document.getElementById('calculateBtn');
-            const resultArea = document.getElementById('resultArea');
             const modulesResults = document.getElementById('modulesResults');
             const summaryResults = document.getElementById('summaryResults');
 
@@ -382,7 +386,6 @@
                     insertPrice: insertPriceInput.value,
                     openings: []
                 };
-
                 const rows = openingsContainer.querySelectorAll('.opening-row');
                 rows.forEach(row => {
                     const width = row.querySelector('.opening-width').value;
@@ -390,7 +393,6 @@
                     const count = row.querySelector('.opening-count').value;
                     data.openings.push({ width, height, count });
                 });
-
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
             }
 
@@ -400,7 +402,6 @@
                     addOpeningRow(1.5, 1.8, 1);
                     return;
                 }
-
                 try {
                     const data = JSON.parse(saved);
                     if (data.height !== undefined) heightInput.value = data.height;
@@ -412,7 +413,6 @@
                     if (data.wallType !== undefined) wallTypeSelect.value = data.wallType;
                     if (data.price !== undefined) priceInput.value = data.price;
                     if (data.insertPrice !== undefined) insertPriceInput.value = data.insertPrice;
-
                     openingsContainer.innerHTML = '';
                     if (data.openings && Array.isArray(data.openings) && data.openings.length > 0) {
                         data.openings.forEach(op => {
@@ -424,7 +424,7 @@
                     } else {
                         addOpeningRow(1.5, 1.8, 1);
                     }
-                } catch (e) {
+                } catch(e) {
                     console.warn('读取保存的数据失败，使用默认值');
                     openingsContainer.innerHTML = '';
                     addOpeningRow(1.5, 1.8, 1);
@@ -446,7 +446,7 @@
                 try {
                     let val = safeEval(str);
                     return (typeof val === 'number' && isFinite(val)) ? val : NaN;
-                } catch (e) {
+                } catch(e) {
                     return NaN;
                 }
             }
@@ -494,17 +494,12 @@
 
                 let layers = Math.ceil(H_input / MODULE_HEIGHT);
                 const H_actual = layers * MODULE_HEIGHT;
-                if (Math.abs(H_input - H_actual) > TOL) {
-                    console.log(`墙高${H_input}米向上取整为${layers}层，实际覆盖高度${H_actual.toFixed(2)}米`);
-                }
-
                 const totalLength = L_h + L_v;
                 const S_total_actual = totalLength * H_actual;
 
                 const openings = calculateOpenings();
                 const totalInsertBlocks = openings.totalInsertBlocks;
                 const totalWinArea = openings.totalWinArea;
-
                 const S_net_actual = S_total_actual - totalWinArea;
                 if (S_net_actual < -TOL) {
                     alert('门窗总面积超过按实际覆盖高度计算的墙体毛面积，请检查洞口尺寸');
@@ -525,7 +520,6 @@
                 const bigTTotal = bigPer * N_T;
                 const smallTTotal = smallPer * N_T;
 
-                // 根据墙厚获取对应模块面积
                 const areaMap = {
                     '90直板': AREA_90,
                     '60直板': AREA_60,
@@ -569,7 +563,6 @@
                     count60 += extra60;
                 }
 
-                // 钢丝勾计算
                 const cornerHooks = N_corner * (2 * layers - 1);
                 const tHooks = N_T * (6 * layers - 3);
                 const wallHooks = Math.ceil(totalLength * layers / 3);
@@ -587,16 +580,13 @@
                 };
 
                 const totalBlocks = count90 + count60 + bigCornerTotal + smallCornerTotal + bigTTotal + smallTTotal + totalInsertBlocks;
-
-                // 模块总面积 = 所有非插板模块的面积之和（可能大于墙体净面积）
                 const totalModuleArea = count90 * AREA_90 + count60 * AREA_60 +
                                         bigCornerTotal * areaMap['大角'] +
                                         smallCornerTotal * areaMap['小角'] +
                                         bigTTotal * areaMap['大T'] +
                                         smallTTotal * areaMap['小T'];
-
                 const insertTotalPrice = totalInsertBlocks * insertPrice;
-                const moduleTotalPrice = totalModuleArea * price; // 模块总价按实际模块面积计算
+                const moduleTotalPrice = totalModuleArea * price;
                 const totalPrice = moduleTotalPrice + insertTotalPrice;
 
                 renderResults(theoretical, layers, S_total_actual, totalWinArea, S_net_actual, totalModuleArea, totalBlocks, moduleTotalPrice, insertTotalPrice, totalPrice, areaMap);
@@ -682,7 +672,6 @@
             }
 
             calcBtn.addEventListener('click', calculate);
-
             window.addEventListener('load', function() {
                 loadInputData();
                 setTimeout(calculate, 50);
