@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>模块价格计算器（双墙厚+独立单价+插板）</title>
+    <title>模块价格计算器（双墙厚+独立单价+插板+顶板）</title>
     <style>
-        /* 样式与前完全相同，此处省略以节省篇幅 */
+        /* 样式与之前基本一致，仅增加顶板区域样式 */
         * {
             margin: 0;
             padding: 0;
@@ -198,6 +198,45 @@
             background-color: white;
             outline: none;
         }
+        /* 顶板专用样式 */
+        .roof-panel {
+            background-color: #e6f7e6;
+            border: 1px solid #b8e6b8;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        .roof-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d6a4f;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .roof-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .roof-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .roof-item label {
+            font-size: 12px;
+            color: #2d6a4f;
+            font-weight: 500;
+        }
+        .roof-item input {
+            padding: 8px 10px;
+            border: 1px solid #cbdae6;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: white;
+        }
         .result-card {
             background: linear-gradient(135deg, #1c3c4f, #153545);
             border-radius: 16px;
@@ -278,12 +317,15 @@
                 grid-template-columns: 100px 1fr 1fr;
                 gap: 8px;
             }
+            .roof-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧮 模块价格计算器（双墙厚+独立单价+插板）</h1>
+        <h1>🧮 模块价格计算器（双墙厚+独立单价+插板+顶板）</h1>
         <div class="sub">25墙和32墙可分别设置单价，自动保存所有数据</div>
 
         <!-- 模块固定参数提示 -->
@@ -294,7 +336,7 @@
             <p style="margin-top: 8px; color: #4285f4;">※ 直板面积相同，角/T型面积不同</p>
         </div>
 
-        <!-- 双墙厚单价输入区（左右并排） -->
+        <!-- 双墙厚单价输入区 -->
         <div class="dual-price-area">
             <div class="price-card">
                 <label>💰 25墙模块单价 (元/㎡)</label>
@@ -306,23 +348,21 @@
             </div>
         </div>
 
-        <!-- 双墙厚模块输入区（左右并排） -->
+        <!-- 双墙厚模块输入区 -->
         <div class="dual-modules">
-            <!-- 25墙模块 -->
             <div class="wall-card">
                 <h3>🧱 25墙模块 <span class="wall-badge">厚度250mm</span></h3>
                 <div class="modules-grid" id="modules25Grid"></div>
             </div>
-            <!-- 32墙模块 -->
             <div class="wall-card">
                 <h3>🧱 32墙模块 <span class="wall-badge">厚度320mm</span></h3>
                 <div class="modules-grid" id="modules32Grid"></div>
             </div>
         </div>
 
-        <!-- 辅料输入区（包含插板） -->
+        <!-- 辅料输入区 -->
         <div class="section-title" style="font-size: 18px; font-weight: 600; margin: 20px 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">🔧 辅料</div>
-        <div class="accessory-grid" id="accessoryGrid">
+        <div class="accessory-grid">
             <div class="accessory-row">
                 <div class="accessory-name">卡勾</div>
                 <div class="accessory-input">
@@ -356,7 +396,6 @@
                     <input type="number" id="accessory_32_price" step="0.1" min="0" value="0" placeholder="单价">
                 </div>
             </div>
-            <!-- 新增：25插板 -->
             <div class="accessory-row">
                 <div class="accessory-name">25插板</div>
                 <div class="accessory-input">
@@ -368,7 +407,6 @@
                     <input type="number" id="accessory_25_plate_price" step="0.1" min="0" value="0" placeholder="单价">
                 </div>
             </div>
-            <!-- 新增：32插板 -->
             <div class="accessory-row">
                 <div class="accessory-name">32插板</div>
                 <div class="accessory-input">
@@ -378,6 +416,29 @@
                 <div class="accessory-input">
                     <label>单价 (元/个)</label>
                     <input type="number" id="accessory_32_plate_price" step="0.1" min="0" value="0" placeholder="单价">
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增顶板区域 -->
+        <div class="roof-panel">
+            <div class="roof-title">🏠 顶板</div>
+            <div class="roof-grid">
+                <div class="roof-item">
+                    <label>长度 (米)</label>
+                    <input type="number" id="roof_length" step="0.01" min="0" value="0" placeholder="长度">
+                </div>
+                <div class="roof-item">
+                    <label>宽度 (米)</label>
+                    <input type="number" id="roof_width" step="0.01" min="0" value="0" placeholder="宽度">
+                </div>
+                <div class="roof-item">
+                    <label>数量 (个)</label>
+                    <input type="number" id="roof_quantity" step="1" min="0" value="0" placeholder="数量">
+                </div>
+                <div class="roof-item">
+                    <label>单价 (元/㎡)</label>
+                    <input type="number" id="roof_price" step="0.1" min="0" value="0" placeholder="单价">
                 </div>
             </div>
         </div>
@@ -401,7 +462,7 @@
     <script>
         (function() {
             // localStorage存储键名
-            const STORAGE_KEY = 'modulePriceCalculatorDataV3';
+            const STORAGE_KEY = 'modulePriceCalculatorDataV4';
             
             // 不同墙厚的模块面积配置
             const moduleAreaConfig = {
@@ -431,6 +492,17 @@
             let priceSpans25 = {};
             let priceSpans32 = {};
 
+            // 获取顶板数据
+            function getRoofData() {
+                const length = parseFloat(document.getElementById('roof_length').value) || 0;
+                const width = parseFloat(document.getElementById('roof_width').value) || 0;
+                const quantity = parseInt(document.getElementById('roof_quantity').value, 10) || 0;
+                const price = parseFloat(document.getElementById('roof_price').value) || 0;
+                const area = length * width * quantity;
+                const totalPrice = area * price;
+                return { length, width, quantity, price, area, totalPrice };
+            }
+
             // 保存所有输入数据到localStorage
             function saveAllData() {
                 const data = {
@@ -447,6 +519,12 @@
                         plate25Price: document.getElementById('accessory_25_plate_price').value,
                         plate32: document.getElementById('accessory_32_plate').value,
                         plate32Price: document.getElementById('accessory_32_plate_price').value
+                    },
+                    roof: {
+                        length: document.getElementById('roof_length').value,
+                        width: document.getElementById('roof_width').value,
+                        quantity: document.getElementById('roof_quantity').value,
+                        price: document.getElementById('roof_price').value
                     },
                     modules25: {},
                     modules32: {}
@@ -493,6 +571,14 @@
                         if (data.accessories.plate25Price !== undefined) document.getElementById('accessory_25_plate_price').value = data.accessories.plate25Price;
                         if (data.accessories.plate32 !== undefined) document.getElementById('accessory_32_plate').value = data.accessories.plate32;
                         if (data.accessories.plate32Price !== undefined) document.getElementById('accessory_32_plate_price').value = data.accessories.plate32Price;
+                    }
+                    
+                    // 加载顶板数据
+                    if (data.roof) {
+                        if (data.roof.length !== undefined) document.getElementById('roof_length').value = data.roof.length;
+                        if (data.roof.width !== undefined) document.getElementById('roof_width').value = data.roof.width;
+                        if (data.roof.quantity !== undefined) document.getElementById('roof_quantity').value = data.roof.quantity;
+                        if (data.roof.price !== undefined) document.getElementById('roof_price').value = data.roof.price;
                     }
                     
                     // 加载25墙模块数量
@@ -623,6 +709,7 @@
                 const unitPrice25 = parseFloat(document.getElementById('unitPrice25').value) || 0;
                 const unitPrice32 = parseFloat(document.getElementById('unitPrice32').value) || 0;
                 const accessories = getAccessoryData();
+                const roof = getRoofData();
                 
                 // 计算25墙模块
                 const areas25 = moduleAreaConfig['25'];
@@ -670,16 +757,19 @@
                 const plate32Total = accessories.plate32.count * accessories.plate32.price;
                 const totalAccessoryPrice = hookTotal + broken25Total + broken32Total + plate25Total + plate32Total;
                 
-                // 总价
+                // 模块总价
                 const totalModulePrice = totalPrice25 + totalPrice32;
-                const grandTotal = totalModulePrice + totalAccessoryPrice;
+                // 顶板总价
+                const roofTotalPrice = roof.totalPrice;
+                // 所有项目合计
+                const grandTotal = totalModulePrice + totalAccessoryPrice + roofTotalPrice;
                 
                 // 渲染结果
-                renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, grandTotal);
+                renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, roofTotalPrice, grandTotal);
             }
             
             // 渲染详细结果
-            function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, grandTotal) {
+            function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, roofTotalPrice, grandTotal) {
                 const resultContainer = document.getElementById('resultContent');
                 if (!resultContainer) return;
                 
@@ -809,7 +899,18 @@
                     </div>
                 `;
                 
-                // 总计 - 此处合计总价保留两位小数
+                // 顶板明细
+                if (roof.quantity > 0 && roof.area > 0) {
+                    html += `<div style="margin: 12px 0 8px 0;"><span class="result-label" style="font-weight: 600;">🏠 顶板</span></div>`;
+                    html += `
+                        <div class="result-row">
+                            <span class="result-label">顶板 (${roof.length}×${roof.width}×${roof.quantity}块)</span>
+                            <span class="result-value">面积: ${roof.area.toFixed(4)}㎡ × ${roof.price.toFixed(4)}元/㎡ = ${roofTotalPrice.toFixed(4)}元</span>
+                        </div>
+                    `;
+                }
+                
+                // 总计 - 合计总价保留两位小数
                 html += `
                     <div class="result-row total-row">
                         <span class="result-label">💰 合计总价</span>
@@ -829,6 +930,12 @@
             
             // 辅料变化时的处理
             function onAccessoryChange() {
+                saveAllData();
+                calculate();
+            }
+            
+            // 顶板输入变化时的处理
+            function onRoofChange() {
                 saveAllData();
                 calculate();
             }
@@ -870,13 +977,22 @@
                     }
                 });
                 
+                // 绑定顶板输入事件
+                const roofInputs = ['roof_length', 'roof_width', 'roof_quantity', 'roof_price'];
+                roofInputs.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', onRoofChange);
+                    }
+                });
+                
                 // 加载保存的数据
                 const hasSavedData = loadAllData();
                 
                 // 更新价格预览
                 updateAllPrices();
                 
-                // 如果加载了数据，自动计算；否则初始计算
+                // 计算
                 calculate();
             }
             
