@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>模块产量计算器（钢筋连接件）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-size: 16px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .sub {
+            font-size: 0.95rem;
+            color: #718096;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+        .info-card {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        .info-card p {
+            margin: 4px 0;
+            color: #4a5568;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbdae6;
+            border-radius: 12px;
+            font-size: 1rem;
+            background-color: white;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .input-group input:focus {
+            border-color: #4285f4;
+            box-shadow: 0 0 0 2px rgba(66,133,244,0.1);
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 20px 0 12px 0;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .demand-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+        .demand-col {
+            background-color: #fafafa;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .demand-col h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a4055;
+            margin-bottom: 12px;
+            text-align: center;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #cbdae6;
+        }
+        .demand-item {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .demand-item label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            flex: 1;
+        }
+        .demand-item input {
+            width: 80px;
+            padding: 6px 8px;
+            border: 1px solid #cbdae6;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+        .mold-select {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 16px 0;
+            border: 1px solid #e2e8f0;
+        }
+        .mold-select h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+        .mold-group {
+            margin-bottom: 16px;
+        }
+        .mold-group h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4285f4;
+            margin-bottom: 8px;
+        }
+        .mold-checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .mold-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #cbdae6;
+        }
+        .mold-checkbox input {
+            width: auto;
+            margin: 0;
+        }
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .btn-check, .btn-clear, .btn-mold {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            touch-action: manipulation;
+            text-align: center;
+        }
+        .btn-check {
+            background-color: #34a853;
+            color: white;
+        }
+        .btn-clear {
+            background-color: #ea4335;
+            color: white;
+        }
+        .btn-mold {
+            background-color: #f39c12;
+            color: white;
+        }
+        .btn-check:active, .btn-clear:active, .btn-mold:active {
+            transform: scale(0.98);
+        }
+        .result-card {
+            background: linear-gradient(135deg, #1c3c4f, #153545);
+            border-radius: 16px;
+            padding: 16px;
+            color: #edf4fa;
+            margin-top: 20px;
+        }
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #3e6279;
+        }
+        .module-section {
+            margin-bottom: 16px;
+        }
+        .module-header {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: #ffd966;
+        }
+        .module-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            padding: 4px 0;
+            border-bottom: 1px dashed #3e6279;
+        }
+        .module-name {
+            color: #aacfec;
+        }
+        .module-count {
+            font-weight: 700;
+            color: #ffd966;
+        }
+        .indent {
+            margin-left: 16px;
+        }
+        .warning {
+            color: #ffb347;
+            background-color: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        .success {
+            color: #6fcf97;
+        }
+        .note {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+            margin-top: 16px;
+        }
+        @media (max-width: 600px) {
+            .demand-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .button-row {
+                flex-direction: column;
+            }
+            .demand-item {
+                justify-content: space-between;
+            }
+            .mold-checkbox-group {
+                gap: 8px;
+            }
+            .mold-checkbox {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 模块产量计算器</h1>
+        <div class="sub">根据钢筋连接件库存计算可生产的模块数量（基于模具）</div>
+
+        <div class="info-card">
+            <p><strong>📌 消耗规则（25墙模块）：</strong></p>
+            <p>90直板：6个25钢筋 | 60直板：4个 | 大角：8个 | 小角：4个 | 大T：10个 | 小T：8个</p>
+            <p><strong>📌 消耗规则（32墙模块）：</strong></p>
+            <p>90直板：6个32钢筋 | 60直板：4个 | 大角：8个 | 小角：4个</p>
+            <p>大T：2个25钢筋 + 8个32钢筋 | 小T：4个25钢筋 + 4个32钢筋</p>
+            <p><strong>📌 模具产出（一模）：</strong></p>
+            <p>25直板模具：6个90直板+1个60直板 | 25T型模具：2个大T+2个小T | 25拐角模具：2个大角+2个小角</p>
+            <p>32直板模具：5个90直板+1个60直板 | 32T型模具：1个大T+1个小T+1个60直板 | 32拐角模具：1个大角+1个小角+1个90直板</p>
+        </div>
+
+        <div class="input-group">
+            <label>🔩 25钢筋连接件（个）</label>
+            <input type="number" id="steel25" step="1" min="0" value="0" placeholder="请输入数量">
+        </div>
+        <div class="input-group">
+            <label>🔩 32钢筋连接件（个）</label>
+            <input type="number" id="steel32" step="1" min="0" value="0" placeholder="请输入数量">
+        </div>
+
+        <!-- 模具选择区域，分为25和32两行 -->
+        <div class="mold-select">
+            <h4>🔧 选择模具（可多选）</h4>
+            <div class="mold-group">
+                <h5>📐 25墙模具</h5>
+                <div class="mold-checkbox-group" id="mold25Group"></div>
+            </div>
+            <div class="mold-group">
+                <h5>📏 32墙模具</h5>
+                <div class="mold-checkbox-group" id="mold32Group"></div>
+            </div>
+        </div>
+
+        <!-- 需求输入区域：左右两列 -->
+        <div class="section-title">📝 需要生产的模块数量</div>
+        <div class="demand-grid" id="demandGrid">
+            <div class="demand-col" id="demand25Col"></div>
+            <div class="demand-col" id="demand32Col"></div>
+        </div>
+
+        <!-- 按钮组 -->
+        <div class="button-row">
+            <button class="btn-check" id="checkDemandBtn">🔍 检查需求</button>
+            <button class="btn-clear" id="clearDemandBtn">🗑️ 一键清零</button>
+            <button class="btn-mold" id="calcMoldBtn">⚙️ 计算所选模具产量</button>
+        </div>
+
+        <div class="result-card" id="resultArea">
+            <div class="result-title">📊 计算结果</div>
+            <div id="resultContent">
+                <div class="result-row" style="text-align:center;">请输入数量并点击计算</div>
+            </div>
+        </div>
+        <div class="note">* 数据自动保存，下次打开自动恢复。</div>
+    </div>
+
+    <script>
+        (function() {
+            const STORAGE_KEY = 'moduleProductionCalculatorV13';
+
+            // 模块消耗规则
+            const modules25 = [
+                { name: '90直板', steel25: 6, steel32: 0 },
+                { name: '60直板', steel25: 4, steel32: 0 },
+                { name: '大角', steel25: 8, steel32: 0 },
+                { name: '小角', steel25: 4, steel32: 0 },
+                { name: '大T', steel25: 10, steel32: 0 },
+                { name: '小T', steel25: 8, steel32: 0 }
+            ];
+            const modules32 = [
+                { name: '90直板', steel25: 0, steel32: 6 },
+                { name: '60直板', steel25: 0, steel32: 4 },
+                { name: '大角', steel25: 0, steel32: 8 },
+                { name: '小角', steel25: 0, steel32: 4 },
+                { name: '大T', steel25: 2, steel32: 8 },
+                { name: '小T', steel25: 4, steel32: 4 }
+            ];
+
+            // 模具定义（25墙和32墙分开）
+            const molds25 = [
+                { name: '25直板模具', steel25: 40, steel32: 0, outputs: { '90直板': 6, '60直板': 1 } },
+                { name: '25T型模具', steel25: 36, steel32: 0, outputs: { '大T': 2, '小T': 2 } },
+                { name: '25拐角模具', steel25: 24, steel32: 0, outputs: { '大角': 2, '小角': 2 } }
+            ];
+            const molds32 = [
+                { name: '32直板模具', steel25: 0, steel32: 34, outputs: { '90直板': 5, '60直板': 1 } },
+                { name: '32T型模具', steel25: 6, steel32: 16, outputs: { '大T': 1, '小T': 1, '60直板': 1 } },
+                { name: '32拐角模具', steel25: 0, steel32: 18, outputs: { '大角': 1, '小角': 1, '90直板': 1 } }
+            ];
+            const allMolds = [...molds25, ...molds32];
+
+            // DOM 元素
+            const steel25Input = document.getElementById('steel25');
+            const steel32Input = document.getElementById('steel32');
+            const demand25Col = document.getElementById('demand25Col');
+            const demand32Col = document.getElementById('demand32Col');
+            const mold25Group = document.getElementById('mold25Group');
+            const mold32Group = document.getElementById('mold32Group');
+            const checkBtn = document.getElementById('checkDemandBtn');
+            const clearBtn = document.getElementById('clearDemandBtn');
+            const calcMoldBtn = document.getElementById('calcMoldBtn');
+            const resultContent = document.getElementById('resultContent');
+
+            // 存储需求输入框引用
+            let demandInputs = {};
+            // 存储模具复选框引用
+            let moldCheckboxes = {};
+
+            // 生成需求输入界面
+            function buildDemandInputs() {
+                let html25 = '<h4>25墙模块</h4>';
+                modules25.forEach(mod => {
+                    html25 += `
+                        <div class="demand-item">
+                            <label>${mod.name}</label>
+                            <input type="number" id="demand_25_${mod.name}" step="1" min="0" value="0" placeholder="数量">
+                        </div>
+                    `;
+                });
+                demand25Col.innerHTML = html25;
+
+                let html32 = '<h4>32墙模块</h4>';
+                modules32.forEach(mod => {
+                    html32 += `
+                        <div class="demand-item">
+                            <label>${mod.name}</label>
+                            <input type="number" id="demand_32_${mod.name}" step="1" min="0" value="0" placeholder="数量">
+                        </div>
+                    `;
+                });
+                demand32Col.innerHTML = html32;
+
+                modules25.forEach(mod => {
+                    const id = `demand_25_${mod.name}`;
+                    demandInputs[`25_${mod.name}`] = document.getElementById(id);
+                });
+                modules32.forEach(mod => {
+                    const id = `demand_32_${mod.name}`;
+                    demandInputs[`32_${mod.name}`] = document.getElementById(id);
+                });
+            }
+
+            // 生成模具选择界面（分两行）
+            function buildMoldCheckboxes() {
+                // 25墙模具
+                let html25 = '';
+                molds25.forEach(mold => {
+                    html25 += `
+                        <label class="mold-checkbox">
+                            <input type="checkbox" value="${mold.name}" data-mold="${mold.name}"> ${mold.name}
+                        </label>
+                    `;
+                });
+                mold25Group.innerHTML = html25;
+                // 32墙模具
+                let html32 = '';
+                molds32.forEach(mold => {
+                    html32 += `
+                        <label class="mold-checkbox">
+                            <input type="checkbox" value="${mold.name}" data-mold="${mold.name}"> ${mold.name}
+                        </label>
+                    `;
+                });
+                mold32Group.innerHTML = html32;
+
+                // 保存引用
+                allMolds.forEach(mold => {
+                    const cb = document.querySelector(`input[value="${mold.name}"]`);
+                    if (cb) moldCheckboxes[mold.name] = cb;
+                });
+                // 默认全部选中
+                for (let name in moldCheckboxes) {
+                    moldCheckboxes[name].checked = true;
+                }
+            }
+
+            function getSelectedMolds() {
+                const selected = [];
+                for (let name in moldCheckboxes) {
+                    if (moldCheckboxes[name].checked) {
+                        const mold = allMolds.find(m => m.name === name);
+                        if (mold) selected.push(mold);
+                    }
+                }
+                return selected;
+            }
+
+            function getDemand() {
+                const demand = {};
+                modules25.forEach(mod => {
+                    const key = `25_${mod.name}`;
+                    const val = parseInt(demandInputs[key]?.value, 10) || 0;
+                    demand[key] = val;
+                });
+                modules32.forEach(mod => {
+                    const key = `32_${mod.name}`;
+                    const val = parseInt(demandInputs[key]?.value, 10) || 0;
+                    demand[key] = val;
+                });
+                return demand;
+            }
+
+            function getStock() {
+                return {
+                    steel25: parseInt(steel25Input.value, 10) || 0,
+                    steel32: parseInt(steel32Input.value, 10) || 0
+                };
+            }
+
+            function saveAllData() {
+                const demand = getDemand();
+                const selectedMolds = [];
+                for (let name in moldCheckboxes) {
+                    if (moldCheckboxes[name].checked) selectedMolds.push(name);
+                }
+                const data = {
+                    steel25: steel25Input.value,
+                    steel32: steel32Input.value,
+                    demand: demand,
+                    selectedMolds: selectedMolds
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+
+            function loadAllData() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        const data = JSON.parse(saved);
+                        if (data.steel25 !== undefined) steel25Input.value = data.steel25;
+                        if (data.steel32 !== undefined) steel32Input.value = data.steel32;
+                        if (data.demand) {
+                            for (let key in data.demand) {
+                                if (demandInputs[key]) {
+                                    demandInputs[key].value = data.demand[key];
+                                }
+                            }
+                        }
+                        if (data.selectedMolds && Array.isArray(data.selectedMolds)) {
+                            for (let name in moldCheckboxes) {
+                                moldCheckboxes[name].checked = data.selectedMolds.includes(name);
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            function clearDemand() {
+                for (let key in demandInputs) {
+                    if (demandInputs[key]) demandInputs[key].value = 0;
+                }
+                saveAllData();
+                renderCheck();
+            }
+
+            // 计算所选模具产量（独立计算，不分配资源）
+            function calcSelectedMolds() {
+                const selected = getSelectedMolds();
+                if (selected.length === 0) {
+                    return { moldResults: [], totalOutputs: {} };
+                }
+                const { steel25, steel32 } = getStock();
+                const moldResults = [];
+                const totalOutputs = {};
+                for (let mold of selected) {
+                    let maxShots = Infinity;
+                    if (mold.steel25 > 0) maxShots = Math.min(maxShots, Math.floor(steel25 / mold.steel25));
+                    if (mold.steel32 > 0) maxShots = Math.min(maxShots, Math.floor(steel32 / mold.steel32));
+                    if (maxShots === Infinity) maxShots = 0;
+                    const outputs = {};
+                    for (let mod in mold.outputs) {
+                        const qty = maxShots * mold.outputs[mod];
+                        outputs[mod] = qty;
+                        totalOutputs[mod] = (totalOutputs[mod] || 0) + qty;
+                    }
+                    moldResults.push({
+                        name: mold.name,
+                        shots: maxShots,
+                        outputs: outputs,
+                        remaining: {
+                            steel25: steel25 - maxShots * mold.steel25,
+                            steel32: steel32 - maxShots * mold.steel32
+                        }
+                    });
+                }
+                return { moldResults, totalOutputs };
+            }
+
+            // 需求检查
+            function checkDemand() {
+                const demand = getDemand();
+                const { steel25, steel32 } = getStock();
+                let requiredSteel25 = 0, requiredSteel32 = 0;
+                modules25.forEach(mod => {
+                    const qty = demand[`25_${mod.name}`];
+                    if (qty) requiredSteel25 += qty * mod.steel25;
+                });
+                modules32.forEach(mod => {
+                    const qty = demand[`32_${mod.name}`];
+                    if (qty) {
+                        requiredSteel25 += qty * mod.steel25;
+                        requiredSteel32 += qty * mod.steel32;
+                    }
+                });
+                const remainingSteel25 = steel25 - requiredSteel25;
+                const remainingSteel32 = steel32 - requiredSteel32;
+                let canProduce = true;
+                let message = '';
+                if (requiredSteel25 > steel25) {
+                    canProduce = false;
+                    message += `❌ 25钢筋不足：需要 ${requiredSteel25} 个，当前 ${steel25} 个，缺少 ${requiredSteel25 - steel25} 个。\n`;
+                }
+                if (requiredSteel32 > steel32) {
+                    canProduce = false;
+                    message += `❌ 32钢筋不足：需要 ${requiredSteel32} 个，当前 ${steel32} 个，缺少 ${requiredSteel32 - steel32} 个。\n`;
+                }
+                if (canProduce) message = `✅ 当前库存可以满足需求！共需 25钢筋 ${requiredSteel25} 个，32钢筋 ${requiredSteel32} 个。`;
+                else message += `\n💡 建议：减少需求或增加库存。`;
+                let detailHtml = '';
+                if (!canProduce) {
+                    detailHtml = '<div class="warning"><strong>📋 模块需求明细：</strong></div>';
+                    for (let mod of modules25) {
+                        const qty = demand[`25_${mod.name}`];
+                        if (qty > 0) {
+                            const need = qty * mod.steel25;
+                            if (need > steel25) detailHtml += `<div class="module-row" style="color:#ffb347;">25墙 ${mod.name} (需求${qty}块) → 需25钢筋:${need} → 资源不足</div>`;
+                        }
+                    }
+                    for (let mod of modules32) {
+                        const qty = demand[`32_${mod.name}`];
+                        if (qty > 0) {
+                            const need25 = qty * mod.steel25;
+                            const need32 = qty * mod.steel32;
+                            if (need25 > steel25 || need32 > steel32) detailHtml += `<div class="module-row" style="color:#ffb347;">32墙 ${mod.name} (需求${qty}块) → 需25钢筋:${need25} 需32钢筋:${need32} → 资源不足</div>`;
+                        }
+                    }
+                }
+                return { canProduce, message, detailHtml, requiredSteel25, requiredSteel32, remainingSteel25, remainingSteel32 };
+            }
+
+            // 渲染所选模具产量
+            function renderSelectedMolds() {
+                const { steel25, steel32 } = getStock();
+                const selected = getSelectedMolds();
+                const { moldResults, totalOutputs } = calcSelectedMolds();
+                const has32Mold = selected.some(m => molds32.some(m32 => m32.name === m.name));
+
+                let html = `<div class="module-section"><div class="module-header">⚙️ 所选模具产量（独立计算，互不影响）</div>`;
+                if (selected.length === 0) {
+                    html += `<div class="module-row">请至少选择一个模具</div>`;
+                } else {
+                    html += `<div class="module-row" style="margin-bottom: 8px;"><span class="module-name">🔧 使用模具：</span><span class="module-count">${selected.map(m => m.name).join(', ')}</span></div>`;
+                    for (let mr of moldResults) {
+                        html += `<div class="module-row" style="margin-top: 6px;"><span class="module-name">${mr.name}</span><span class="module-count">最多 ${mr.shots} 模</span></div>`;
+                        if (mr.shots > 0) {
+                            for (let mod in mr.outputs) {
+                                if (mr.outputs[mod] > 0) {
+                                    html += `<div class="module-row indent"><span class="module-name">└─ ${mod}</span><span class="module-count">${mr.outputs[mod]} 块</span></div>`;
+                                }
+                            }
+                            // 显示该模具剩余钢筋
+                            if (mr.name.startsWith('25')) {
+                                html += `<div class="module-row indent"><span class="module-name">剩余25钢筋</span><span class="module-count">${mr.remaining.steel25} 个</span></div>`;
+                            } else {
+                                html += `<div class="module-row indent"><span class="module-name">剩余25钢筋</span><span class="module-count">${mr.remaining.steel25} 个</span></div>`;
+                                html += `<div class="module-row indent"><span class="module-name">剩余32钢筋</span><span class="module-count">${mr.remaining.steel32} 个</span></div>`;
+                            }
+                        } else {
+                            html += `<div class="module-row indent"><span class="module-name">资源不足，无法生产</span></div>`;
+                        }
+                    }
+                    // 总产量汇总（独立累加）
+                    html += `<div class="module-row" style="margin-top: 8px;"><span class="module-name">📦 总产量汇总（各模具独立计算，可能存在资源重复使用）</span></div>`;
+                    for (let mod in totalOutputs) {
+                        html += `<div class="module-row indent"><span class="module-name">${mod}</span><span class="module-count">${totalOutputs[mod]} 块</span></div>`;
+                    }
+                    if (has32Mold) {
+                        // 有32模具时显示剩余32钢筋（这里剩余是相对于初始库存，无法准确反映资源冲突，故仅作参考）
+                        html += `<div class="module-row" style="margin-top: 8px;"><span class="module-name">📌 注意：各模具独立使用初始库存，资源可能被重复使用，实际生产时需协调分配。</span></div>`;
+                    }
+                }
+                html += `</div>`;
+                // 当前库存
+                html += `<div class="module-section"><div class="module-header">📦 当前库存</div>`;
+                html += `<div class="module-row"><span class="module-name">25钢筋连接件</span><span class="module-count">${steel25} 个</span></div>`;
+                html += `<div class="module-row"><span class="module-name">32钢筋连接件</span><span class="module-count">${steel32} 个</span></div>`;
+                html += `</div>`;
+
+                resultContent.innerHTML = html;
+            }
+
+            function renderCheck() {
+                const { canProduce, message, detailHtml, requiredSteel25, requiredSteel32, remainingSteel25, remainingSteel32 } = checkDemand();
+                let html = `<div class="module-section"><div class="module-header">🔍 需求检查结果</div>`;
+                if (canProduce) html += `<div class="module-row success">${message}</div>`;
+                else {
+                    html += `<div class="module-row warning" style="white-space: pre-line;">${message}</div>`;
+                    html += detailHtml;
+                }
+                html += `<div class="module-row"><span class="module-name">需求总计 25钢筋：</span><span class="module-count">${requiredSteel25} 个</span></div>`;
+                html += `<div class="module-row"><span class="module-name">需求总计 32钢筋：</span><span class="module-count">${requiredSteel32} 个</span></div>`;
+                html += `<div class="module-row"><span class="module-name">满足需求后剩余 25钢筋：</span><span class="module-count">${remainingSteel25} 个</span></div>`;
+                html += `<div class="module-row"><span class="module-name">满足需求后剩余 32钢筋：</span><span class="module-count">${remainingSteel32} 个</span></div>`;
+                html += `</div>`;
+                resultContent.innerHTML = html;
+            }
+
+            function onInputChange() {
+                saveAllData();
+            }
+
+            function init() {
+                buildDemandInputs();
+                buildMoldCheckboxes();
+                loadAllData();
+                steel25Input.addEventListener('input', onInputChange);
+                steel32Input.addEventListener('input', onInputChange);
+                for (let key in demandInputs) {
+                    demandInputs[key].addEventListener('input', onInputChange);
+                }
+                for (let name in moldCheckboxes) {
+                    moldCheckboxes[name].addEventListener('change', onInputChange);
+                }
+                checkBtn.addEventListener('click', renderCheck);
+                clearBtn.addEventListener('click', clearDemand);
+                calcMoldBtn.addEventListener('click', renderSelectedMolds);
+                // 默认执行一次所选模具产量
+                renderSelectedMolds();
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>
