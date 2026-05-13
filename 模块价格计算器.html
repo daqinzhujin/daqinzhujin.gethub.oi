@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块价格计算器（双墙厚+独立单价+插板+顶板）</title>
+    <title>模块价格计算器（双墙厚+独立单价+插板+顶板按立方）</title>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            font-size: 16px; /* 增大基础字体 */
+            font-size: 16px;
         }
         .container {
             background-color: white;
@@ -30,13 +30,13 @@
             margin: 0 auto;
         }
         h1 {
-            font-size: 1.8rem; /* 原1.5rem */
+            font-size: 1.8rem;
             color: #2d3748;
             text-align: center;
             margin-bottom: 8px;
         }
         .sub {
-            font-size: 0.95rem; /* 原0.85rem */
+            font-size: 0.95rem;
             color: #718096;
             text-align: center;
             margin-bottom: 20px;
@@ -49,7 +49,7 @@
             padding: 12px;
             margin-bottom: 20px;
             border: 1px solid #e2e8f0;
-            font-size: 0.9rem; /* 原0.8rem */
+            font-size: 0.9rem;
         }
         .info-card p {
             margin: 4px 0;
@@ -72,14 +72,14 @@
             font-weight: 600;
             color: #1a4055;
             margin-bottom: 6px;
-            font-size: 0.95rem; /* 原0.85rem */
+            font-size: 0.95rem;
         }
         .price-card input {
             width: 100%;
             padding: 10px;
             border: 1px solid #cbdae6;
             border-radius: 8px;
-            font-size: 1rem; /* 原0.9rem */
+            font-size: 1rem;
             background-color: white;
             outline: none;
         }
@@ -96,7 +96,7 @@
             border: 1px solid #e2e8f0;
         }
         .wall-card h3 {
-            font-size: 1rem; /* 原0.95rem */
+            font-size: 1rem;
             font-weight: 600;
             color: #1a4055;
             margin-bottom: 10px;
@@ -110,7 +110,7 @@
         .wall-badge {
             background-color: #4285f4;
             color: white;
-            font-size: 0.75rem; /* 原0.7rem */
+            font-size: 0.75rem;
             padding: 2px 8px;
             border-radius: 20px;
         }
@@ -132,11 +132,11 @@
         .module-name {
             font-weight: 600;
             color: #2d3748;
-            font-size: 0.85rem; /* 原0.75rem */
+            font-size: 0.85rem;
             line-height: 1.3;
         }
         .module-area {
-            font-size: 0.7rem; /* 原0.65rem */
+            font-size: 0.7rem;
             color: #718096;
             margin-top: 2px;
         }
@@ -145,13 +145,13 @@
             padding: 6px 8px;
             border: 1px solid #cbdae6;
             border-radius: 8px;
-            font-size: 0.85rem; /* 原0.75rem */
+            font-size: 0.85rem;
             text-align: center;
         }
         .module-price {
             font-weight: 600;
             color: #4285f4;
-            font-size: 0.85rem; /* 原0.75rem */
+            font-size: 0.85rem;
             text-align: right;
             white-space: nowrap;
         }
@@ -174,7 +174,7 @@
         .accessory-name {
             font-weight: 600;
             color: #b45309;
-            font-size: 0.9rem; /* 原0.8rem */
+            font-size: 0.9rem;
         }
         .accessory-input {
             display: flex;
@@ -182,14 +182,14 @@
             gap: 2px;
         }
         .accessory-input label {
-            font-size: 0.75rem; /* 原0.65rem */
+            font-size: 0.75rem;
             color: #718096;
         }
         .accessory-input input {
             padding: 6px 8px;
             border: 1px solid #cbdae6;
             border-radius: 8px;
-            font-size: 0.85rem; /* 原0.75rem */
+            font-size: 0.85rem;
         }
         .roof-panel {
             background-color: #e6f7e6;
@@ -199,7 +199,7 @@
             margin-bottom: 20px;
         }
         .roof-title {
-            font-size: 1rem; /* 原0.95rem */
+            font-size: 1rem;
             font-weight: 600;
             color: #2d6a4f;
             margin-bottom: 10px;
@@ -218,7 +218,7 @@
             gap: 4px;
         }
         .roof-item label {
-            font-size: 0.8rem; /* 原0.7rem */
+            font-size: 0.8rem;
             color: #2d6a4f;
             font-weight: 500;
         }
@@ -226,7 +226,7 @@
             padding: 6px 8px;
             border: 1px solid #cbdae6;
             border-radius: 8px;
-            font-size: 0.9rem; /* 原0.8rem */
+            font-size: 0.9rem;
         }
         .btn-calc {
             width: 100%;
@@ -235,7 +235,7 @@
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 1.1rem; /* 原1rem */
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             margin: 8px 0 20px;
@@ -253,7 +253,7 @@
             margin-top: 8px;
         }
         .result-title {
-            font-size: 1.1rem; /* 原1rem */
+            font-size: 1.1rem;
             font-weight: 600;
             text-align: center;
             margin-bottom: 12px;
@@ -264,7 +264,7 @@
             display: flex;
             justify-content: space-between;
             padding: 6px 0;
-            font-size: 0.85rem; /* 原0.75rem */
+            font-size: 0.85rem;
             border-bottom: 1px dashed #3e6279;
             flex-wrap: wrap;
         }
@@ -287,15 +287,14 @@
             border-top: 2px solid #ffd966;
         }
         .total-row .result-value {
-            font-size: 1.2rem; /* 原1.1rem */
+            font-size: 1.2rem;
         }
         .note {
-            font-size: 0.8rem; /* 原0.7rem */
+            font-size: 0.8rem;
             color: #718096;
             text-align: center;
             margin-top: 16px;
         }
-        /* 手机端优化：小于700px时单列布局 */
         @media (max-width: 700px) {
             .dual-price-area {
                 grid-template-columns: 1fr;
@@ -343,7 +342,6 @@
                 text-align: left;
             }
         }
-        /* 小屏进一步优化 */
         @media (max-width: 480px) {
             .container {
                 padding: 12px;
@@ -368,15 +366,12 @@
     <h1>🧮 模块价格计算器</h1>
     <div class="sub">25墙和32墙分别设置单价，自动保存数据</div>
 
-    <!-- 模块固定参数提示 -->
     <div class="info-card">
         <p>📐 各模块单块面积：</p>
         <p>25墙：90直板0.27㎡ | 60直板0.18㎡ | 大角0.36㎡ | 小角0.18㎡ | 大T0.4125㎡ | 小T0.3225㎡</p>
         <p>32墙：90直板0.27㎡ | 60直板0.18㎡ | 大角0.456㎡ | 小角0.276㎡ | 大T0.402㎡ | 小T0.312㎡</p>
-        <p>※ 直板面积相同，角/T型面积不同</p>
     </div>
 
-    <!-- 双墙厚单价输入区 -->
     <div class="dual-price-area">
         <div class="price-card">
             <label>💰 25墙模块单价 (元/㎡)</label>
@@ -388,7 +383,6 @@
         </div>
     </div>
 
-    <!-- 双墙厚模块输入区 -->
     <div class="dual-modules">
         <div class="wall-card">
             <h3>🧱 25墙模块 <span class="wall-badge">厚度250mm</span></h3>
@@ -400,93 +394,60 @@
         </div>
     </div>
 
-    <!-- 辅料输入区 -->
     <div class="section-title" style="font-size: 1rem; font-weight: 600; margin: 16px 0 8px 0; padding-bottom: 4px; border-bottom: 2px solid #e2e8f0;">🔧 辅料</div>
     <div class="accessory-grid">
         <div class="accessory-row">
             <div class="accessory-name">卡勾</div>
-            <div class="accessory-input">
-                <label>数量 (袋)</label>
-                <input type="number" id="accessory_hook_bags" step="1" min="0" value="0" placeholder="数量">
-            </div>
-            <div class="accessory-input">
-                <label>单价 (元/袋)</label>
-                <input type="number" id="accessory_hook_price" step="0.1" min="0" value="0" placeholder="单价">
-            </div>
+            <div class="accessory-input"><label>数量 (袋)</label><input type="number" id="accessory_hook_bags" step="1" min="0" value="0"></div>
+            <div class="accessory-input"><label>单价 (元/袋)</label><input type="number" id="accessory_hook_price" step="0.1" min="0" value="0"></div>
         </div>
         <div class="accessory-row">
             <div class="accessory-name">25破口卡</div>
-            <div class="accessory-input">
-                <label>数量 (袋)</label>
-                <input type="number" id="accessory_25_broken" step="1" min="0" value="0" placeholder="数量">
-            </div>
-            <div class="accessory-input">
-                <label>单价 (元/袋)</label>
-                <input type="number" id="accessory_25_price" step="0.1" min="0" value="0" placeholder="单价">
-            </div>
+            <div class="accessory-input"><label>数量 (袋)</label><input type="number" id="accessory_25_broken" step="1" min="0" value="0"></div>
+            <div class="accessory-input"><label>单价 (元/袋)</label><input type="number" id="accessory_25_price" step="0.1" min="0" value="0"></div>
         </div>
         <div class="accessory-row">
             <div class="accessory-name">32破口卡</div>
-            <div class="accessory-input">
-                <label>数量 (袋)</label>
-                <input type="number" id="accessory_32_broken" step="1" min="0" value="0" placeholder="数量">
-            </div>
-            <div class="accessory-input">
-                <label>单价 (元/袋)</label>
-                <input type="number" id="accessory_32_price" step="0.1" min="0" value="0" placeholder="单价">
-            </div>
+            <div class="accessory-input"><label>数量 (袋)</label><input type="number" id="accessory_32_broken" step="1" min="0" value="0"></div>
+            <div class="accessory-input"><label>单价 (元/袋)</label><input type="number" id="accessory_32_price" step="0.1" min="0" value="0"></div>
         </div>
         <div class="accessory-row">
             <div class="accessory-name">25插板</div>
-            <div class="accessory-input">
-                <label>数量 (个)</label>
-                <input type="number" id="accessory_25_plate" step="1" min="0" value="0" placeholder="数量">
-            </div>
-            <div class="accessory-input">
-                <label>单价 (元/个)</label>
-                <input type="number" id="accessory_25_plate_price" step="0.1" min="0" value="0" placeholder="单价">
-            </div>
+            <div class="accessory-input"><label>数量 (个)</label><input type="number" id="accessory_25_plate" step="1" min="0" value="0"></div>
+            <div class="accessory-input"><label>单价 (元/个)</label><input type="number" id="accessory_25_plate_price" step="0.1" min="0" value="0"></div>
         </div>
         <div class="accessory-row">
             <div class="accessory-name">32插板</div>
-            <div class="accessory-input">
-                <label>数量 (个)</label>
-                <input type="number" id="accessory_32_plate" step="1" min="0" value="0" placeholder="数量">
-            </div>
-            <div class="accessory-input">
-                <label>单价 (元/个)</label>
-                <input type="number" id="accessory_32_plate_price" step="0.1" min="0" value="0" placeholder="单价">
-            </div>
+            <div class="accessory-input"><label>数量 (个)</label><input type="number" id="accessory_32_plate" step="1" min="0" value="0"></div>
+            <div class="accessory-input"><label>单价 (元/个)</label><input type="number" id="accessory_32_plate_price" step="0.1" min="0" value="0"></div>
         </div>
     </div>
 
-    <!-- 顶板区域 -->
+    <!-- 顶板：改为输入总面积、单块面积、厚度、单价（元/m³） -->
     <div class="roof-panel">
         <div class="roof-title">🏠 顶板</div>
         <div class="roof-grid">
             <div class="roof-item">
-                <label>长度 (米)</label>
-                <input type="number" id="roof_length" step="0.01" min="0" value="0" placeholder="长度">
+                <label>总面积 (m²)</label>
+                <input type="number" id="roof_total_area" step="0.01" min="0" value="0" placeholder="总面积">
             </div>
             <div class="roof-item">
-                <label>宽度 (米)</label>
-                <input type="number" id="roof_width" step="0.01" min="0" value="0" placeholder="宽度">
+                <label>单块面积 (m²)</label>
+                <input type="number" id="roof_unit_area" step="0.0001" min="0" value="0.732" placeholder="默认1.2×0.61=0.732">
             </div>
             <div class="roof-item">
-                <label>数量 (个)</label>
-                <input type="number" id="roof_quantity" step="1" min="0" value="0" placeholder="数量">
+                <label>厚度 (mm)</label>
+                <input type="number" id="roof_thickness" step="1" min="0" value="50" placeholder="厚度">
             </div>
             <div class="roof-item">
-                <label>单价 (元/㎡)</label>
-                <input type="number" id="roof_price" step="0.1" min="0" value="0" placeholder="单价">
+                <label>单价 (元/m³)</label>
+                <input type="number" id="roof_price_per_cubic" step="1" min="0" value="330" placeholder="元/m³">
             </div>
         </div>
     </div>
 
-    <!-- 计算按钮 -->
     <button class="btn-calc" id="calcBtn">✨ 计算价格</button>
 
-    <!-- 结果展示区 -->
     <div class="result-card" id="resultArea">
         <div class="result-title">📊 计算结果</div>
         <div id="resultContent">
@@ -496,54 +457,35 @@
             </div>
         </div>
     </div>
-    <div class="note">* 模块数量按整块输入，所有数据自动保存，下次打开自动恢复</div>
+    <div class="note">* 顶板按立方米计价，块数自动向上取整；所有数据自动保存</div>
 </div>
 
 <script>
     (function() {
-        // localStorage存储键名
-        const STORAGE_KEY = 'modulePriceCalculatorDataV4';
+        const STORAGE_KEY = 'modulePriceCalculatorV5_cubic';
         
-        // 不同墙厚的模块面积配置
         const moduleAreaConfig = {
-            '25': {
-                '90直板': 0.27,
-                '60直板': 0.18,
-                '大角': 0.36,
-                '小角': 0.18,
-                '大T': 0.4125,
-                '小T': 0.3225
-            },
-            '32': {
-                '90直板': 0.27,
-                '60直板': 0.18,
-                '大角': 0.456,
-                '小角': 0.276,
-                '大T': 0.402,
-                '小T': 0.312
-            }
+            '25': { '90直板':0.27, '60直板':0.18, '大角':0.36, '小角':0.18, '大T':0.4125, '小T':0.3225 },
+            '32': { '90直板':0.27, '60直板':0.18, '大角':0.456, '小角':0.276, '大T':0.402, '小T':0.312 }
         };
 
         const moduleNames = ['90直板', '60直板', '大角', '小角', '大T', '小T'];
-        
-        // 存储输入框引用
-        let inputs25 = {};
-        let inputs32 = {};
-        let priceSpans25 = {};
-        let priceSpans32 = {};
+        let inputs25 = {}, inputs32 = {}, priceSpans25 = {}, priceSpans32 = {};
 
-        // 获取顶板数据
+        // 获取顶板数据（新算法）
         function getRoofData() {
-            const length = parseFloat(document.getElementById('roof_length').value) || 0;
-            const width = parseFloat(document.getElementById('roof_width').value) || 0;
-            const quantity = parseInt(document.getElementById('roof_quantity').value, 10) || 0;
-            const price = parseFloat(document.getElementById('roof_price').value) || 0;
-            const area = length * width * quantity;
-            const totalPrice = area * price;
-            return { length, width, quantity, price, area, totalPrice };
+            const totalArea = parseFloat(document.getElementById('roof_total_area').value) || 0;
+            const unitArea = parseFloat(document.getElementById('roof_unit_area').value) || 0;
+            const thickness = parseFloat(document.getElementById('roof_thickness').value) || 0;
+            const pricePerCubic = parseFloat(document.getElementById('roof_price_per_cubic').value) || 0;
+            
+            const volume = totalArea * (thickness / 1000);
+            const totalPrice = volume * pricePerCubic;
+            const blocks = unitArea > 0 ? Math.ceil(totalArea / unitArea) : 0;
+            
+            return { totalArea, unitArea, thickness, pricePerCubic, volume, totalPrice, blocks };
         }
 
-        // 保存所有输入数据
         function saveAllData() {
             const data = {
                 unitPrice25: document.getElementById('unitPrice25').value,
@@ -561,24 +503,21 @@
                     plate32Price: document.getElementById('accessory_32_plate_price').value
                 },
                 roof: {
-                    length: document.getElementById('roof_length').value,
-                    width: document.getElementById('roof_width').value,
-                    quantity: document.getElementById('roof_quantity').value,
-                    price: document.getElementById('roof_price').value
+                    totalArea: document.getElementById('roof_total_area').value,
+                    unitArea: document.getElementById('roof_unit_area').value,
+                    thickness: document.getElementById('roof_thickness').value,
+                    pricePerCubic: document.getElementById('roof_price_per_cubic').value
                 },
                 modules25: {},
                 modules32: {}
             };
-            
             moduleNames.forEach(name => {
                 if (inputs25[name]) data.modules25[name] = inputs25[name].value;
                 if (inputs32[name]) data.modules32[name] = inputs32[name].value;
             });
-            
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         }
-        
-        // 加载保存的数据
+
         function loadAllData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (!saved) return false;
@@ -601,10 +540,10 @@
                 }
                 if (data.roof) {
                     const r = data.roof;
-                    if (r.length !== undefined) document.getElementById('roof_length').value = r.length;
-                    if (r.width !== undefined) document.getElementById('roof_width').value = r.width;
-                    if (r.quantity !== undefined) document.getElementById('roof_quantity').value = r.quantity;
-                    if (r.price !== undefined) document.getElementById('roof_price').value = r.price;
+                    if (r.totalArea !== undefined) document.getElementById('roof_total_area').value = r.totalArea;
+                    if (r.unitArea !== undefined) document.getElementById('roof_unit_area').value = r.unitArea;
+                    if (r.thickness !== undefined) document.getElementById('roof_thickness').value = r.thickness;
+                    if (r.pricePerCubic !== undefined) document.getElementById('roof_price_per_cubic').value = r.pricePerCubic;
                 }
                 if (data.modules25) {
                     moduleNames.forEach(name => {
@@ -620,7 +559,6 @@
             } catch(e) { return false; }
         }
 
-        // 生成模块输入行
         function buildModuleGrid(containerId, wallType, inputsObj, priceSpansObj) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -629,16 +567,10 @@
             moduleNames.forEach(name => {
                 html += `
                     <div class="module-row">
-                        <div class="module-name">
-                            ${name}
-                            <div class="module-area">${areas[name].toFixed(4)}㎡/块</div>
-                        </div>
-                        <div class="module-input">
-                            <input type="number" id="input_${wallType}_${name}" step="1" min="0" value="0" placeholder="数量">
-                        </div>
+                        <div class="module-name">${name}<div class="module-area">${areas[name].toFixed(4)}㎡/块</div></div>
+                        <div class="module-input"><input type="number" id="input_${wallType}_${name}" step="1" min="0" value="0" placeholder="数量"></div>
                         <div class="module-price" id="price_${wallType}_${name}">0.00元</div>
-                    </div>
-                `;
+                    </div>`;
             });
             container.innerHTML = html;
             moduleNames.forEach(name => {
@@ -652,33 +584,29 @@
             });
         }
 
-        // 更新价格预览
         function updateAllPrices() {
             const unitPrice25 = parseFloat(document.getElementById('unitPrice25').value) || 0;
             const unitPrice32 = parseFloat(document.getElementById('unitPrice32').value) || 0;
             const areas25 = moduleAreaConfig['25'];
             moduleNames.forEach(name => {
-                const input = inputs25[name];
-                const priceSpan = priceSpans25[name];
+                const input = inputs25[name], priceSpan = priceSpans25[name];
                 if (input && priceSpan) {
                     const count = parseInt(input.value,10)||0;
                     const area = count * areas25[name];
-                    priceSpan.textContent = (area * unitPrice25).toFixed(4) + '元';
+                    priceSpan.textContent = (area * unitPrice25).toFixed(2) + '元';
                 }
             });
             const areas32 = moduleAreaConfig['32'];
             moduleNames.forEach(name => {
-                const input = inputs32[name];
-                const priceSpan = priceSpans32[name];
+                const input = inputs32[name], priceSpan = priceSpans32[name];
                 if (input && priceSpan) {
                     const count = parseInt(input.value,10)||0;
                     const area = count * areas32[name];
-                    priceSpan.textContent = (area * unitPrice32).toFixed(4) + '元';
+                    priceSpan.textContent = (area * unitPrice32).toFixed(2) + '元';
                 }
             });
         }
 
-        // 获取辅料数据
         function getAccessoryData() {
             return {
                 hookBags: { count: parseInt(document.getElementById('accessory_hook_bags').value,10)||0, price: parseFloat(document.getElementById('accessory_hook_price').value)||0 },
@@ -689,14 +617,13 @@
             };
         }
 
-        // 计算主函数
         function calculate() {
             const unitPrice25 = parseFloat(document.getElementById('unitPrice25').value)||0;
             const unitPrice32 = parseFloat(document.getElementById('unitPrice32').value)||0;
             const accessories = getAccessoryData();
             const roof = getRoofData();
-            
-            let results25 = [], totalArea25=0, totalPrice25=0;
+
+            let results25=[], totalArea25=0, totalPrice25=0;
             const areas25 = moduleAreaConfig['25'];
             moduleNames.forEach(name => {
                 const count = parseInt(inputs25[name]?.value||0,10);
@@ -707,7 +634,7 @@
                 totalPrice25 += price;
             });
             
-            let results32 = [], totalArea32=0, totalPrice32=0;
+            let results32=[], totalArea32=0, totalPrice32=0;
             const areas32 = moduleAreaConfig['32'];
             moduleNames.forEach(name => {
                 const count = parseInt(inputs32[name]?.value||0,10);
@@ -717,7 +644,7 @@
                 totalArea32 += area;
                 totalPrice32 += price;
             });
-            
+
             const hookTotal = accessories.hookBags.count * accessories.hookBags.price;
             const broken25Total = accessories.broken25.count * accessories.broken25.price;
             const broken32Total = accessories.broken32.count * accessories.broken32.price;
@@ -726,69 +653,71 @@
             const totalAccessoryPrice = hookTotal + broken25Total + broken32Total + plate25Total + plate32Total;
             const totalModulePrice = totalPrice25 + totalPrice32;
             const grandTotal = totalModulePrice + totalAccessoryPrice + roof.totalPrice;
-            
+
             renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, grandTotal);
         }
-        
+
         function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, grandTotal) {
             const container = document.getElementById('resultContent');
             if(!container) return;
             let html = '';
             
-            html += `<div style="margin-bottom:8px;"><span class="result-label" style="font-weight:600;">🧱 25墙模块 (单价 ${unitPrice25.toFixed(4)}元/㎡)</span></div>`;
-            if(results25.length) results25.forEach(r=>{html+=`<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ × ${unitPrice25.toFixed(4)} = ${r.price.toFixed(4)}元</span></div>`;});
-            else html+='<div class="result-row"><span class="result-label">暂未输入25墙模块数量</span><span class="result-value">0.00元</span></div>';
-            html+=`<div class="result-row"><span class="result-label">📦 25墙模块总面积</span><span class="result-value">${totalArea25.toFixed(4)} ㎡</span></div>
-                   <div class="result-row"><span class="result-label">💰 25墙模块总价</span><span class="result-value">${totalPrice25.toFixed(4)} 元</span></div>`;
-            
-            html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🧱 32墙模块 (单价 ${unitPrice32.toFixed(4)}元/㎡)</span></div>`;
-            if(results32.length) results32.forEach(r=>{html+=`<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ × ${unitPrice32.toFixed(4)} = ${r.price.toFixed(4)}元</span></div>`;});
-            else html+='<div class="result-row"><span class="result-label">暂未输入32墙模块数量</span><span class="result-value">0.00元</span></div>';
-            html+=`<div class="result-row"><span class="result-label">📦 32墙模块总面积</span><span class="result-value">${totalArea32.toFixed(4)} ㎡</span></div>
-                   <div class="result-row"><span class="result-label">💰 32墙模块总价</span><span class="result-value">${totalPrice32.toFixed(4)} 元</span></div>`;
-            
+            html += `<div style="margin-bottom:8px;"><span class="result-label" style="font-weight:600;">🧱 25墙模块 (单价 ${unitPrice25.toFixed(2)}元/㎡)</span></div>`;
+            if(results25.length) results25.forEach(r => { html += `<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ × ${unitPrice25.toFixed(2)} = ${r.price.toFixed(2)}元</span></div>`; });
+            else html += '<div class="result-row"><span class="result-label">暂未输入25墙模块数量</span><span class="result-value">0.00元</span></div>';
+            html += `<div class="result-row"><span class="result-label">📦 25墙模块总面积</span><span class="result-value">${totalArea25.toFixed(4)} ㎡</span></div>
+                     <div class="result-row"><span class="result-label">💰 25墙模块总价</span><span class="result-value">${totalPrice25.toFixed(2)} 元</span></div>`;
+
+            html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🧱 32墙模块 (单价 ${unitPrice32.toFixed(2)}元/㎡)</span></div>`;
+            if(results32.length) results32.forEach(r => { html += `<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ × ${unitPrice32.toFixed(2)} = ${r.price.toFixed(2)}元</span></div>`; });
+            else html += '<div class="result-row"><span class="result-label">暂未输入32墙模块数量</span><span class="result-value">0.00元</span></div>';
+            html += `<div class="result-row"><span class="result-label">📦 32墙模块总面积</span><span class="result-value">${totalArea32.toFixed(4)} ㎡</span></div>
+                     <div class="result-row"><span class="result-label">💰 32墙模块总价</span><span class="result-value">${totalPrice32.toFixed(2)} 元</span></div>`;
+
             html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">📊 模块汇总</span></div>
                      <div class="result-row"><span class="result-label">📦 模块总面积合计</span><span class="result-value">${(totalArea25+totalArea32).toFixed(4)} ㎡</span></div>
-                     <div class="result-row"><span class="result-label">💰 模块总价合计</span><span class="result-value">${totalModulePrice.toFixed(4)} 元</span></div>`;
-            
+                     <div class="result-row"><span class="result-label">💰 模块总价合计</span><span class="result-value">${totalModulePrice.toFixed(2)} 元</span></div>`;
+
             html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🔧 辅料部分</span></div>`;
             let hasAcc=false;
-            if(accessories.hookBags.count>0){hasAcc=true; html+=`<div class="result-row"><span class="result-label">卡勾 (${accessories.hookBags.count}袋 × ${accessories.hookBags.price.toFixed(4)}元)</span><span class="result-value">${hookTotal.toFixed(4)} 元</span></div>`;}
-            if(accessories.broken25.count>0){hasAcc=true; html+=`<div class="result-row"><span class="result-label">25破口卡 (${accessories.broken25.count}袋 × ${accessories.broken25.price.toFixed(4)}元)</span><span class="result-value">${broken25Total.toFixed(4)} 元</span></div>`;}
-            if(accessories.broken32.count>0){hasAcc=true; html+=`<div class="result-row"><span class="result-label">32破口卡 (${accessories.broken32.count}袋 × ${accessories.broken32.price.toFixed(4)}元)</span><span class="result-value">${broken32Total.toFixed(4)} 元</span></div>`;}
-            if(accessories.plate25.count>0){hasAcc=true; html+=`<div class="result-row"><span class="result-label">25插板 (${accessories.plate25.count}个 × ${accessories.plate25.price.toFixed(4)}元)</span><span class="result-value">${plate25Total.toFixed(4)} 元</span></div>`;}
-            if(accessories.plate32.count>0){hasAcc=true; html+=`<div class="result-row"><span class="result-label">32插板 (${accessories.plate32.count}个 × ${accessories.plate32.price.toFixed(4)}元)</span><span class="result-value">${plate32Total.toFixed(4)} 元</span></div>`;}
-            if(!hasAcc) html+='<div class="result-row"><span class="result-label">暂未输入辅料数量</span><span class="result-value">0.00元</span></div>';
-            html+=`<div class="result-row"><span class="result-label">🔧 辅料总价</span><span class="result-value">${totalAccessoryPrice.toFixed(4)} 元</span></div>`;
-            
-            if(roof.quantity>0 && roof.area>0){
-                html+=`<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🏠 顶板</span></div>`;
-                html+=`<div class="result-row"><span class="result-label">顶板 (${roof.length}×${roof.width}×${roof.quantity}块)</span><span class="result-value">面积: ${roof.area.toFixed(4)}㎡ × ${roof.price.toFixed(4)}元/㎡ = ${roof.totalPrice.toFixed(4)}元</span></div>`;
+            if(accessories.hookBags.count>0){ hasAcc=true; html += `<div class="result-row"><span class="result-label">卡勾 (${accessories.hookBags.count}袋 × ${accessories.hookBags.price.toFixed(2)}元)</span><span class="result-value">${hookTotal.toFixed(2)} 元</span></div>`; }
+            if(accessories.broken25.count>0){ hasAcc=true; html += `<div class="result-row"><span class="result-label">25破口卡 (${accessories.broken25.count}袋 × ${accessories.broken25.price.toFixed(2)}元)</span><span class="result-value">${broken25Total.toFixed(2)} 元</span></div>`; }
+            if(accessories.broken32.count>0){ hasAcc=true; html += `<div class="result-row"><span class="result-label">32破口卡 (${accessories.broken32.count}袋 × ${accessories.broken32.price.toFixed(2)}元)</span><span class="result-value">${broken32Total.toFixed(2)} 元</span></div>`; }
+            if(accessories.plate25.count>0){ hasAcc=true; html += `<div class="result-row"><span class="result-label">25插板 (${accessories.plate25.count}个 × ${accessories.plate25.price.toFixed(2)}元)</span><span class="result-value">${plate25Total.toFixed(2)} 元</span></div>`; }
+            if(accessories.plate32.count>0){ hasAcc=true; html += `<div class="result-row"><span class="result-label">32插板 (${accessories.plate32.count}个 × ${accessories.plate32.price.toFixed(2)}元)</span><span class="result-value">${plate32Total.toFixed(2)} 元</span></div>`; }
+            if(!hasAcc) html += '<div class="result-row"><span class="result-label">暂未输入辅料数量</span><span class="result-value">0.00元</span></div>';
+            html += `<div class="result-row"><span class="result-label">🔧 辅料总价</span><span class="result-value">${totalAccessoryPrice.toFixed(2)} 元</span></div>`;
+
+            // 顶板显示
+            if(roof.totalArea > 0){
+                html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🏠 顶板</span></div>`;
+                html += `<div class="result-row"><span class="result-label">总面积</span><span class="result-value">${roof.totalArea.toFixed(2)} m²</span></div>`;
+                html += `<div class="result-row"><span class="result-label">体积</span><span class="result-value">${roof.volume.toFixed(4)} m³</span></div>`;
+                html += `<div class="result-row"><span class="result-label">所需块数 (整块)</span><span class="result-value">${roof.blocks} 块 (单块 ${roof.unitArea.toFixed(3)}m²)</span></div>`;
+                html += `<div class="result-row"><span class="result-label">单价 / 总价</span><span class="result-value">${roof.pricePerCubic.toFixed(2)} 元/m³ × ${roof.volume.toFixed(4)} = ${roof.totalPrice.toFixed(2)} 元</span></div>`;
             }
-            
-            html+=`<div class="result-row total-row"><span class="result-label">💰 合计总价</span><span class="result-value">${grandTotal.toFixed(2)} 元</span></div>`;
+
+            html += `<div class="result-row total-row"><span class="result-label">💰 合计总价</span><span class="result-value">${grandTotal.toFixed(2)} 元</span></div>`;
             container.innerHTML = html;
         }
-        
-        function onPriceChange(){ updateAllPrices(); saveAllData(); calculate(); }
-        function onAccessoryChange(){ saveAllData(); calculate(); }
-        function onRoofChange(){ saveAllData(); calculate(); }
-        
+
+        function onPriceChange() { updateAllPrices(); saveAllData(); calculate(); }
+        function onAccessoryChange() { saveAllData(); calculate(); }
+        function onRoofChange() { saveAllData(); calculate(); }
+
         function init() {
             buildModuleGrid('modules25Grid', '25', inputs25, priceSpans25);
             buildModuleGrid('modules32Grid', '32', inputs32, priceSpans32);
             
-            const price25 = document.getElementById('unitPrice25');
-            const price32 = document.getElementById('unitPrice32');
-            const calcBtn = document.getElementById('calcBtn');
-            price25?.addEventListener('input', onPriceChange);
-            price32?.addEventListener('input', onPriceChange);
-            calcBtn?.addEventListener('click', calculate);
+            document.getElementById('unitPrice25')?.addEventListener('input', onPriceChange);
+            document.getElementById('unitPrice32')?.addEventListener('input', onPriceChange);
+            document.getElementById('calcBtn')?.addEventListener('click', calculate);
             
             const accIds = ['accessory_hook_bags','accessory_hook_price','accessory_25_broken','accessory_25_price','accessory_32_broken','accessory_32_price','accessory_25_plate','accessory_25_plate_price','accessory_32_plate','accessory_32_plate_price'];
-            accIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input', onAccessoryChange); });
-            const roofIds = ['roof_length','roof_width','roof_quantity','roof_price'];
-            roofIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input', onRoofChange); });
+            accIds.forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', onAccessoryChange); });
+            
+            const roofIds = ['roof_total_area','roof_unit_area','roof_thickness','roof_price_per_cubic'];
+            roofIds.forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', onRoofChange); });
             
             loadAllData();
             updateAllPrices();
