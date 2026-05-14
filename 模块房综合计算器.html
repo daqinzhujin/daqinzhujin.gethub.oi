@@ -3,47 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块房综合计算器 · 挂钩修正 · 钢筋间距300</title>
+    <title>模块房综合计算器 · 25/32分别统计</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
-        body { background: #f0f4f8; padding: 16px; font-size: 16px; color: #1e293b; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 28px; padding: 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
-        h1 { font-size: 1.8rem; text-align: center; color: #0f2b3d; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 20px; }
-        .section { background: #f9fafb; border-radius: 20px; padding: 16px; margin-bottom: 24px; border: 1px solid #e2e8f0; }
+        body { background: #f5f7fa; padding: 16px; font-size: 16px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .container { background: white; border-radius: 24px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 1.8rem; text-align: center; color: #2d3748; font-weight: 600; margin-bottom: 8px; }
+        .subtitle { text-align: center; color: #718096; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+        .section { background: #f8fafc; border-radius: 16px; padding: 16px; margin-bottom: 24px; border: 1px solid #e2e8f0; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .section-title { font-size: 1.15rem; font-weight: 600; color: #1e3a5f; display: flex; align-items: center; gap: 8px; border-left: 4px solid #4285f4; padding-left: 12px; }
-        .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #475569; border-radius: 20px; padding: 4px 12px; font-size: 0.72rem; cursor: pointer; transition: 0.2s; }
+        .section-title { font-size: 1.1rem; font-weight: 600; color: #1e3a5f; display: flex; align-items: center; gap: 8px; }
+        .section-title::before { content: ''; display: inline-block; width: 4px; height: 20px; background: #4285f4; border-radius: 2px; }
+        .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #475569; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
         .btn-clear:hover { background: #fee2e2; border-color: #f87171; color: #b91c1c; }
-        .floor-tabs { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px; }
-        .floor-tab { background: #e2e8f0; border: none; padding: 8px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+        .input-group { margin-bottom: 12px; }
+        label { display: block; font-weight: 500; color: #4a5568; margin-bottom: 6px; font-size: 0.82rem; }
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; background: #f8fafc; outline: none; transition: 0.2s; }
+        input:focus, select:focus { border-color: #4285f4; background: white; box-shadow: 0 0 0 3px rgba(66,133,244,0.12); }
+        .radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+        .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; font-size: 0.9rem; }
+        .radio-group input[type="radio"] { width: auto; accent-color: #4285f4; }
+        .floor-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+        .floor-tab { background: #e2e8f0; border: none; padding: 8px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
         .floor-tab.active { background: #4285f4; color: white; }
         .floor-panel { display: none; }
         .floor-panel.active-panel { display: block; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
-        .input-group { margin-bottom: 12px; }
-        label { display: block; font-weight: 500; color: #2c3e50; margin-bottom: 4px; font-size: 0.82rem; }
-        input, select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 0.95rem; background: white; outline: none; transition: 0.2s; }
-        input:focus, select:focus { border-color: #4285f4; box-shadow: 0 0 0 3px rgba(66,133,244,0.15); }
-        .radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-        .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; }
-        .radio-group input[type="radio"] { width: auto; accent-color: #4285f4; }
-        .result-card { background: linear-gradient(135deg, #1c3c4f, #153545); border-radius: 20px; padding: 16px; color: #e2f0fa; margin-top: 20px; }
-        .result-title { font-size: 1.1rem; font-weight: 600; border-bottom: 1px solid #3e6279; padding-bottom: 8px; margin-bottom: 12px; text-align: center; }
-        .result-section-title { font-size: 1rem; font-weight: 600; color: #b9d9f0; margin: 12px 0 6px; padding-left: 4px; }
-        .result-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dashed #3a5a70; }
-        .total { font-weight: 700; font-size: 1rem; color: #ffd966; border-top: 2px solid #ffd966; margin-top: 8px; padding-top: 8px; }
-        .subnote { font-size: 0.72rem; text-align: center; color: #8ba1b0; margin-top: 12px; }
-        .opening-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: #f1f5f9; padding: 8px; border-radius: 12px; flex-wrap: wrap; }
+        .checkbox-row { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
+        .checkbox-row input[type="checkbox"] { width: auto; accent-color: #4285f4; }
+        .beam-section, .roof-panel { background: #f1f5f9; border-radius: 14px; padding: 12px; margin-top: 12px; border: 1px solid #e2e8f0; }
+        .roof-panel { margin-bottom: 12px; }
+        .result-card { background: white; border-radius: 16px; padding: 20px; margin-top: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+        .result-title { font-size: 1.2rem; font-weight: 600; color: #2d3748; text-align: center; margin-bottom: 20px; }
+        .result-section-title { font-size: 1rem; font-weight: 600; color: #1e3a5f; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 6px; }
+        .result-subtitle { font-weight: 600; color: #475569; margin: 8px 0 4px; font-size: 0.9rem; }
+        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dashed #e2e8f0; }
+        .result-item:last-child { border-bottom: none; }
+        .result-label { color: #4a5568; }
+        .result-value { font-weight: 600; color: #1e293b; }
+        .total { font-weight: 700; border-top: 2px solid #4285f4; margin-top: 8px; padding-top: 8px; }
+        .total-heavy { border-top: 3px solid #4285f4; margin-top: 10px; padding-top: 10px; }
+        .highlight { color: #4285f4; font-weight: 700; }
+        .subnote { font-size: 0.75rem; color: #718096; text-align: center; margin-top: 16px; }
+        .opening-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: white; padding: 8px; border-radius: 12px; flex-wrap: wrap; border: 1px solid #e2e8f0; }
         .opening-row input { flex: 1; min-width: 60px; margin: 0; }
         .btn-small { background: #ea4335; border: none; border-radius: 30px; padding: 6px 10px; color: white; font-size: 0.7rem; cursor: pointer; white-space: nowrap; }
         .btn-small.add { background: #34a853; }
-        .checkbox-row { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
-        .checkbox-row input[type="checkbox"] { width: auto; }
-        .beam-section { background: #edf2f9; border-radius: 14px; padding: 12px; margin-top: 12px; }
-        .roof-panel { background: #edf2f9; border-radius: 14px; padding: 12px; margin-bottom: 12px; }
-        @media (max-width: 640px) {
-            .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 8px; }
+
+        @media (max-width: 800px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
             .container { padding: 16px; }
         }
     </style>
@@ -51,7 +60,7 @@
 <body>
 <div class="container">
     <h1>🏗️ 模块房综合计算器</h1>
-    <div class="subnote" style="margin-bottom:16px;">25/32模块分离计价 · 分层梁 · 顶板整块出售 · 屋顶无层数 · 自动计算</div>
+    <div class="subtitle">25/32模块分离计价 · 分层梁 · 顶板整块出售 · 屋顶无层数 · 自动计算</div>
 
     <!-- 材料单价 -->
     <div class="section">
@@ -99,7 +108,7 @@
         </div>
     </div>
 
-    <!-- 楼层 -->
+    <!-- 楼层参数 -->
     <div class="section">
         <div class="section-header">
             <span class="section-title">🏠 楼层参数</span>
@@ -121,7 +130,7 @@
         <div class="section-header">
             <span class="section-title">🏠 屋顶</span>
             <span style="display:flex; align-items:center; gap:8px;">
-                <label style="font-size:0.82rem;">房屋层数</label>
+                <label style="font-size:0.82rem; margin:0;">房屋层数</label>
                 <select id="houseFloors" style="width:auto;">
                     <option value="1" selected>1层</option>
                     <option value="2">2层</option>
@@ -155,7 +164,8 @@
         </div>
     </div>
 
-    <div id="results" class="result-card">
+    <!-- 结果 -->
+    <div class="result-card" id="results">
         <div class="result-title">📊 计算结果</div>
         <div id="resultContent">输入参数后自动计算</div>
     </div>
@@ -163,489 +173,367 @@
 </div>
 
 <script>
-(function() {
-    const MODULE_HEIGHT = 0.3;
-    const AREA_90 = 0.27;
-    const AREA_60 = 0.18;
-    const CAVITY_THICK = 0.14;
-    const MODULE_AREA = {
-        '25': { 大角:0.36, 小角:0.18, 大T:0.4125, 小T:0.3225 },
-        '32': { 大角:0.456, 小角:0.276, 大T:0.402,  小T:0.312 }
-    };
-    const theoreticalKgPerM = (d) => 0.00617 * d * d;
-
-    const defaultFloorData = {
-        1: { mode: 'all25', openings: [], height: 3.6, wallCount: 6,
-              extHor: '', extVer: '', extCorners: 0,
-              intHor: '', intVer: '', intCorners: 0, tWalls: 6,
-              beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 },
-        2: { mode: 'mixed', openings: [], height: 3.3, wallCount: 6,
-              extHor: '', extVer: '', extCorners: 5,
-              intHor: '', intVer: '', intCorners: 0, tWalls: 4,
-              beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 }
-    };
-    const floorData = JSON.parse(JSON.stringify(defaultFloorData));
-    const STORAGE_KEY = 'houseCalcV17_full';
-
-    const $ = id => document.getElementById(id);
-
-    const roofEls = {
-        houseFloors: $('houseFloors'),
-        roof1: { length: $('roof1Length'), width: $('roof1Width'), thick: $('roof1Thick'), deduct: $('roof1Deduct') },
-        roof2: { length: $('roof2Length'), width: $('roof2Width'), thick: $('roof2Thick'), deduct: $('roof2Deduct') }
-    };
-
-    const priceInputs = {
-        module25: $('priceModule25'), module32: $('priceModule32'),
-        insert25: $('priceInsert25'), insert32: $('priceInsert32'),
-        hook: $('priceHook'), concrete: $('priceConcrete'),
-        topPlateArea: $('topPlateArea'), topPlateUnitArea: $('topPlateUnitArea'),
-        topPlateThick: $('topPlateThick'), priceTopPlate: $('priceTopPlate'),
-        phi6: $('pricePhi6'), phi10: $('pricePhi10'), phi12: $('pricePhi12'),
-        phi14: $('pricePhi14'), phi18: $('pricePhi18'), phi22: $('pricePhi22')
-    };
-
-    // ---------- 工具函数 ----------
-    function safeEval(expr) {
-        if (!expr || typeof expr !== 'string') return 0;
-        const clean = expr.replace(/\s/g,'');
-        if (/^[0-9+\-*/().]+$/.test(clean)) {
-            try { return eval(clean); } catch { return 0; }
-        }
-        return parseFloat(expr) || 0;
-    }
-
-    // ---------- 清空操作 ----------
-    function clearInputs(ids) { ids.forEach(id => { const el = $(id); if (el) el.value = ''; }); }
-    function clearMaterialPrice() {
-        clearInputs(['priceModule25','priceModule32','priceInsert25','priceInsert32','priceHook','priceConcrete']);
-        saveToLocal(); calculateAll();
-    }
-    function clearTopPlate() {
-        clearInputs(['topPlateArea','topPlateUnitArea','topPlateThick','priceTopPlate']);
-        saveToLocal(); calculateAll();
-    }
-    function clearRebarPrice() {
-        clearInputs(['pricePhi6','pricePhi10','pricePhi12','pricePhi14','pricePhi18','pricePhi22']);
-        saveToLocal(); calculateAll();
-    }
-    function clearRoof() {
-        const floors = parseInt(roofEls.houseFloors.value) || 1;
-        ['roof1Length','roof1Width','roof1Thick'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-        $('roof1Deduct').checked = false;
-        if (floors >= 2) {
-            ['roof2Length','roof2Width','roof2Thick'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-            $('roof2Deduct').checked = false;
-        }
-        saveToLocal(); calculateAll();
-    }
-    function clearFloor(floor) {
-        floorData[floor] = {
-            mode: 'all25', openings: [], height: '', wallCount: '',
-            extHor: '', extVer: '', extCorners: '',
-            intHor: '', intVer: '', intCorners: '', tWalls: '',
-            beamLengthExpr: '', beamWidth: '', beamHeight: ''
+    (function() {
+        const MODULE_HEIGHT = 0.3;
+        const AREA_90 = 0.27;
+        const AREA_60 = 0.18;
+        const CAVITY_THICK = 0.14;
+        const MODULE_AREA = {
+            '25': { 大角:0.36, 小角:0.18, 大T:0.4125, 小T:0.3225 },
+            '32': { 大角:0.456, 小角:0.276, 大T:0.402,  小T:0.312 }
         };
-        renderFloorPanel(floor);
-        renderOpenings(floor);
-        saveToLocal();
-        calculateAll();
-    }
+        const theoreticalKgPerM = (d) => 0.00617 * d * d;
 
-    // ---------- 面板渲染 ----------
-    function collectFloorInputs(floor) {
-        const data = floorData[floor];
-        const container = document.getElementById(`floor${floor}Panel`);
-        if (!container) return;
-        const modeRadio = container.querySelector(`input[name="mode${floor}"]:checked`);
-        if (modeRadio) data.mode = modeRadio.value;
-        const h = container.querySelector(`#height${floor}`);
-        if (h) data.height = parseFloat(h.value) || '';
-        const wc = container.querySelector(`#wallCount${floor}`);
-        if (wc) data.wallCount = parseInt(wc.value) || '';
+        const defaultFloorData = {
+            1: { mode: 'all25', openings: [], height: 3.6, wallCount: 6,
+                  extHor: '', extVer: '', extCorners: 0,
+                  intHor: '', intVer: '', intCorners: 0, tWalls: 6,
+                  beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 },
+            2: { mode: 'mixed', openings: [], height: 3.3, wallCount: 6,
+                  extHor: '', extVer: '', extCorners: 5,
+                  intHor: '', intVer: '', intCorners: 0, tWalls: 4,
+                  beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 }
+        };
+        const floorData = JSON.parse(JSON.stringify(defaultFloorData));
+        const STORAGE_KEY = 'houseCalcV21_separate';
 
-        if (data.mode === 'all25') {
-            data.extHor = ''; data.extVer = ''; data.extCorners = '';
-            const hor = container.querySelector(`#hor${floor}`);
-            const ver = container.querySelector(`#ver${floor}`);
-            const corners = container.querySelector(`#corners${floor}`);
-            const tWalls = container.querySelector(`#tWalls${floor}`);
-            if (hor) data.intHor = hor.value;
-            if (ver) data.intVer = ver.value;
-            if (corners) data.intCorners = parseInt(corners.value) || '';
-            if (tWalls) data.tWalls = parseInt(tWalls.value) || '';
-        } else {
-            const extHor = container.querySelector(`#extHor${floor}`);
-            const extVer = container.querySelector(`#extVer${floor}`);
-            const extCorners = container.querySelector(`#extCorners${floor}`);
-            const intHor = container.querySelector(`#intHor${floor}`);
-            const intVer = container.querySelector(`#intVer${floor}`);
-            const intCorners = container.querySelector(`#intCorners${floor}`);
-            const tWalls = container.querySelector(`#tWalls${floor}`);
-            if (extHor) data.extHor = extHor.value;
-            if (extVer) data.extVer = extVer.value;
-            if (extCorners) data.extCorners = parseInt(extCorners.value) || '';
-            if (intHor) data.intHor = intHor.value;
-            if (intVer) data.intVer = intVer.value;
-            if (intCorners) data.intCorners = parseInt(intCorners.value) || '';
-            if (tWalls) data.tWalls = parseInt(tWalls.value) || '';
+        const $ = id => document.getElementById(id);
+
+        const roofEls = {
+            houseFloors: $('houseFloors'),
+            roof1: { length: $('roof1Length'), width: $('roof1Width'), thick: $('roof1Thick'), deduct: $('roof1Deduct') },
+            roof2: { length: $('roof2Length'), width: $('roof2Width'), thick: $('roof2Thick'), deduct: $('roof2Deduct') }
+        };
+
+        const priceInputs = {
+            module25: $('priceModule25'), module32: $('priceModule32'),
+            insert25: $('priceInsert25'), insert32: $('priceInsert32'),
+            hook: $('priceHook'), concrete: $('priceConcrete'),
+            topPlateArea: $('topPlateArea'), topPlateUnitArea: $('topPlateUnitArea'),
+            topPlateThick: $('topPlateThick'), priceTopPlate: $('priceTopPlate'),
+            phi6: $('pricePhi6'), phi10: $('pricePhi10'), phi12: $('pricePhi12'),
+            phi14: $('pricePhi14'), phi18: $('pricePhi18'), phi22: $('pricePhi22')
+        };
+
+        function safeEval(expr) {
+            if (!expr || typeof expr !== 'string') return 0;
+            const clean = expr.replace(/\s/g,'');
+            if (/^[0-9+\-*/().]+$/.test(clean)) {
+                try { return eval(clean); } catch { return 0; }
+            }
+            return parseFloat(expr) || 0;
         }
-        const beamLen = container.querySelector(`#beamLen${floor}`);
-        const beamW = container.querySelector(`#beamW${floor}`);
-        const beamH = container.querySelector(`#beamH${floor}`);
-        if (beamLen) data.beamLengthExpr = beamLen.value;
-        if (beamW) data.beamWidth = parseFloat(beamW.value) || '';
-        if (beamH) data.beamHeight = parseFloat(beamH.value) || '';
-    }
 
-    function renderFloorPanel(floor) {
-        const container = document.getElementById(`floor${floor}Panel`);
-        const data = floorData[floor];
-        const isMixed = data.mode === 'mixed';
-        let html = `<div class="radio-group"><label><input type="radio" name="mode${floor}" value="all25" ${!isMixed?'checked':''}> 全25墙</label><label><input type="radio" name="mode${floor}" value="mixed" ${isMixed?'checked':''}> 32外墙 + 25内墙</label></div>
-            <div class="grid-2"><div class="input-group"><label>墙体高度 (m)</label><input type="number" id="height${floor}" step="0.1" value="${data.height}"></div><div class="input-group"><label>墙面数量</label><input type="number" id="wallCount${floor}" value="${data.wallCount}" min="1"></div></div>`;
-        if (!isMixed) {
-            html += `<div class="grid-2"><div class="input-group"><label>横墙总长 (m) 可算式</label><input type="text" id="hor${floor}" value="${data.intHor}"></div><div class="input-group"><label>纵墙总长 (m) 可算式</label><input type="text" id="ver${floor}" value="${data.intVer}"></div><div class="input-group"><label>拐角数量</label><input type="number" id="corners${floor}" value="${data.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${floor}" value="${data.tWalls}" min="0"></div></div>`;
-        } else {
-            html += `<div style="font-weight:600; margin:12px 0 6px;">🧱 外墙 (32模块)</div><div class="grid-2"><div class="input-group"><label>外墙横长 (m)</label><input type="text" id="extHor${floor}" value="${data.extHor}"></div><div class="input-group"><label>外墙纵长 (m)</label><input type="text" id="extVer${floor}" value="${data.extVer}"></div><div class="input-group"><label>外墙拐角</label><input type="number" id="extCorners${floor}" value="${data.extCorners}" min="0"></div></div>
-            <div style="font-weight:600; margin:12px 0 6px;">🧱 内墙 (25模块)</div><div class="grid-2"><div class="input-group"><label>内墙横长 (m)</label><input type="text" id="intHor${floor}" value="${data.intHor}"></div><div class="input-group"><label>内墙纵长 (m)</label><input type="text" id="intVer${floor}" value="${data.intVer}"></div><div class="input-group"><label>内墙拐角</label><input type="number" id="intCorners${floor}" value="${data.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${floor}" value="${data.tWalls}" min="0"></div></div>`;
+        function clearInputs(ids) { ids.forEach(id => { const el = $(id); if (el) el.value = ''; }); }
+        function clearMaterialPrice() { clearInputs(['priceModule25','priceModule32','priceInsert25','priceInsert32','priceHook','priceConcrete']); saveToLocal(); calculateAll(); }
+        function clearTopPlate() { clearInputs(['topPlateArea','topPlateUnitArea','topPlateThick','priceTopPlate']); saveToLocal(); calculateAll(); }
+        function clearRebarPrice() { clearInputs(['pricePhi6','pricePhi10','pricePhi12','pricePhi14','pricePhi18','pricePhi22']); saveToLocal(); calculateAll(); }
+        function clearRoof() {
+            const floors = parseInt(roofEls.houseFloors.value) || 1;
+            ['roof1Length','roof1Width','roof1Thick'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+            $('roof1Deduct').checked = false;
+            if (floors >= 2) {
+                ['roof2Length','roof2Width','roof2Thick'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+                $('roof2Deduct').checked = false;
+            }
+            saveToLocal(); calculateAll();
         }
-        html += `<div class="beam-section"><div style="font-weight:600; margin-bottom:8px;">📏 本层梁</div><div class="grid-2"><div class="input-group"><label>梁总长度 (m) 可算式</label><input type="text" id="beamLen${floor}" value="${data.beamLengthExpr}" placeholder="例:5.2+3.3"></div><div class="input-group"><label>梁宽度 (m)</label><input type="number" id="beamW${floor}" step="0.01" value="${data.beamWidth}"></div><div class="input-group"><label>梁高度 (m)</label><input type="number" id="beamH${floor}" step="0.01" value="${data.beamHeight}"></div></div></div>`;
-        html += `<div class="section-title" style="margin-top:12px;">🚪 门窗洞口</div><div id="openingsContainer${floor}"></div><button class="btn-small add" data-floor="${floor}">➕ 添加洞口</button>`;
-        container.innerHTML = html;
+        function clearFloor(floor) {
+            floorData[floor] = { mode: 'all25', openings: [], height: '', wallCount: '', extHor: '', extVer: '', extCorners: '', intHor: '', intVer: '', intCorners: '', tWalls: '', beamLengthExpr: '', beamWidth: '', beamHeight: '' };
+            renderFloorPanel(floor); renderOpenings(floor); saveToLocal(); calculateAll();
+        }
 
-        container.querySelectorAll(`input[name="mode${floor}"]`).forEach(radio => {
-            radio.addEventListener('change', () => {
-                collectFloorInputs(floor);
-                floorData[floor].mode = radio.value;
-                renderFloorPanel(floor);
-                renderOpenings(floor);
-                saveToLocal();
-                calculateAll();
+        function collectFloorInputs(floor) {
+            const data = floorData[floor];
+            const container = document.getElementById(`floor${floor}Panel`);
+            if (!container) return;
+            const modeRadio = container.querySelector(`input[name="mode${floor}"]:checked`);
+            if (modeRadio) data.mode = modeRadio.value;
+            const h = container.querySelector(`#height${floor}`);
+            if (h) data.height = parseFloat(h.value) || '';
+            const wc = container.querySelector(`#wallCount${floor}`);
+            if (wc) data.wallCount = parseInt(wc.value) || '';
+            if (data.mode === 'all25') {
+                data.extHor = ''; data.extVer = ''; data.extCorners = '';
+                const hor = container.querySelector(`#hor${floor}`), ver = container.querySelector(`#ver${floor}`), corners = container.querySelector(`#corners${floor}`), tWalls = container.querySelector(`#tWalls${floor}`);
+                if (hor) data.intHor = hor.value; if (ver) data.intVer = ver.value; if (corners) data.intCorners = parseInt(corners.value) || ''; if (tWalls) data.tWalls = parseInt(tWalls.value) || '';
+            } else {
+                const extHor = container.querySelector(`#extHor${floor}`), extVer = container.querySelector(`#extVer${floor}`), extCorners = container.querySelector(`#extCorners${floor}`), intHor = container.querySelector(`#intHor${floor}`), intVer = container.querySelector(`#intVer${floor}`), intCorners = container.querySelector(`#intCorners${floor}`), tWalls = container.querySelector(`#tWalls${floor}`);
+                if (extHor) data.extHor = extHor.value; if (extVer) data.extVer = extVer.value; if (extCorners) data.extCorners = parseInt(extCorners.value) || ''; if (intHor) data.intHor = intHor.value; if (intVer) data.intVer = intVer.value; if (intCorners) data.intCorners = parseInt(intCorners.value) || ''; if (tWalls) data.tWalls = parseInt(tWalls.value) || '';
+            }
+            const beamLen = container.querySelector(`#beamLen${floor}`), beamW = container.querySelector(`#beamW${floor}`), beamH = container.querySelector(`#beamH${floor}`);
+            if (beamLen) data.beamLengthExpr = beamLen.value; if (beamW) data.beamWidth = parseFloat(beamW.value) || ''; if (beamH) data.beamHeight = parseFloat(beamH.value) || '';
+        }
+
+        function renderFloorPanel(floor) {
+            const container = document.getElementById(`floor${floor}Panel`);
+            const data = floorData[floor];
+            const isMixed = data.mode === 'mixed';
+            let html = `<div class="radio-group"><label><input type="radio" name="mode${floor}" value="all25" ${!isMixed?'checked':''}> 全25墙</label><label><input type="radio" name="mode${floor}" value="mixed" ${isMixed?'checked':''}> 32外墙 + 25内墙</label></div>
+                <div class="grid-2"><div class="input-group"><label>墙体高度 (m)</label><input type="number" id="height${floor}" step="0.1" value="${data.height}"></div><div class="input-group"><label>墙面数量</label><input type="number" id="wallCount${floor}" value="${data.wallCount}" min="1"></div></div>`;
+            if (!isMixed) {
+                html += `<div class="grid-2"><div class="input-group"><label>横墙总长 (m) 可算式</label><input type="text" id="hor${floor}" value="${data.intHor}"></div><div class="input-group"><label>纵墙总长 (m) 可算式</label><input type="text" id="ver${floor}" value="${data.intVer}"></div><div class="input-group"><label>拐角数量</label><input type="number" id="corners${floor}" value="${data.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${floor}" value="${data.tWalls}" min="0"></div></div>`;
+            } else {
+                html += `<div style="font-weight:600; margin:12px 0 6px;">🧱 外墙 (32模块)</div><div class="grid-2"><div class="input-group"><label>外墙横长 (m)</label><input type="text" id="extHor${floor}" value="${data.extHor}"></div><div class="input-group"><label>外墙纵长 (m)</label><input type="text" id="extVer${floor}" value="${data.extVer}"></div><div class="input-group"><label>外墙拐角</label><input type="number" id="extCorners${floor}" value="${data.extCorners}" min="0"></div></div>
+                <div style="font-weight:600; margin:12px 0 6px;">🧱 内墙 (25模块)</div><div class="grid-2"><div class="input-group"><label>内墙横长 (m)</label><input type="text" id="intHor${floor}" value="${data.intHor}"></div><div class="input-group"><label>内墙纵长 (m)</label><input type="text" id="intVer${floor}" value="${data.intVer}"></div><div class="input-group"><label>内墙拐角</label><input type="number" id="intCorners${floor}" value="${data.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${floor}" value="${data.tWalls}" min="0"></div></div>`;
+            }
+            html += `<div class="beam-section"><div style="font-weight:600; margin-bottom:8px;">📏 本层梁</div><div class="grid-2"><div class="input-group"><label>梁总长度 (m) 可算式</label><input type="text" id="beamLen${floor}" value="${data.beamLengthExpr}" placeholder="例:5.2+3.3"></div><div class="input-group"><label>梁宽度 (m)</label><input type="number" id="beamW${floor}" step="0.01" value="${data.beamWidth}"></div><div class="input-group"><label>梁高度 (m)</label><input type="number" id="beamH${floor}" step="0.01" value="${data.beamHeight}"></div></div></div>`;
+            html += `<div class="section-title" style="margin-top:12px;">🚪 门窗洞口</div><div id="openingsContainer${floor}"></div><button class="btn-small add" data-floor="${floor}">➕ 添加洞口</button>`;
+            container.innerHTML = html;
+
+            container.querySelectorAll(`input[name="mode${floor}"]`).forEach(radio => {
+                radio.addEventListener('change', () => { collectFloorInputs(floor); floorData[floor].mode = radio.value; renderFloorPanel(floor); renderOpenings(floor); saveToLocal(); calculateAll(); });
             });
-        });
-        container.querySelectorAll('input, select').forEach(el => {
-            if (el.type !== 'radio') {
-                el.addEventListener('input', () => {
-                    collectFloorInputs(floor);
-                    saveToLocal();
-                    calculateAll();
-                });
-            }
-        });
-        container.querySelector('.btn-small.add').addEventListener('click', () => addOpening(floor));
-    }
+            container.querySelectorAll('input, select').forEach(el => { if (el.type !== 'radio') el.addEventListener('input', () => { collectFloorInputs(floor); saveToLocal(); calculateAll(); }); });
+            container.querySelector('.btn-small.add').addEventListener('click', () => addOpening(floor));
+        }
 
-    function renderOpenings(floor) {
-        const container = document.getElementById(`openingsContainer${floor}`);
-        if (!container) return;
-        container.innerHTML = '';
-        floorData[floor].openings.forEach((op, idx) => {
-            const row = document.createElement('div');
-            row.className = 'opening-row';
-            row.innerHTML = `
-                <input type="number" step="0.01" placeholder="宽(m)" value="${op.width}" class="op-width">
-                <input type="number" step="0.01" placeholder="高(m)" value="${op.height}" class="op-height">
-                <input type="number" step="1" placeholder="数量" value="${op.count}" class="op-count" style="width:70px">
-                <button class="btn-small">删除</button>`;
-            row.querySelector('.btn-small').addEventListener('click', () => {
-                floorData[floor].openings.splice(idx,1);
-                renderOpenings(floor);
-                saveToLocal();
-                calculateAll();
+        function renderOpenings(floor) {
+            const container = document.getElementById(`openingsContainer${floor}`);
+            if (!container) return; container.innerHTML = '';
+            floorData[floor].openings.forEach((op, idx) => {
+                const row = document.createElement('div'); row.className = 'opening-row';
+                row.innerHTML = `<input type="number" step="0.01" placeholder="宽(m)" value="${op.width}" class="op-width"><input type="number" step="0.01" placeholder="高(m)" value="${op.height}" class="op-height"><input type="number" step="1" placeholder="数量" value="${op.count}" class="op-count" style="width:70px"><button class="btn-small">删除</button>`;
+                row.querySelector('.btn-small').addEventListener('click', () => { floorData[floor].openings.splice(idx,1); renderOpenings(floor); saveToLocal(); calculateAll(); });
+                const w = row.querySelector('.op-width'), h2 = row.querySelector('.op-height'), c = row.querySelector('.op-count');
+                w.addEventListener('change', () => { op.width = parseFloat(w.value)||0; saveToLocal(); calculateAll(); });
+                h2.addEventListener('change', () => { op.height = parseFloat(h2.value)||0; saveToLocal(); calculateAll(); });
+                c.addEventListener('change', () => { op.count = parseInt(c.value)||0; saveToLocal(); calculateAll(); });
+                container.appendChild(row);
             });
-            const w = row.querySelector('.op-width');
-            const h2 = row.querySelector('.op-height');
-            const c = row.querySelector('.op-count');
-            w.addEventListener('change', () => { op.width = parseFloat(w.value)||0; saveToLocal(); calculateAll(); });
-            h2.addEventListener('change', () => { op.height = parseFloat(h2.value)||0; saveToLocal(); calculateAll(); });
-            c.addEventListener('change', () => { op.count = parseInt(c.value)||0; saveToLocal(); calculateAll(); });
-            container.appendChild(row);
-        });
-    }
-
-    function addOpening(floor) {
-        floorData[floor].openings.push({ width:1.0, height:1.8, count:1 });
-        renderOpenings(floor);
-        saveToLocal();
-        calculateAll();
-    }
-
-    function updateRoofVisibility() {
-        const floors = parseInt(roofEls.houseFloors.value) || 1;
-        $('roof2Panel').style.display = floors >= 2 ? 'block' : 'none';
-    }
-
-    // ---------- 核心计算 ----------
-    function calcFloorModules(floor) {
-        const data = floorData[floor];
-        const H = Number(data.height); if (!H || H <= 0) return null;
-        const layers = Math.ceil(H / MODULE_HEIGHT);
-        const openings = data.openings;
-        let totalWinArea = 0, totalInsertBlocks = 0;
-        for (let op of openings) { if (op.width>0 && op.height>0 && op.count>0) { totalWinArea += op.width*op.height*op.count; totalInsertBlocks += op.count*2*Math.ceil(op.height/MODULE_HEIGHT); } }
-        let extHor=0, extVer=0, intHor=0, intVer=0, extCorners=0, intCorners=0, tWalls=Number(data.tWalls)||0;
-        if (data.mode === 'all25') { intHor = safeEval(data.intHor); intVer = safeEval(data.intVer); intCorners = Number(data.intCorners)||0; }
-        else { extHor = safeEval(data.extHor); extVer = safeEval(data.extVer); extCorners = Number(data.extCorners)||0; intHor = safeEval(data.intHor); intVer = safeEval(data.intVer); intCorners = Number(data.intCorners)||0; }
-        const extTotalLen = extHor + extVer, intTotalLen = intHor + intVer, totalLength = extTotalLen + intTotalLen;
-        if (totalLength <= 0) return null;
-        const S_total = totalLength * layers * MODULE_HEIGHT, S_net = Math.max(0, S_total - totalWinArea);
-        const bigLayers = Math.ceil(layers/2), smallLayers = Math.floor(layers/2);
-
-        const bigCorner32 = extCorners * bigLayers, smallCorner32 = extCorners * smallLayers;
-        const bigT32 = (data.mode==='mixed') ? tWalls*bigLayers : 0, smallT32 = (data.mode==='mixed') ? tWalls*smallLayers : 0;
-        const areaSpecial32 = bigCorner32*MODULE_AREA['32'].大角 + smallCorner32*MODULE_AREA['32'].小角 + bigT32*MODULE_AREA['32'].大T + smallT32*MODULE_AREA['32'].小T;
-
-        let bigCorner25, smallCorner25, bigT25, smallT25;
-        if (data.mode==='all25') { bigCorner25 = intCorners * bigLayers; smallCorner25 = intCorners * smallLayers; bigT25 = tWalls * bigLayers; smallT25 = tWalls * smallLayers; }
-        else { bigCorner25 = intCorners * bigLayers; smallCorner25 = intCorners * smallLayers; bigT25 = 0; smallT25 = 0; }
-        const areaSpecial25 = bigCorner25*MODULE_AREA['25'].大角 + smallCorner25*MODULE_AREA['25'].小角 + bigT25*MODULE_AREA['25'].大T + smallT25*MODULE_AREA['25'].小T;
-
-        const S_special_total = areaSpecial32 + areaSpecial25;
-        let S_straight = Math.max(0, S_net - S_special_total);
-        const wallCount = Number(data.wallCount) || 1;
-        const M = Math.ceil(wallCount * layers / 2);
-        let count60 = M, remain = S_straight - M * AREA_60; if (remain < 0) remain = 0;
-        let count90 = Math.floor(remain / AREA_90), remain2 = remain - count90 * AREA_90;
-        if (remain2 > 1e-6) count60 += Math.ceil(remain2 / AREA_60);
-        const areaStraight = count90*AREA_90 + count60*AREA_60;
-
-        const ratio32 = totalLength > 0 ? extTotalLen / totalLength : 0;
-        const areaStraight32 = areaStraight * ratio32, areaStraight25 = areaStraight - areaStraight32;
-        const area32 = areaSpecial32 + areaStraight32, area25 = areaSpecial25 + areaStraight25;
-
-        const insert32 = Math.round(totalInsertBlocks * ratio32), insert25 = totalInsertBlocks - insert32;
-        const totalCorners = extCorners + intCorners;
-        const cornerHooks = totalCorners * 6;         // 每个拐角6个
-        const tHooks = tWalls * 9;                    // 每个T型9个
-        const wallHooks = Math.ceil(totalLength * layers / 3);
-        return { layers, totalLength, S_net, count90, count60, bigCorner32, smallCorner32, bigT32, smallT32, bigCorner25, smallCorner25, bigT25, smallT25, insert32, insert25, totalHooks: cornerHooks+tHooks+wallHooks, area32, area25 };
-    }
-
-    function calcFloorRebar(floor, mod) {
-        if (!mod) return { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 };
-        const data = floorData[floor], openings = data.openings;
-        let totalWinWidth = 0;
-        for (let op of openings) totalWinWidth += (op.width||0)*(op.count||0);
-        const H = Number(data.height);
-        const horizontalLen = mod.layers * (mod.totalLength - totalWinWidth);
-        const vertBars = Math.ceil(mod.totalLength / 0.3);
-        const vertLen = vertBars * H;
-        const extCorners = Number(data.extCorners)||0, intCorners = Number(data.intCorners)||0, tWalls = Number(data.tWalls)||0;
-        let col32 = (data.mode==='mixed')? extCorners + tWalls : 0;
-        let col25 = (data.mode==='all25')? intCorners + tWalls : intCorners;
-        const columnSteelLen = (col32+col25) * 4 * H;
-        const stirrupPerCol = Math.ceil(H/0.2);
-        const len32 = col32 * stirrupPerCol * (4*0.32+0.2), len25 = col25 * stirrupPerCol * (4*0.25+0.2);
-        let topLen = 0;
-        for (let op of openings) topLen += (op.count||0)*((op.width||0)+0.4);
-        return { lenPhi6: len32+len25, lenPhi10: horizontalLen, lenPhi12: vertLen + topLen, lenPhi14: columnSteelLen };
-    }
-
-    function calcRoofRebar(len, wid) {
-        if (len<=0||wid<=0) return { lenPhi12:0, lenPhi10:0 };
-        const bottom = Math.ceil(len/0.2)*wid + Math.ceil(wid/0.2)*len;
-        return { lenPhi12: bottom, lenPhi10: bottom };
-    }
-
-    function calcSingleBeamRebar(beamLen, beamW, beamH) {
-        if (beamLen <= 0) return { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
-        return { lenPhi22: beamLen*3, lenPhi18: beamLen*2, lenPhi6: (Math.ceil(beamLen/0.2)+1)*(2*(beamW+beamH)+0.2) };
-    }
-
-    function calculateAll() {
-        for (let f of [1,2]) collectFloorInputs(f);
-        const p25 = parseFloat(priceInputs.module25.value)||0, p32 = parseFloat(priceInputs.module32.value)||0;
-        const pIns25 = parseFloat(priceInputs.insert25.value)||0, pIns32 = parseFloat(priceInputs.insert32.value)||0;
-        const pHook = parseFloat(priceInputs.hook.value)||0, pConc = parseFloat(priceInputs.concrete.value)||0;
-        const houseFloors = parseInt(roofEls.houseFloors.value)||1;
-        const topArea = parseFloat(priceInputs.topPlateArea.value)||0, topUnitArea = parseFloat(priceInputs.topPlateUnitArea.value)||0, topThick = parseFloat(priceInputs.topPlateThick.value)||0, pTopPlate = parseFloat(priceInputs.priceTopPlate.value)||0;
-        const price = { phi6: parseFloat(priceInputs.phi6.value)||0, phi10: parseFloat(priceInputs.phi10.value)||0, phi12: parseFloat(priceInputs.phi12.value)||0, phi14: parseFloat(priceInputs.phi14.value)||0, phi18: parseFloat(priceInputs.phi18.value)||0, phi22: parseFloat(priceInputs.phi22.value)||0 };
-
-        let totalArea25=0, totalArea32=0, sum90=0, sum60=0, big32=0, small32=0, bigT32=0, smallT32=0, big25=0, small25=0, bigT25=0, smallT25=0, ins25=0, ins32=0, hooks=0, wallConc=0;
-        let rebar = { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 };
-        let beamConcByFloor = [0,0,0], beamProjByFloor = [0,0,0], beamRebarTotal = { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
-
-        for (let f of [1,2]) {
-            const mod = calcFloorModules(f);
-            if (mod) {
-                const reb = calcFloorRebar(f, mod);
-                totalArea25 += mod.area25; totalArea32 += mod.area32;
-                sum90 += mod.count90; sum60 += mod.count60;
-                big32 += mod.bigCorner32; small32 += mod.smallCorner32; bigT32 += mod.bigT32; smallT32 += mod.smallT32;
-                big25 += mod.bigCorner25; small25 += mod.smallCorner25; bigT25 += mod.bigT25; smallT25 += mod.smallT25;
-                ins25 += mod.insert25; ins32 += mod.insert32;
-                hooks += mod.totalHooks;
-                wallConc += mod.S_net * CAVITY_THICK;
-                rebar.lenPhi6 += reb.lenPhi6; rebar.lenPhi10 += reb.lenPhi10; rebar.lenPhi12 += reb.lenPhi12; rebar.lenPhi14 += reb.lenPhi14;
-            }
-            const data = floorData[f];
-            const beamLen = safeEval(data.beamLengthExpr);
-            if (beamLen > 0) {
-                const bw = Number(data.beamWidth)||0, bh = Number(data.beamHeight)||0;
-                beamConcByFloor[f] = beamLen * bw * bh;
-                beamProjByFloor[f] = beamLen * bw;
-                const single = calcSingleBeamRebar(beamLen, bw, bh);
-                beamRebarTotal.lenPhi22 += single.lenPhi22; beamRebarTotal.lenPhi18 += single.lenPhi18; beamRebarTotal.lenPhi6 += single.lenPhi6;
-            }
         }
 
-        let roofConcTotal = 0, roofRebarTotal = { lenPhi12:0, lenPhi10:0 };
-        for (let f = 1; f <= houseFloors; f++) {
-            const panel = roofEls[`roof${f}`];
-            if (!panel.length || !panel.width) continue;
-            const len = parseFloat(panel.length.value)||0, wid = parseFloat(panel.width.value)||0, thick = parseFloat(panel.thick.value)||0;
-            const deduct = panel.deduct && panel.deduct.checked;
-            let area = len * wid;
-            if (deduct && beamProjByFloor[f] > 0) area = Math.max(0, area - beamProjByFloor[f]);
-            roofConcTotal += area * thick;
-            const reb = calcRoofRebar(len, wid);
-            roofRebarTotal.lenPhi12 += reb.lenPhi12; roofRebarTotal.lenPhi10 += reb.lenPhi10;
+        function addOpening(floor) { floorData[floor].openings.push({ width:1.0, height:1.8, count:1 }); renderOpenings(floor); saveToLocal(); calculateAll(); }
+        function updateRoofVisibility() { $('roof2Panel').style.display = (parseInt(roofEls.houseFloors.value) || 1) >= 2 ? 'block' : 'none'; }
+
+        function calcFloorModules(floor) {
+            const data = floorData[floor];
+            const H = Number(data.height); if (!H || H <= 0) return null;
+            const layers = Math.ceil(H / MODULE_HEIGHT);
+            const openings = data.openings;
+            let totalWinArea = 0, totalInsertBlocks = 0;
+            for (let op of openings) { if (op.width>0 && op.height>0 && op.count>0) { totalWinArea += op.width*op.height*op.count; totalInsertBlocks += op.count*2*Math.ceil(op.height/MODULE_HEIGHT); } }
+            let extHor=0, extVer=0, intHor=0, intVer=0, extCorners=0, intCorners=0, tWalls=Number(data.tWalls)||0;
+            if (data.mode === 'all25') { intHor = safeEval(data.intHor); intVer = safeEval(data.intVer); intCorners = Number(data.intCorners)||0; }
+            else { extHor = safeEval(data.extHor); extVer = safeEval(data.extVer); extCorners = Number(data.extCorners)||0; intHor = safeEval(data.intHor); intVer = safeEval(data.intVer); intCorners = Number(data.intCorners)||0; }
+            const extTotalLen = extHor + extVer, intTotalLen = intHor + intVer, totalLength = extTotalLen + intTotalLen;
+            if (totalLength <= 0) return null;
+            const S_total = totalLength * layers * MODULE_HEIGHT, S_net = Math.max(0, S_total - totalWinArea);
+            const bigLayers = Math.ceil(layers/2), smallLayers = Math.floor(layers/2);
+
+            const bigCorner32 = extCorners * bigLayers, smallCorner32 = extCorners * smallLayers;
+            const bigT32 = (data.mode==='mixed') ? tWalls*bigLayers : 0, smallT32 = (data.mode==='mixed') ? tWalls*smallLayers : 0;
+            const areaSpecial32 = bigCorner32*MODULE_AREA['32'].大角 + smallCorner32*MODULE_AREA['32'].小角 + bigT32*MODULE_AREA['32'].大T + smallT32*MODULE_AREA['32'].小T;
+
+            let bigCorner25, smallCorner25, bigT25, smallT25;
+            if (data.mode==='all25') { bigCorner25 = intCorners * bigLayers; smallCorner25 = intCorners * smallLayers; bigT25 = tWalls * bigLayers; smallT25 = tWalls * smallLayers; }
+            else { bigCorner25 = intCorners * bigLayers; smallCorner25 = intCorners * smallLayers; bigT25 = 0; smallT25 = 0; }
+            const areaSpecial25 = bigCorner25*MODULE_AREA['25'].大角 + smallCorner25*MODULE_AREA['25'].小角 + bigT25*MODULE_AREA['25'].大T + smallT25*MODULE_AREA['25'].小T;
+
+            const S_special_total = areaSpecial32 + areaSpecial25;
+            let S_straight = Math.max(0, S_net - S_special_total);
+            const wallCount = Number(data.wallCount) || 1;
+            const M = Math.ceil(wallCount * layers / 2);
+            let count60 = M, remain = S_straight - M * AREA_60; if (remain < 0) remain = 0;
+            let count90 = Math.floor(remain / AREA_90), remain2 = remain - count90 * AREA_90;
+            if (remain2 > 1e-6) count60 += Math.ceil(remain2 / AREA_60);
+            const areaStraight = count90*AREA_90 + count60*AREA_60;
+
+            const ratio32 = totalLength > 0 ? extTotalLen / totalLength : 0;
+            const areaStraight32 = areaStraight * ratio32, areaStraight25 = areaStraight - areaStraight32;
+            const area32 = areaSpecial32 + areaStraight32, area25 = areaSpecial25 + areaStraight25;
+
+            const count90_32 = Math.round(count90 * ratio32), count90_25 = count90 - count90_32;
+            const count60_32 = Math.round(count60 * ratio32), count60_25 = count60 - count60_32;
+
+            const insert32 = Math.round(totalInsertBlocks * ratio32), insert25 = totalInsertBlocks - insert32;
+            const totalCorners = extCorners + intCorners;
+            const cornerHooks = totalCorners * 6, tHooks = tWalls * 9, wallHooks = Math.ceil(totalLength * layers / 3);
+            return { layers, totalLength, S_net, count90, count60, count90_25, count90_32, count60_25, count60_32, bigCorner32, smallCorner32, bigT32, smallT32, bigCorner25, smallCorner25, bigT25, smallT25, insert32, insert25, totalHooks: cornerHooks+tHooks+wallHooks, area32, area25 };
         }
 
-        const totalBeamConc = beamConcByFloor[1] + beamConcByFloor[2];
-        const totalConc = wallConc + roofConcTotal + totalBeamConc;
-        const concCost = totalConc * pConc;
+        function calcFloorRebar(floor, mod) {
+            if (!mod) return { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 };
+            const data = floorData[floor], openings = data.openings;
+            let totalWinWidth = 0; for (let op of openings) totalWinWidth += (op.width||0)*(op.count||0);
+            const H = Number(data.height);
+            const horizontalLen = mod.layers * (mod.totalLength - totalWinWidth);
+            const vertBars = Math.ceil(mod.totalLength / 0.3);
+            const vertLen = vertBars * H;
+            const extCorners = Number(data.extCorners)||0, intCorners = Number(data.intCorners)||0, tWalls = Number(data.tWalls)||0;
+            let col32 = (data.mode==='mixed')? extCorners + tWalls : 0, col25 = (data.mode==='all25')? intCorners + tWalls : intCorners;
+            const columnSteelLen = (col32+col25) * 4 * H;
+            const stirrupPerCol = Math.ceil(H/0.2);
+            const len32 = col32 * stirrupPerCol * (4*0.32+0.2), len25 = col25 * stirrupPerCol * (4*0.25+0.2);
+            let topLen = 0; for (let op of openings) topLen += (op.count||0)*((op.width||0)+0.4);
+            return { lenPhi6: len32+len25, lenPhi10: horizontalLen, lenPhi12: vertLen + topLen, lenPhi14: columnSteelLen };
+        }
 
-        const topVol = topArea * (topThick / 1000);
-        const topCost = topVol * pTopPlate;
-        const topBlocks = (topUnitArea > 0) ? Math.ceil(topArea / topUnitArea) : 0;
+        function calcRoofRebar(len, wid) {
+            if (len<=0||wid<=0) return { lenPhi12:0, lenPhi10:0 };
+            const bottom = Math.ceil(len/0.2)*wid + Math.ceil(wid/0.2)*len;
+            return { lenPhi12: bottom, lenPhi10: bottom };
+        }
 
-        rebar.lenPhi12 += roofRebarTotal.lenPhi12; rebar.lenPhi10 += roofRebarTotal.lenPhi10;
-        rebar.lenPhi22 = beamRebarTotal.lenPhi22; rebar.lenPhi18 = beamRebarTotal.lenPhi18; rebar.lenPhi6 += beamRebarTotal.lenPhi6;
+        function calcSingleBeamRebar(beamLen, beamW, beamH) {
+            if (beamLen <= 0) return { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
+            return { lenPhi22: beamLen*3, lenPhi18: beamLen*2, lenPhi6: (Math.ceil(beamLen/0.2)+1)*(2*(beamW+beamH)+0.2) };
+        }
 
-        const costModules = totalArea25 * p25 + totalArea32 * p32;
-        const costInserts = ins25 * pIns25 + ins32 * pIns32;
-        const costHooks = hooks * pHook;
-        const costModuleParts = costModules + costInserts + costHooks;
-        const rebarCost = rebar.lenPhi6*price.phi6 + rebar.lenPhi10*price.phi10 + rebar.lenPhi12*price.phi12 + rebar.lenPhi14*price.phi14 + (rebar.lenPhi18||0)*price.phi18 + (rebar.lenPhi22||0)*price.phi22;
-        const totalCost = costModuleParts + concCost + topCost + rebarCost;
+        function calculateAll() {
+            for (let f of [1,2]) collectFloorInputs(f);
+            const p25 = parseFloat(priceInputs.module25.value)||0, p32 = parseFloat(priceInputs.module32.value)||0;
+            const pIns25 = parseFloat(priceInputs.insert25.value)||0, pIns32 = parseFloat(priceInputs.insert32.value)||0;
+            const pHook = parseFloat(priceInputs.hook.value)||0, pConc = parseFloat(priceInputs.concrete.value)||0;
+            const houseFloors = parseInt(roofEls.houseFloors.value)||1;
+            const topArea = parseFloat(priceInputs.topPlateArea.value)||0, topUnitArea = parseFloat(priceInputs.topPlateUnitArea.value)||0, topThick = parseFloat(priceInputs.topPlateThick.value)||0, pTopPlate = parseFloat(priceInputs.priceTopPlate.value)||0;
+            const price = { phi6: parseFloat(priceInputs.phi6.value)||0, phi10: parseFloat(priceInputs.phi10.value)||0, phi12: parseFloat(priceInputs.phi12.value)||0, phi14: parseFloat(priceInputs.phi14.value)||0, phi18: parseFloat(priceInputs.phi18.value)||0, phi22: parseFloat(priceInputs.phi22.value)||0 };
 
-        const ton = (d, len) => (len * theoreticalKgPerM(d) / 1000);
-        const t6 = ton(6, rebar.lenPhi6), t10 = ton(10, rebar.lenPhi10), t12 = ton(12, rebar.lenPhi12), t14 = ton(14, rebar.lenPhi14), t18 = ton(18, rebar.lenPhi18||0), t22 = ton(22, rebar.lenPhi22||0);
+            let totalArea25=0, totalArea32=0;
+            let sum90_25=0, sum90_32=0, sum60_25=0, sum60_32=0;
+            let big32=0, small32=0, bigT32=0, smallT32=0, big25=0, small25=0, bigT25=0, smallT25=0;
+            let ins25=0, ins32=0, hooks=0, wallConc=0;
+            let rebar = { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 };
+            let beamConcByFloor = [0,0,0], beamProjByFloor = [0,0,0], beamRebarTotal = { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
+            let blocks25_total = 0, blocks32_total = 0;
 
-        let html = `
-            <div class="result-section-title">🧱 模块及配件</div>
-            <div class="result-item"><span>模块总面积</span><span>${(totalArea25+totalArea32).toFixed(2)} m²</span></div>
-            <div class="result-item"><span>　25模块面积</span><span>${totalArea25.toFixed(2)} m² × ${p25} = ${(totalArea25*p25).toFixed(2)}</span></div>
-            <div class="result-item"><span>　32模块面积</span><span>${totalArea32.toFixed(2)} m² × ${p32} = ${(totalArea32*p32).toFixed(2)}</span></div>
-            <div class="result-item"><span>90直板 / 60直板</span><span>${sum90} / ${sum60}</span></div>
-            <div class="result-item"><span>32大角/小角</span><span>${big32} / ${small32}</span></div>
-            <div class="result-item"><span>32大T/小T</span><span>${bigT32} / ${smallT32}</span></div>
-            <div class="result-item"><span>25大角/小角</span><span>${big25} / ${small25}</span></div>
-            <div class="result-item"><span>25大T/小T</span><span>${bigT25} / ${smallT25}</span></div>
-            <div class="result-item"><span>32插板 / 25插板</span><span>${ins32} / ${ins25}</span></div>
-            <div class="result-item"><span>钢丝勾</span><span>${hooks} 个 × ${pHook} = ${costHooks.toFixed(2)}</span></div>
-            <div class="result-item total"><span>💰 模块及配件合计</span><span>${costModuleParts.toFixed(2)}</span></div>
-            <div class="result-section-title">🧪 混凝土</div>
-            <div class="result-item"><span>墙体混凝土</span><span>${wallConc.toFixed(2)} m³</span></div>
-            <div class="result-item"><span>屋顶混凝土 (合计)</span><span>${roofConcTotal.toFixed(2)} m³</span></div>
-            <div class="result-item"><span>梁混凝土 (合计)</span><span>${totalBeamConc.toFixed(2)} m³</span></div>
-            <div class="result-item total"><span>混凝土总计</span><span>${totalConc.toFixed(2)} m³</span></div>
-            <div class="result-item"><span>混凝土总价</span><span>${concCost.toFixed(2)} 元</span></div>
-            <div class="result-item"><span>🔝 顶板体积</span><span>${topVol.toFixed(4)} m³</span></div>
-            <div class="result-item"><span>　顶板总价</span><span>${topCost.toFixed(2)} 元</span></div>
-            <div class="result-item"><span>　所需顶板块数</span><span>${topBlocks} 块 (单块${topUnitArea.toFixed(3)}m²)</span></div>
-            <div class="result-section-title">⚙️ 钢筋</div>
-            <div class="result-item"><span>Φ6 长度 / 重量</span><span>${(rebar.lenPhi6||0).toFixed(1)} m / ${t6.toFixed(3)} t</span></div>
-            <div class="result-item"><span>Φ10 长度 / 重量</span><span>${(rebar.lenPhi10||0).toFixed(1)} m / ${t10.toFixed(3)} t</span></div>
-            <div class="result-item"><span>Φ12 长度 / 重量</span><span>${(rebar.lenPhi12||0).toFixed(1)} m / ${t12.toFixed(3)} t</span></div>
-            <div class="result-item"><span>Φ14 长度 / 重量</span><span>${(rebar.lenPhi14||0).toFixed(1)} m / ${t14.toFixed(3)} t</span></div>
-            <div class="result-item"><span>Φ18 (梁) 长度/重量</span><span>${(rebar.lenPhi18||0).toFixed(1)} m / ${t18.toFixed(3)} t</span></div>
-            <div class="result-item"><span>Φ22 (梁) 长度/重量</span><span>${(rebar.lenPhi22||0).toFixed(1)} m / ${t22.toFixed(3)} t</span></div>
-            <div class="result-item total"><span>💰 钢筋总价</span><span>${rebarCost.toFixed(2)} 元</span></div>
-            <div class="result-item total" style="font-size:1.05rem;"><span>🧾 合计总价</span><span>${totalCost.toFixed(2)} 元</span></div>`;
-        $('resultContent').innerHTML = html;
-    }
-
-    // ---------- 数据存储 ----------
-    function saveToLocal() {
-        const roofData = {
-            houseFloors: roofEls.houseFloors.value,
-            roof1: { length: roofEls.roof1.length.value, width: roofEls.roof1.width.value, thick: roofEls.roof1.thick.value, deduct: roofEls.roof1.deduct.checked },
-            roof2: { length: roofEls.roof2.length.value, width: roofEls.roof2.width.value, thick: roofEls.roof2.thick.value, deduct: roofEls.roof2.deduct.checked }
-        };
-        const data = {
-            prices: {
-                module25: priceInputs.module25.value, module32: priceInputs.module32.value,
-                insert25: priceInputs.insert25.value, insert32: priceInputs.insert32.value,
-                hook: priceInputs.hook.value, concrete: priceInputs.concrete.value,
-                topPlateArea: priceInputs.topPlateArea.value, topPlateUnitArea: priceInputs.topPlateUnitArea.value,
-                topPlateThick: priceInputs.topPlateThick.value, priceTopPlate: priceInputs.priceTopPlate.value,
-                phi6: priceInputs.phi6.value, phi10: priceInputs.phi10.value, phi12: priceInputs.phi12.value,
-                phi14: priceInputs.phi14.value, phi18: priceInputs.phi18.value, phi22: priceInputs.phi22.value
-            },
-            roof: roofData,
-            floors: floorData
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
-
-    function loadFromLocal() {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        try {
-            const saved = JSON.parse(raw);
-            if (saved.prices) {
-                for (let k in saved.prices) {
-                    if (priceInputs[k]) priceInputs[k].value = saved.prices[k];
+            for (let f of [1,2]) {
+                const mod = calcFloorModules(f);
+                if (mod) {
+                    const reb = calcFloorRebar(f, mod);
+                    totalArea25 += mod.area25; totalArea32 += mod.area32;
+                    sum90_25 += mod.count90_25; sum90_32 += mod.count90_32;
+                    sum60_25 += mod.count60_25; sum60_32 += mod.count60_32;
+                    big32 += mod.bigCorner32; small32 += mod.smallCorner32; bigT32 += mod.bigT32; smallT32 += mod.smallT32;
+                    big25 += mod.bigCorner25; small25 += mod.smallCorner25; bigT25 += mod.bigT25; smallT25 += mod.smallT25;
+                    ins25 += mod.insert25; ins32 += mod.insert32;
+                    hooks += mod.totalHooks;
+                    wallConc += mod.S_net * CAVITY_THICK;
+                    rebar.lenPhi6 += reb.lenPhi6; rebar.lenPhi10 += reb.lenPhi10; rebar.lenPhi12 += reb.lenPhi12; rebar.lenPhi14 += reb.lenPhi14;
+                    blocks25_total += mod.count90_25 + mod.count60_25 + mod.bigCorner25 + mod.smallCorner25 + mod.bigT25 + mod.smallT25;
+                    blocks32_total += mod.count90_32 + mod.count60_32 + mod.bigCorner32 + mod.smallCorner32 + mod.bigT32 + mod.smallT32;
+                }
+                const data = floorData[f];
+                const beamLen = safeEval(data.beamLengthExpr);
+                if (beamLen > 0) {
+                    const bw = Number(data.beamWidth)||0, bh = Number(data.beamHeight)||0;
+                    beamConcByFloor[f] = beamLen * bw * bh; beamProjByFloor[f] = beamLen * bw;
+                    const single = calcSingleBeamRebar(beamLen, bw, bh);
+                    beamRebarTotal.lenPhi22 += single.lenPhi22; beamRebarTotal.lenPhi18 += single.lenPhi18; beamRebarTotal.lenPhi6 += single.lenPhi6;
                 }
             }
-            if (saved.roof) {
-                roofEls.houseFloors.value = saved.roof.houseFloors || 1;
-                if (saved.roof.roof1) {
-                    roofEls.roof1.length.value = saved.roof.roof1.length || '';
-                    roofEls.roof1.width.value = saved.roof.roof1.width || '';
-                    roofEls.roof1.thick.value = saved.roof.roof1.thick || '';
-                    roofEls.roof1.deduct.checked = saved.roof.roof1.deduct || false;
-                }
-                if (saved.roof.roof2) {
-                    roofEls.roof2.length.value = saved.roof.roof2.length || '';
-                    roofEls.roof2.width.value = saved.roof.roof2.width || '';
-                    roofEls.roof2.thick.value = saved.roof.roof2.thick || '';
-                    roofEls.roof2.deduct.checked = saved.roof.roof2.deduct || false;
-                }
+
+            let roofConcTotal = 0, roofRebarTotal = { lenPhi12:0, lenPhi10:0 };
+            for (let f = 1; f <= houseFloors; f++) {
+                const panel = roofEls[`roof${f}`];
+                if (!panel.length || !panel.width) continue;
+                const len = parseFloat(panel.length.value)||0, wid = parseFloat(panel.width.value)||0, thick = parseFloat(panel.thick.value)||0;
+                const deduct = panel.deduct && panel.deduct.checked;
+                let area = len * wid; if (deduct && beamProjByFloor[f] > 0) area = Math.max(0, area - beamProjByFloor[f]);
+                roofConcTotal += area * thick;
+                const reb = calcRoofRebar(len, wid);
+                roofRebarTotal.lenPhi12 += reb.lenPhi12; roofRebarTotal.lenPhi10 += reb.lenPhi10;
             }
-            if (saved.floors) {
-                for (let f of [1,2]) if (saved.floors[f]) floorData[f] = { ...floorData[f], ...saved.floors[f] };
-            }
-            updateRoofVisibility();
-        } catch(e) {}
-    }
 
-    // ---------- 初始化 ----------
-    function init() {
-        loadFromLocal();
-        renderFloorPanel(1); renderFloorPanel(2);
-        renderOpenings(1); renderOpenings(2);
+            const totalBeamConc = beamConcByFloor[1] + beamConcByFloor[2];
+            const totalConc = wallConc + roofConcTotal + totalBeamConc;
+            const concCost = totalConc * pConc;
 
-        $('clearMaterialPrice').addEventListener('click', clearMaterialPrice);
-        $('clearTopPlate').addEventListener('click', clearTopPlate);
-        $('clearRebarPrice').addEventListener('click', clearRebarPrice);
-        $('clearRoof').addEventListener('click', clearRoof);
-        $('clearFloor1').addEventListener('click', () => clearFloor(1));
-        $('clearFloor2').addEventListener('click', () => clearFloor(2));
+            const topVol = topArea * (topThick / 1000);
+            const topCost = topVol * pTopPlate;
+            const topBlocks = (topUnitArea > 0) ? Math.ceil(topArea / topUnitArea) : 0;
 
-        roofEls.houseFloors.addEventListener('change', () => { updateRoofVisibility(); saveToLocal(); calculateAll(); });
+            rebar.lenPhi12 += roofRebarTotal.lenPhi12; rebar.lenPhi10 += roofRebarTotal.lenPhi10;
+            rebar.lenPhi22 = beamRebarTotal.lenPhi22; rebar.lenPhi18 = beamRebarTotal.lenPhi18; rebar.lenPhi6 += beamRebarTotal.lenPhi6;
 
-        document.querySelectorAll('.floor-tab').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const floor = this.dataset.floor;
-                document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                $('floor1Panel').classList.toggle('active-panel', floor==='1');
-                $('floor2Panel').classList.toggle('active-panel', floor==='2');
-            });
-        });
-        document.querySelectorAll('input, select').forEach(el => {
-            if (el.closest('.floor-panel')) return;
-            el.addEventListener('input', () => { saveToLocal(); calculateAll(); });
-            if (el.type === 'checkbox') el.addEventListener('change', () => { saveToLocal(); calculateAll(); });
-        });
-        calculateAll();
-    }
-    init();
-})();
+            const costModules = totalArea25 * p25 + totalArea32 * p32;
+            const costInserts = ins25 * pIns25 + ins32 * pIns32;
+            const costHooks = hooks * pHook;
+            const costModuleParts = costModules + costInserts + costHooks;
+            const rebarCost = rebar.lenPhi6*price.phi6 + rebar.lenPhi10*price.phi10 + rebar.lenPhi12*price.phi12 + rebar.lenPhi14*price.phi14 + (rebar.lenPhi18||0)*price.phi18 + (rebar.lenPhi22||0)*price.phi22;
+            const totalCost = costModuleParts + concCost + topCost + rebarCost;
+
+            const ton = (d, len) => (len * theoreticalKgPerM(d) / 1000);
+            const t6 = ton(6, rebar.lenPhi6), t10 = ton(10, rebar.lenPhi10), t12 = ton(12, rebar.lenPhi12), t14 = ton(14, rebar.lenPhi14), t18 = ton(18, rebar.lenPhi18||0), t22 = ton(22, rebar.lenPhi22||0);
+
+            let html = `
+                <div class="result-section-title">🧱 模块及配件</div>
+                <div class="result-item"><span class="result-label">模块总面积</span><span class="result-value">${(totalArea25+totalArea32).toFixed(2)} m²</span></div>
+                <div class="result-subtitle">🔵 25模块</div>
+                <div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${sum90_25} 块 (面积 ${(sum90_25*AREA_90).toFixed(2)} m²)</span></div>
+                <div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${sum60_25} 块 (面积 ${(sum60_25*AREA_60).toFixed(2)} m²)</span></div>
+                <div class="result-item"><span class="result-label">　大角 / 小角</span><span class="result-value">${big25} / ${small25}</span></div>
+                <div class="result-item"><span class="result-label">　大T / 小T</span><span class="result-value">${bigT25} / ${smallT25}</span></div>
+                <div class="result-item"><span class="result-label">　📦 25模块总数量</span><span class="result-value">${blocks25_total} 块 (面积 ${totalArea25.toFixed(2)} m²)</span></div>
+                <div class="result-item"><span class="result-label">　💰 25模块总价</span><span class="result-value">${(totalArea25*p25).toFixed(2)} 元</span></div>
+                <div class="result-subtitle">🔴 32模块</div>
+                <div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${sum90_32} 块 (面积 ${(sum90_32*AREA_90).toFixed(2)} m²)</span></div>
+                <div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${sum60_32} 块 (面积 ${(sum60_32*AREA_60).toFixed(2)} m²)</span></div>
+                <div class="result-item"><span class="result-label">　大角 / 小角</span><span class="result-value">${big32} / ${small32}</span></div>
+                <div class="result-item"><span class="result-label">　大T / 小T</span><span class="result-value">${bigT32} / ${smallT32}</span></div>
+                <div class="result-item"><span class="result-label">　📦 32模块总数量</span><span class="result-value">${blocks32_total} 块 (面积 ${totalArea32.toFixed(2)} m²)</span></div>
+                <div class="result-item"><span class="result-label">　💰 32模块总价</span><span class="result-value">${(totalArea32*p32).toFixed(2)} 元</span></div>
+                <div class="result-item"><span class="result-label">32插板 / 25插板</span><span class="result-value">${ins32} / ${ins25}</span></div>
+                <div class="result-item"><span class="result-label">钢丝勾</span><span class="result-value">${hooks} 个 × ${pHook} = ${costHooks.toFixed(2)}</span></div>
+                <div class="result-item total"><span class="result-label">💰 价格合计</span><span class="result-value highlight">${costModuleParts.toFixed(2)} 元</span></div>
+
+                <div class="result-section-title">🔝 顶板</div>
+                <div class="result-item"><span class="result-label">顶板总面积</span><span class="result-value">${topArea.toFixed(2)} m²</span></div>
+                <div class="result-item"><span class="result-label">体积 / 单价</span><span class="result-value">${topVol.toFixed(4)} m³ × ${pTopPlate} 元/m³</span></div>
+                <div class="result-item"><span class="result-label">所需块数</span><span class="result-value">${topBlocks} 块 (单块 ${topUnitArea.toFixed(3)} m²)</span></div>
+                <div class="result-item"><span class="result-label">💰 顶板总价</span><span class="result-value highlight">${topCost.toFixed(2)} 元</span></div>
+
+                <div class="result-section-title">🧪 混凝土</div>
+                <div class="result-item"><span class="result-label">墙体混凝土</span><span class="result-value">${wallConc.toFixed(2)} m³</span></div>
+                <div class="result-item"><span class="result-label">屋顶混凝土 (合计)</span><span class="result-value">${roofConcTotal.toFixed(2)} m³</span></div>
+                <div class="result-item"><span class="result-label">梁混凝土 (合计)</span><span class="result-value">${totalBeamConc.toFixed(2)} m³</span></div>
+                <div class="result-item"><span class="result-label">混凝土总计</span><span class="result-value">${totalConc.toFixed(2)} m³</span></div>
+                <div class="result-item total"><span class="result-label">💰 混凝土总价</span><span class="result-value highlight">${concCost.toFixed(2)} 元</span></div>
+
+                <div class="result-section-title">⚙️ 钢筋</div>
+                <div class="result-item"><span class="result-label">Φ6 长度 / 重量</span><span class="result-value">${(rebar.lenPhi6||0).toFixed(1)} m / ${t6.toFixed(3)} t</span></div>
+                <div class="result-item"><span class="result-label">Φ10 长度 / 重量</span><span class="result-value">${(rebar.lenPhi10||0).toFixed(1)} m / ${t10.toFixed(3)} t</span></div>
+                <div class="result-item"><span class="result-label">Φ12 长度 / 重量</span><span class="result-value">${(rebar.lenPhi12||0).toFixed(1)} m / ${t12.toFixed(3)} t</span></div>
+                <div class="result-item"><span class="result-label">Φ14 长度 / 重量</span><span class="result-value">${(rebar.lenPhi14||0).toFixed(1)} m / ${t14.toFixed(3)} t</span></div>
+                <div class="result-item"><span class="result-label">Φ18 (梁) 长度/重量</span><span class="result-value">${(rebar.lenPhi18||0).toFixed(1)} m / ${t18.toFixed(3)} t</span></div>
+                <div class="result-item"><span class="result-label">Φ22 (梁) 长度/重量</span><span class="result-value">${(rebar.lenPhi22||0).toFixed(1)} m / ${t22.toFixed(3)} t</span></div>
+                <div class="result-item total"><span class="result-label">💰 钢筋总价</span><span class="result-value highlight">${rebarCost.toFixed(2)} 元</span></div>
+                <div class="result-item total-heavy"><span class="result-label">🧾 合计总价</span><span class="result-value highlight" style="font-size:1.05rem;">${totalCost.toFixed(2)} 元</span></div>`;
+            $('resultContent').innerHTML = html;
+        }
+
+        function saveToLocal() {
+            const roofData = { houseFloors: roofEls.houseFloors.value, roof1: { length: roofEls.roof1.length.value, width: roofEls.roof1.width.value, thick: roofEls.roof1.thick.value, deduct: roofEls.roof1.deduct.checked }, roof2: { length: roofEls.roof2.length.value, width: roofEls.roof2.width.value, thick: roofEls.roof2.thick.value, deduct: roofEls.roof2.deduct.checked } };
+            const data = { prices: { module25: priceInputs.module25.value, module32: priceInputs.module32.value, insert25: priceInputs.insert25.value, insert32: priceInputs.insert32.value, hook: priceInputs.hook.value, concrete: priceInputs.concrete.value, topPlateArea: priceInputs.topPlateArea.value, topPlateUnitArea: priceInputs.topPlateUnitArea.value, topPlateThick: priceInputs.topPlateThick.value, priceTopPlate: priceInputs.priceTopPlate.value, phi6: priceInputs.phi6.value, phi10: priceInputs.phi10.value, phi12: priceInputs.phi12.value, phi14: priceInputs.phi14.value, phi18: priceInputs.phi18.value, phi22: priceInputs.phi22.value }, roof: roofData, floors: floorData };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadFromLocal() {
+            const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return;
+            try {
+                const saved = JSON.parse(raw);
+                if (saved.prices) { for (let k in saved.prices) { if (priceInputs[k]) priceInputs[k].value = saved.prices[k]; } }
+                if (saved.roof) { roofEls.houseFloors.value = saved.roof.houseFloors || 1; if (saved.roof.roof1) { roofEls.roof1.length.value = saved.roof.roof1.length || ''; roofEls.roof1.width.value = saved.roof.roof1.width || ''; roofEls.roof1.thick.value = saved.roof.roof1.thick || ''; roofEls.roof1.deduct.checked = saved.roof.roof1.deduct || false; } if (saved.roof.roof2) { roofEls.roof2.length.value = saved.roof.roof2.length || ''; roofEls.roof2.width.value = saved.roof.roof2.width || ''; roofEls.roof2.thick.value = saved.roof.roof2.thick || ''; roofEls.roof2.deduct.checked = saved.roof.roof2.deduct || false; } }
+                if (saved.floors) { for (let f of [1,2]) if (saved.floors[f]) floorData[f] = { ...floorData[f], ...saved.floors[f] }; }
+                updateRoofVisibility();
+            } catch (e) {}
+        }
+
+        function init() {
+            loadFromLocal(); renderFloorPanel(1); renderFloorPanel(2); renderOpenings(1); renderOpenings(2);
+            $('clearMaterialPrice').addEventListener('click', clearMaterialPrice);
+            $('clearTopPlate').addEventListener('click', clearTopPlate);
+            $('clearRebarPrice').addEventListener('click', clearRebarPrice);
+            $('clearRoof').addEventListener('click', clearRoof);
+            $('clearFloor1').addEventListener('click', () => clearFloor(1));
+            $('clearFloor2').addEventListener('click', () => clearFloor(2));
+            roofEls.houseFloors.addEventListener('change', () => { updateRoofVisibility(); saveToLocal(); calculateAll(); });
+            document.querySelectorAll('.floor-tab').forEach(btn => { btn.addEventListener('click', function() { const floor = this.dataset.floor; document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active')); this.classList.add('active'); $('floor1Panel').classList.toggle('active-panel', floor==='1'); $('floor2Panel').classList.toggle('active-panel', floor==='2'); }); });
+            document.querySelectorAll('input, select').forEach(el => { if (el.closest('.floor-panel')) return; el.addEventListener('input', () => { saveToLocal(); calculateAll(); }); if (el.type === 'checkbox') el.addEventListener('change', () => { saveToLocal(); calculateAll(); }); });
+            calculateAll();
+        }
+        init();
+    })();
 </script>
 </body>
 </html>
