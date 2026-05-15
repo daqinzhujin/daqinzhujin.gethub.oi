@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块房综合计算器 · 25/32分别统计</title>
+    <title>模块房综合计算器 · 箍筋根数显示</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
         body { background: #f5f7fa; padding: 16px; font-size: 16px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
@@ -195,7 +195,7 @@
                   beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 }
         };
         const floorData = JSON.parse(JSON.stringify(defaultFloorData));
-        const STORAGE_KEY = 'houseCalcV21_separate';
+        const STORAGE_KEY = 'houseCalcV22_stirrup_count';
 
         const $ = id => document.getElementById(id);
 
@@ -376,8 +376,9 @@
         }
 
         function calcSingleBeamRebar(beamLen, beamW, beamH) {
-            if (beamLen <= 0) return { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
-            return { lenPhi22: beamLen*3, lenPhi18: beamLen*2, lenPhi6: (Math.ceil(beamLen/0.2)+1)*(2*(beamW+beamH)+0.2) };
+            if (beamLen <= 0) return { lenPhi22:0, lenPhi18:0, lenPhi6:0, stirrupCount:0 };
+            const count = Math.ceil(beamLen/0.2)+1;
+            return { lenPhi22: beamLen*3, lenPhi18: beamLen*2, lenPhi6: count*(2*(beamW+beamH)+0.2), stirrupCount: count };
         }
 
         function calculateAll() {
@@ -396,6 +397,7 @@
             let rebar = { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 };
             let beamConcByFloor = [0,0,0], beamProjByFloor = [0,0,0], beamRebarTotal = { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
             let blocks25_total = 0, blocks32_total = 0;
+            let totalStirrupCount = 0; // 箍筋总根数
 
             for (let f of [1,2]) {
                 const mod = calcFloorModules(f);
@@ -412,6 +414,15 @@
                     rebar.lenPhi6 += reb.lenPhi6; rebar.lenPhi10 += reb.lenPhi10; rebar.lenPhi12 += reb.lenPhi12; rebar.lenPhi14 += reb.lenPhi14;
                     blocks25_total += mod.count90_25 + mod.count60_25 + mod.bigCorner25 + mod.smallCorner25 + mod.bigT25 + mod.smallT25;
                     blocks32_total += mod.count90_32 + mod.count60_32 + mod.bigCorner32 + mod.smallCorner32 + mod.bigT32 + mod.smallT32;
+
+                    // 墙体柱子箍筋根数
+                    const data = floorData[f];
+                    const H = Number(data.height);
+                    const extCorners = Number(data.extCorners)||0, intCorners = Number(data.intCorners)||0, tWalls = Number(data.tWalls)||0;
+                    let col32 = (data.mode==='mixed')? extCorners + tWalls : 0;
+                    let col25 = (data.mode==='all25')? intCorners + tWalls : intCorners;
+                    const stirrupPerCol = Math.ceil(H/0.2);
+                    totalStirrupCount += (col32 + col25) * stirrupPerCol;
                 }
                 const data = floorData[f];
                 const beamLen = safeEval(data.beamLengthExpr);
@@ -420,6 +431,7 @@
                     beamConcByFloor[f] = beamLen * bw * bh; beamProjByFloor[f] = beamLen * bw;
                     const single = calcSingleBeamRebar(beamLen, bw, bh);
                     beamRebarTotal.lenPhi22 += single.lenPhi22; beamRebarTotal.lenPhi18 += single.lenPhi18; beamRebarTotal.lenPhi6 += single.lenPhi6;
+                    totalStirrupCount += single.stirrupCount; // 梁箍筋根数
                 }
             }
 
@@ -492,6 +504,7 @@
 
                 <div class="result-section-title">⚙️ 钢筋</div>
                 <div class="result-item"><span class="result-label">Φ6 长度 / 重量</span><span class="result-value">${(rebar.lenPhi6||0).toFixed(1)} m / ${t6.toFixed(3)} t</span></div>
+                <div class="result-item"><span class="result-label">　箍筋总根数</span><span class="result-value">${totalStirrupCount} 根</span></div>
                 <div class="result-item"><span class="result-label">Φ10 长度 / 重量</span><span class="result-value">${(rebar.lenPhi10||0).toFixed(1)} m / ${t10.toFixed(3)} t</span></div>
                 <div class="result-item"><span class="result-label">Φ12 长度 / 重量</span><span class="result-value">${(rebar.lenPhi12||0).toFixed(1)} m / ${t12.toFixed(3)} t</span></div>
                 <div class="result-item"><span class="result-label">Φ14 长度 / 重量</span><span class="result-value">${(rebar.lenPhi14||0).toFixed(1)} m / ${t14.toFixed(3)} t</span></div>
