@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块房综合计算器 · 箍筋根数显示</title>
+    <title>模块房综合计算器 · 分层顶板保温板 · 最终版</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
         body { background: #f5f7fa; padding: 16px; font-size: 16px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
@@ -32,11 +32,10 @@
         .floor-panel.active-panel { display: block; }
         .checkbox-row { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
         .checkbox-row input[type="checkbox"] { width: auto; accent-color: #4285f4; }
-        .beam-section, .roof-panel { background: #f1f5f9; border-radius: 14px; padding: 12px; margin-top: 12px; border: 1px solid #e2e8f0; }
-        .roof-panel { margin-bottom: 12px; }
+        .beam-section, .roof-panel, .plate-panel { background: #f1f5f9; border-radius: 14px; padding: 12px; margin-top: 12px; border: 1px solid #e2e8f0; }
         .result-card { background: white; border-radius: 16px; padding: 20px; margin-top: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
         .result-title { font-size: 1.2rem; font-weight: 600; color: #2d3748; text-align: center; margin-bottom: 20px; }
-        .result-section-title { font-size: 1rem; font-weight: 600; color: #1e3a5f; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 6px; }
+        .result-section-title { font-size: 1rem; font-weight: 600; color: #1e3a5f; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
         .result-subtitle { font-weight: 600; color: #475569; margin: 8px 0 4px; font-size: 0.9rem; }
         .result-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dashed #e2e8f0; }
         .result-item:last-child { border-bottom: none; }
@@ -60,7 +59,7 @@
 <body>
 <div class="container">
     <h1>🏗️ 模块房综合计算器</h1>
-    <div class="subtitle">25/32模块分离计价 · 分层梁 · 顶板整块出售 · 屋顶无层数 · 自动计算</div>
+    <div class="subtitle">25/32模块分离计价 · 分层顶板与保温板 · 分楼层结果</div>
 
     <!-- 材料单价 -->
     <div class="section">
@@ -76,28 +75,7 @@
             <div class="input-group"><label>钢丝勾单价 (元/个)</label><input type="number" id="priceHook" value="0.5" step="0.1"></div>
             <div class="input-group"><label>混凝土单价 (元/m³)</label><input type="number" id="priceConcrete" value="500" step="10"></div>
         </div>
-    </div>
-
-    <!-- 顶板 -->
-    <div class="section">
-        <div class="section-header">
-            <span class="section-title">🔝 顶板</span>
-            <button class="btn-clear" id="clearTopPlate">🗑️ 清空</button>
-        </div>
-        <div class="grid-2">
-            <div class="input-group"><label>顶板总面积 (m²)</label><input type="number" id="topPlateArea" step="0.01" value="0"></div>
-            <div class="input-group"><label>单块顶板面积 (m²)</label><input type="number" id="topPlateUnitArea" step="0.0001" value="0.732" placeholder="默认1.2m×0.61m=0.732"></div>
-            <div class="input-group"><label>顶板厚度 (mm)</label><input type="number" id="topPlateThick" step="1" value="50"></div>
-            <div class="input-group"><label>顶板单价 (元/m³)</label><input type="number" id="priceTopPlate" step="1" value="330"></div>
-        </div>
-    </div>
-
-    <!-- 钢筋单价 -->
-    <div class="section">
-        <div class="section-header">
-            <span class="section-title">⚡ 钢筋单价 (元/米)</span>
-            <button class="btn-clear" id="clearRebarPrice">🗑️ 清空</button>
-        </div>
+        <div class="section-title" style="margin-top:12px;">⚡ 钢筋单价 (元/米)</div>
         <div class="grid-3">
             <div class="input-group"><label>Φ6</label><input type="number" id="pricePhi6" step="0.01" value="0.3"></div>
             <div class="input-group"><label>Φ10</label><input type="number" id="pricePhi10" step="0.01" value="0.5"></div>
@@ -125,45 +103,6 @@
         <div id="floor2Panel" class="floor-panel"></div>
     </div>
 
-    <!-- 屋顶 -->
-    <div class="section">
-        <div class="section-header">
-            <span class="section-title">🏠 屋顶</span>
-            <span style="display:flex; align-items:center; gap:8px;">
-                <label style="font-size:0.82rem; margin:0;">房屋层数</label>
-                <select id="houseFloors" style="width:auto;">
-                    <option value="1" selected>1层</option>
-                    <option value="2">2层</option>
-                </select>
-                <button class="btn-clear" id="clearRoof">🗑️ 清空</button>
-            </span>
-        </div>
-        <div id="roof1Panel" class="roof-panel">
-            <div style="font-weight:600; margin-bottom:8px;">🏠 1层屋顶</div>
-            <div class="grid-2">
-                <div class="input-group"><label>长度 (m)</label><input type="number" id="roof1Length" step="0.1" value="10"></div>
-                <div class="input-group"><label>宽度 (m)</label><input type="number" id="roof1Width" step="0.1" value="8"></div>
-            </div>
-            <div class="input-group"><label>厚度 (m)</label><input type="number" id="roof1Thick" step="0.01" value="0.12"></div>
-            <div class="checkbox-row">
-                <input type="checkbox" id="roof1Deduct">
-                <label for="roof1Deduct">🏗️ 扣除本层梁投影</label>
-            </div>
-        </div>
-        <div id="roof2Panel" class="roof-panel" style="display:none;">
-            <div style="font-weight:600; margin-bottom:8px;">🏠 2层屋顶</div>
-            <div class="grid-2">
-                <div class="input-group"><label>长度 (m)</label><input type="number" id="roof2Length" step="0.1" value="8"></div>
-                <div class="input-group"><label>宽度 (m)</label><input type="number" id="roof2Width" step="0.1" value="6"></div>
-            </div>
-            <div class="input-group"><label>厚度 (m)</label><input type="number" id="roof2Thick" step="0.01" value="0.12"></div>
-            <div class="checkbox-row">
-                <input type="checkbox" id="roof2Deduct">
-                <label for="roof2Deduct">🏗️ 扣除本层梁投影</label>
-            </div>
-        </div>
-    </div>
-
     <!-- 结果 -->
     <div class="result-card" id="results">
         <div class="result-title">📊 计算结果</div>
@@ -188,29 +127,24 @@
             1: { mode: 'all25', openings: [], height: 3.6, wallCount: 6,
                   extHor: '', extVer: '', extCorners: 0,
                   intHor: '', intVer: '', intCorners: 0, tWalls: 6,
-                  beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 },
+                  beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5,
+                  roofAreaExpr: '10*8', roofThick: 0.12, roofDeduct: false,
+                  insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 },
             2: { mode: 'mixed', openings: [], height: 3.3, wallCount: 6,
                   extHor: '', extVer: '', extCorners: 5,
                   intHor: '', intVer: '', intCorners: 0, tWalls: 4,
-                  beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5 }
+                  beamLengthExpr: '', beamWidth: 0.24, beamHeight: 0.5,
+                  roofAreaExpr: '8*6', roofThick: 0.12, roofDeduct: false,
+                  insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 }
         };
         const floorData = JSON.parse(JSON.stringify(defaultFloorData));
-        const STORAGE_KEY = 'houseCalcV22_stirrup_count';
+        const STORAGE_KEY = 'houseCalcV24_full';
 
         const $ = id => document.getElementById(id);
-
-        const roofEls = {
-            houseFloors: $('houseFloors'),
-            roof1: { length: $('roof1Length'), width: $('roof1Width'), thick: $('roof1Thick'), deduct: $('roof1Deduct') },
-            roof2: { length: $('roof2Length'), width: $('roof2Width'), thick: $('roof2Thick'), deduct: $('roof2Deduct') }
-        };
-
         const priceInputs = {
             module25: $('priceModule25'), module32: $('priceModule32'),
             insert25: $('priceInsert25'), insert32: $('priceInsert32'),
             hook: $('priceHook'), concrete: $('priceConcrete'),
-            topPlateArea: $('topPlateArea'), topPlateUnitArea: $('topPlateUnitArea'),
-            topPlateThick: $('topPlateThick'), priceTopPlate: $('priceTopPlate'),
             phi6: $('pricePhi6'), phi10: $('pricePhi10'), phi12: $('pricePhi12'),
             phi14: $('pricePhi14'), phi18: $('pricePhi18'), phi22: $('pricePhi22')
         };
@@ -226,20 +160,8 @@
 
         function clearInputs(ids) { ids.forEach(id => { const el = $(id); if (el) el.value = ''; }); }
         function clearMaterialPrice() { clearInputs(['priceModule25','priceModule32','priceInsert25','priceInsert32','priceHook','priceConcrete']); saveToLocal(); calculateAll(); }
-        function clearTopPlate() { clearInputs(['topPlateArea','topPlateUnitArea','topPlateThick','priceTopPlate']); saveToLocal(); calculateAll(); }
-        function clearRebarPrice() { clearInputs(['pricePhi6','pricePhi10','pricePhi12','pricePhi14','pricePhi18','pricePhi22']); saveToLocal(); calculateAll(); }
-        function clearRoof() {
-            const floors = parseInt(roofEls.houseFloors.value) || 1;
-            ['roof1Length','roof1Width','roof1Thick'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-            $('roof1Deduct').checked = false;
-            if (floors >= 2) {
-                ['roof2Length','roof2Width','roof2Thick'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-                $('roof2Deduct').checked = false;
-            }
-            saveToLocal(); calculateAll();
-        }
         function clearFloor(floor) {
-            floorData[floor] = { mode: 'all25', openings: [], height: '', wallCount: '', extHor: '', extVer: '', extCorners: '', intHor: '', intVer: '', intCorners: '', tWalls: '', beamLengthExpr: '', beamWidth: '', beamHeight: '' };
+            floorData[floor] = JSON.parse(JSON.stringify(defaultFloorData[floor]));
             renderFloorPanel(floor); renderOpenings(floor); saveToLocal(); calculateAll();
         }
 
@@ -263,6 +185,10 @@
             }
             const beamLen = container.querySelector(`#beamLen${floor}`), beamW = container.querySelector(`#beamW${floor}`), beamH = container.querySelector(`#beamH${floor}`);
             if (beamLen) data.beamLengthExpr = beamLen.value; if (beamW) data.beamWidth = parseFloat(beamW.value) || ''; if (beamH) data.beamHeight = parseFloat(beamH.value) || '';
+            const roofArea = container.querySelector(`#roofArea${floor}`), roofThick = container.querySelector(`#roofThick${floor}`), roofDeduct = container.querySelector(`#roofDeduct${floor}`);
+            if (roofArea) data.roofAreaExpr = roofArea.value; if (roofThick) data.roofThick = parseFloat(roofThick.value) || ''; if (roofDeduct) data.roofDeduct = roofDeduct.checked;
+            const insulArea = container.querySelector(`#insulArea${floor}`), insulUnit = container.querySelector(`#insulUnit${floor}`), insulThick = container.querySelector(`#insulThick${floor}`), insulPrice = container.querySelector(`#insulPrice${floor}`);
+            if (insulArea) data.insulAreaExpr = insulArea.value; if (insulUnit) data.insulUnitArea = parseFloat(insulUnit.value) || ''; if (insulThick) data.insulThick = parseFloat(insulThick.value) || ''; if (insulPrice) data.insulPrice = parseFloat(insulPrice.value) || '';
         }
 
         function renderFloorPanel(floor) {
@@ -278,6 +204,8 @@
                 <div style="font-weight:600; margin:12px 0 6px;">🧱 内墙 (25模块)</div><div class="grid-2"><div class="input-group"><label>内墙横长 (m)</label><input type="text" id="intHor${floor}" value="${data.intHor}"></div><div class="input-group"><label>内墙纵长 (m)</label><input type="text" id="intVer${floor}" value="${data.intVer}"></div><div class="input-group"><label>内墙拐角</label><input type="number" id="intCorners${floor}" value="${data.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${floor}" value="${data.tWalls}" min="0"></div></div>`;
             }
             html += `<div class="beam-section"><div style="font-weight:600; margin-bottom:8px;">📏 本层梁</div><div class="grid-2"><div class="input-group"><label>梁总长度 (m) 可算式</label><input type="text" id="beamLen${floor}" value="${data.beamLengthExpr}" placeholder="例:5.2+3.3"></div><div class="input-group"><label>梁宽度 (m)</label><input type="number" id="beamW${floor}" step="0.01" value="${data.beamWidth}"></div><div class="input-group"><label>梁高度 (m)</label><input type="number" id="beamH${floor}" step="0.01" value="${data.beamHeight}"></div></div></div>`;
+            html += `<div class="roof-panel"><div style="font-weight:600; margin-bottom:8px;">🏗️ 本层顶板（现浇屋顶）</div><div class="grid-2"><div class="input-group"><label>面积 (m²) 可算式</label><input type="text" id="roofArea${floor}" value="${data.roofAreaExpr}" placeholder="例:10*8"></div><div class="input-group"><label>厚度 (m)</label><input type="number" id="roofThick${floor}" step="0.01" value="${data.roofThick}"></div></div><div class="checkbox-row"><input type="checkbox" id="roofDeduct${floor}" ${data.roofDeduct?'checked':''}><label for="roofDeduct${floor}">扣除本层梁投影</label></div></div>`;
+            html += `<div class="plate-panel"><div style="font-weight:600; margin-bottom:8px;">🔲 本层保温板</div><div class="grid-2"><div class="input-group"><label>总面积 (m²) 可算式</label><input type="text" id="insulArea${floor}" value="${data.insulAreaExpr}" placeholder="0"></div><div class="input-group"><label>单块面积 (m²)</label><input type="number" id="insulUnit${floor}" step="0.0001" value="${data.insulUnitArea}"></div><div class="input-group"><label>厚度 (mm)</label><input type="number" id="insulThick${floor}" step="1" value="${data.insulThick}"></div><div class="input-group"><label>单价 (元/m³)</label><input type="number" id="insulPrice${floor}" step="1" value="${data.insulPrice}"></div></div></div>`;
             html += `<div class="section-title" style="margin-top:12px;">🚪 门窗洞口</div><div id="openingsContainer${floor}"></div><button class="btn-small add" data-floor="${floor}">➕ 添加洞口</button>`;
             container.innerHTML = html;
 
@@ -304,8 +232,8 @@
         }
 
         function addOpening(floor) { floorData[floor].openings.push({ width:1.0, height:1.8, count:1 }); renderOpenings(floor); saveToLocal(); calculateAll(); }
-        function updateRoofVisibility() { $('roof2Panel').style.display = (parseInt(roofEls.houseFloors.value) || 1) >= 2 ? 'block' : 'none'; }
 
+        // ---------- 核心计算函数 ----------
         function calcFloorModules(floor) {
             const data = floorData[floor];
             const H = Number(data.height); if (!H || H <= 0) return null;
@@ -386,163 +314,215 @@
             const p25 = parseFloat(priceInputs.module25.value)||0, p32 = parseFloat(priceInputs.module32.value)||0;
             const pIns25 = parseFloat(priceInputs.insert25.value)||0, pIns32 = parseFloat(priceInputs.insert32.value)||0;
             const pHook = parseFloat(priceInputs.hook.value)||0, pConc = parseFloat(priceInputs.concrete.value)||0;
-            const houseFloors = parseInt(roofEls.houseFloors.value)||1;
-            const topArea = parseFloat(priceInputs.topPlateArea.value)||0, topUnitArea = parseFloat(priceInputs.topPlateUnitArea.value)||0, topThick = parseFloat(priceInputs.topPlateThick.value)||0, pTopPlate = parseFloat(priceInputs.priceTopPlate.value)||0;
             const price = { phi6: parseFloat(priceInputs.phi6.value)||0, phi10: parseFloat(priceInputs.phi10.value)||0, phi12: parseFloat(priceInputs.phi12.value)||0, phi14: parseFloat(priceInputs.phi14.value)||0, phi18: parseFloat(priceInputs.phi18.value)||0, phi22: parseFloat(priceInputs.phi22.value)||0 };
 
-            let totalArea25=0, totalArea32=0;
-            let sum90_25=0, sum90_32=0, sum60_25=0, sum60_32=0;
-            let big32=0, small32=0, bigT32=0, smallT32=0, big25=0, small25=0, bigT25=0, smallT25=0;
-            let ins25=0, ins32=0, hooks=0, wallConc=0;
-            let rebar = { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 };
-            let beamConcByFloor = [0,0,0], beamProjByFloor = [0,0,0], beamRebarTotal = { lenPhi22:0, lenPhi18:0, lenPhi6:0 };
-            let blocks25_total = 0, blocks32_total = 0;
-            let totalStirrupCount = 0; // 箍筋总根数
+            const floorResults = { 1: {}, 2: {} };
+            let totalArea25=0, totalArea32=0, totalIns25=0, totalIns32=0, totalHooks=0, totalWallConc=0, totalRoofConc=0, totalBeamConc=0;
+            let totalRebar = { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0, lenPhi18:0, lenPhi22:0 };
+            let totalInsulCost = 0, totalStirrupCount = 0;
 
             for (let f of [1,2]) {
+                const data = floorData[f];
                 const mod = calcFloorModules(f);
+                const beamLen = safeEval(data.beamLengthExpr);
+                let beamConc = 0, beamProj = 0, beamRebar = { lenPhi22:0, lenPhi18:0, lenPhi6:0, stirrupCount:0 };
+                let roofArea = safeEval(data.roofAreaExpr);
+                let roofConc = 0, roofRebar = { lenPhi12:0, lenPhi10:0 };
+                let insulArea = safeEval(data.insulAreaExpr);
+                let insulVol = 0, insulCost = 0, insulBlocks = 0;
+
                 if (mod) {
                     const reb = calcFloorRebar(f, mod);
-                    totalArea25 += mod.area25; totalArea32 += mod.area32;
-                    sum90_25 += mod.count90_25; sum90_32 += mod.count90_32;
-                    sum60_25 += mod.count60_25; sum60_32 += mod.count60_32;
-                    big32 += mod.bigCorner32; small32 += mod.smallCorner32; bigT32 += mod.bigT32; smallT32 += mod.smallT32;
-                    big25 += mod.bigCorner25; small25 += mod.smallCorner25; bigT25 += mod.bigT25; smallT25 += mod.smallT25;
-                    ins25 += mod.insert25; ins32 += mod.insert32;
-                    hooks += mod.totalHooks;
-                    wallConc += mod.S_net * CAVITY_THICK;
-                    rebar.lenPhi6 += reb.lenPhi6; rebar.lenPhi10 += reb.lenPhi10; rebar.lenPhi12 += reb.lenPhi12; rebar.lenPhi14 += reb.lenPhi14;
-                    blocks25_total += mod.count90_25 + mod.count60_25 + mod.bigCorner25 + mod.smallCorner25 + mod.bigT25 + mod.smallT25;
-                    blocks32_total += mod.count90_32 + mod.count60_32 + mod.bigCorner32 + mod.smallCorner32 + mod.bigT32 + mod.smallT32;
-
-                    // 墙体柱子箍筋根数
-                    const data = floorData[f];
-                    const H = Number(data.height);
-                    const extCorners = Number(data.extCorners)||0, intCorners = Number(data.intCorners)||0, tWalls = Number(data.tWalls)||0;
-                    let col32 = (data.mode==='mixed')? extCorners + tWalls : 0;
-                    let col25 = (data.mode==='all25')? intCorners + tWalls : intCorners;
-                    const stirrupPerCol = Math.ceil(H/0.2);
-                    totalStirrupCount += (col32 + col25) * stirrupPerCol;
+                    floorResults[f] = {
+                        area25: mod.area25, area32: mod.area32,
+                        blocks25: mod.count90_25 + mod.count60_25 + mod.bigCorner25 + mod.smallCorner25 + mod.bigT25 + mod.smallT25,
+                        blocks32: mod.count90_32 + mod.count60_32 + mod.bigCorner32 + mod.smallCorner32 + mod.bigT32 + mod.smallT32,
+                        count90_25: mod.count90_25, count90_32: mod.count90_32,
+                        count60_25: mod.count60_25, count60_32: mod.count60_32,
+                        big25: mod.bigCorner25, small25: mod.smallCorner25, bigT25: mod.bigT25, smallT25: mod.smallT25,
+                        big32: mod.bigCorner32, small32: mod.smallCorner32, bigT32: mod.bigT32, smallT32: mod.smallT32,
+                        ins25: mod.insert25, ins32: mod.insert32,
+                        hooks: mod.totalHooks,
+                        wallConc: mod.S_net * CAVITY_THICK,
+                        rebar: reb
+                    };
+                } else {
+                    floorResults[f] = { area25:0, area32:0, blocks25:0, blocks32:0, count90_25:0, count90_32:0, count60_25:0, count60_32:0, big25:0, small25:0, bigT25:0, smallT25:0, big32:0, small32:0, bigT32:0, smallT32:0, ins25:0, ins32:0, hooks:0, wallConc:0, rebar: { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0 } };
                 }
-                const data = floorData[f];
-                const beamLen = safeEval(data.beamLengthExpr);
+
                 if (beamLen > 0) {
                     const bw = Number(data.beamWidth)||0, bh = Number(data.beamHeight)||0;
-                    beamConcByFloor[f] = beamLen * bw * bh; beamProjByFloor[f] = beamLen * bw;
-                    const single = calcSingleBeamRebar(beamLen, bw, bh);
-                    beamRebarTotal.lenPhi22 += single.lenPhi22; beamRebarTotal.lenPhi18 += single.lenPhi18; beamRebarTotal.lenPhi6 += single.lenPhi6;
-                    totalStirrupCount += single.stirrupCount; // 梁箍筋根数
+                    beamConc = beamLen * bw * bh;
+                    beamProj = beamLen * bw;
+                    beamRebar = calcSingleBeamRebar(beamLen, bw, bh);
                 }
+
+                if (roofArea > 0) {
+                    let area = roofArea;
+                    if (data.roofDeduct && beamProj > 0) area = Math.max(0, area - beamProj);
+                    roofConc = area * (data.roofThick || 0);
+                    const side = Math.sqrt(roofArea);
+                    roofRebar = calcRoofRebar(side, side);
+                }
+
+                if (insulArea > 0) {
+                    insulVol = insulArea * ((data.insulThick || 50) / 1000);
+                    insulCost = insulVol * (data.insulPrice || 330);
+                    insulBlocks = (data.insulUnitArea > 0) ? Math.ceil(insulArea / data.insulUnitArea) : 0;
+                }
+
+                floorResults[f].beamConc = beamConc;
+                floorResults[f].roofConc = roofConc;
+                floorResults[f].insulVol = insulVol;
+                floorResults[f].insulCost = insulCost;
+                floorResults[f].insulBlocks = insulBlocks;
+                floorResults[f].beamRebar = beamRebar;
+                floorResults[f].roofRebar = roofRebar;
+                floorResults[f].rebarTotal = {
+                    lenPhi6: floorResults[f].rebar.lenPhi6 + (beamRebar.lenPhi6||0),
+                    lenPhi10: floorResults[f].rebar.lenPhi10 + (roofRebar.lenPhi10||0),
+                    lenPhi12: floorResults[f].rebar.lenPhi12 + (roofRebar.lenPhi12||0),
+                    lenPhi14: floorResults[f].rebar.lenPhi14,
+                    lenPhi18: (beamRebar.lenPhi18||0),
+                    lenPhi22: (beamRebar.lenPhi22||0)
+                };
+
+                totalArea25 += floorResults[f].area25;
+                totalArea32 += floorResults[f].area32;
+                totalIns25 += floorResults[f].ins25;
+                totalIns32 += floorResults[f].ins32;
+                totalHooks += floorResults[f].hooks;
+                totalWallConc += floorResults[f].wallConc;
+                totalRoofConc += roofConc;
+                totalBeamConc += beamConc;
+                totalRebar.lenPhi6 += floorResults[f].rebarTotal.lenPhi6;
+                totalRebar.lenPhi10 += floorResults[f].rebarTotal.lenPhi10;
+                totalRebar.lenPhi12 += floorResults[f].rebarTotal.lenPhi12;
+                totalRebar.lenPhi14 += floorResults[f].rebarTotal.lenPhi14;
+                totalRebar.lenPhi18 += floorResults[f].rebarTotal.lenPhi18;
+                totalRebar.lenPhi22 += floorResults[f].rebarTotal.lenPhi22;
+                totalInsulCost += insulCost;
+                totalStirrupCount += (beamRebar.stirrupCount||0) + (mod ? ((Number(data.extCorners)||0)+(Number(data.intCorners)||0)+(Number(data.tWalls)||0)) * Math.ceil((Number(data.height)||0)/0.2) : 0);
             }
 
-            let roofConcTotal = 0, roofRebarTotal = { lenPhi12:0, lenPhi10:0 };
-            for (let f = 1; f <= houseFloors; f++) {
-                const panel = roofEls[`roof${f}`];
-                if (!panel.length || !panel.width) continue;
-                const len = parseFloat(panel.length.value)||0, wid = parseFloat(panel.width.value)||0, thick = parseFloat(panel.thick.value)||0;
-                const deduct = panel.deduct && panel.deduct.checked;
-                let area = len * wid; if (deduct && beamProjByFloor[f] > 0) area = Math.max(0, area - beamProjByFloor[f]);
-                roofConcTotal += area * thick;
-                const reb = calcRoofRebar(len, wid);
-                roofRebarTotal.lenPhi12 += reb.lenPhi12; roofRebarTotal.lenPhi10 += reb.lenPhi10;
-            }
-
-            const totalBeamConc = beamConcByFloor[1] + beamConcByFloor[2];
-            const totalConc = wallConc + roofConcTotal + totalBeamConc;
+            const totalConc = totalWallConc + totalRoofConc + totalBeamConc;
             const concCost = totalConc * pConc;
-
-            const topVol = topArea * (topThick / 1000);
-            const topCost = topVol * pTopPlate;
-            const topBlocks = (topUnitArea > 0) ? Math.ceil(topArea / topUnitArea) : 0;
-
-            rebar.lenPhi12 += roofRebarTotal.lenPhi12; rebar.lenPhi10 += roofRebarTotal.lenPhi10;
-            rebar.lenPhi22 = beamRebarTotal.lenPhi22; rebar.lenPhi18 = beamRebarTotal.lenPhi18; rebar.lenPhi6 += beamRebarTotal.lenPhi6;
-
             const costModules = totalArea25 * p25 + totalArea32 * p32;
-            const costInserts = ins25 * pIns25 + ins32 * pIns32;
-            const costHooks = hooks * pHook;
+            const costInserts = totalIns25 * pIns25 + totalIns32 * pIns32;
+            const costHooks = totalHooks * pHook;
             const costModuleParts = costModules + costInserts + costHooks;
-            const rebarCost = rebar.lenPhi6*price.phi6 + rebar.lenPhi10*price.phi10 + rebar.lenPhi12*price.phi12 + rebar.lenPhi14*price.phi14 + (rebar.lenPhi18||0)*price.phi18 + (rebar.lenPhi22||0)*price.phi22;
-            const totalCost = costModuleParts + concCost + topCost + rebarCost;
+            const rebarCost = totalRebar.lenPhi6*price.phi6 + totalRebar.lenPhi10*price.phi10 + totalRebar.lenPhi12*price.phi12 + totalRebar.lenPhi14*price.phi14 + totalRebar.lenPhi18*price.phi18 + totalRebar.lenPhi22*price.phi22;
+            const totalCost = costModuleParts + concCost + totalInsulCost + rebarCost;
 
-            const ton = (d, len) => (len * theoreticalKgPerM(d) / 1000);
-            const t6 = ton(6, rebar.lenPhi6), t10 = ton(10, rebar.lenPhi10), t12 = ton(12, rebar.lenPhi12), t14 = ton(14, rebar.lenPhi14), t18 = ton(18, rebar.lenPhi18||0), t22 = ton(22, rebar.lenPhi22||0);
+            // 生成 HTML
+            let html = '';
+            const t = (d, len) => (len * theoreticalKgPerM(d) / 1000);
+            for (let f of [1,2]) {
+                const r = floorResults[f];
+                html += `<div class="result-section-title">🏡 ${f}层用量</div>`;
+                html += `<div class="result-subtitle">🔵 25模块</div>`;
+                html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${r.area25.toFixed(2)} m²</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${r.count90_25} 块 (${(r.count90_25*AREA_90).toFixed(2)} m²)</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${r.count60_25} 块 (${(r.count60_25*AREA_60).toFixed(2)} m²)</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${r.big25} / ${r.small25}</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${r.bigT25} / ${r.smallT25}</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${r.blocks25} 块</span></div>`;
+                html += `<div class="result-subtitle">🔴 32模块</div>`;
+                html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${r.area32.toFixed(2)} m²</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${r.count90_32} 块 (${(r.count90_32*AREA_90).toFixed(2)} m²)</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${r.count60_32} 块 (${(r.count60_32*AREA_60).toFixed(2)} m²)</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${r.big32} / ${r.small32}</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${r.bigT32} / ${r.smallT32}</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${r.blocks32} 块</span></div>`;
+                html += `<div class="result-item"><span class="result-label">插板 25/32</span><span class="result-value">${r.ins25} / ${r.ins32}</span></div>`;
+                html += `<div class="result-item"><span class="result-label">钢丝勾</span><span class="result-value">${r.hooks} 个</span></div>`;
+                html += `<div class="result-item"><span class="result-label">梁混凝土</span><span class="result-value">${r.beamConc.toFixed(2)} m³</span></div>`;
+                html += `<div class="result-item"><span class="result-label">顶板混凝土</span><span class="result-value">${r.roofConc.toFixed(2)} m³</span></div>`;
+                html += `<div class="result-item"><span class="result-label">保温板体积</span><span class="result-value">${r.insulVol.toFixed(4)} m³</span></div>`;
+                html += `<div class="result-item"><span class="result-label">保温板块数</span><span class="result-value">${r.insulBlocks} 块</span></div>`;
+                html += `<div class="result-item"><span class="result-label">保温板价格</span><span class="result-value">${r.insulCost.toFixed(2)} 元</span></div>`;
+                html += `<div class="result-item"><span class="result-label">Φ6</span><span class="result-value">${r.rebarTotal.lenPhi6.toFixed(1)} m / ${t(6, r.rebarTotal.lenPhi6).toFixed(3)} t</span></div>`;
+                html += `<div class="result-item"><span class="result-label">Φ10</span><span class="result-value">${r.rebarTotal.lenPhi10.toFixed(1)} m / ${t(10, r.rebarTotal.lenPhi10).toFixed(3)} t</span></div>`;
+                html += `<div class="result-item"><span class="result-label">Φ12</span><span class="result-value">${r.rebarTotal.lenPhi12.toFixed(1)} m / ${t(12, r.rebarTotal.lenPhi12).toFixed(3)} t</span></div>`;
+                html += `<div class="result-item"><span class="result-label">Φ14</span><span class="result-value">${r.rebarTotal.lenPhi14.toFixed(1)} m / ${t(14, r.rebarTotal.lenPhi14).toFixed(3)} t</span></div>`;
+                html += `<div class="result-item"><span class="result-label">Φ18 (梁)</span><span class="result-value">${r.rebarTotal.lenPhi18.toFixed(1)} m / ${t(18, r.rebarTotal.lenPhi18).toFixed(3)} t</span></div>`;
+                html += `<div class="result-item"><span class="result-label">Φ22 (梁)</span><span class="result-value">${r.rebarTotal.lenPhi22.toFixed(1)} m / ${t(22, r.rebarTotal.lenPhi22).toFixed(3)} t</span></div>`;
+            }
 
-            let html = `
-                <div class="result-section-title">🧱 模块及配件</div>
-                <div class="result-item"><span class="result-label">模块总面积</span><span class="result-value">${(totalArea25+totalArea32).toFixed(2)} m²</span></div>
-                <div class="result-subtitle">🔵 25模块</div>
-                <div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${sum90_25} 块 (面积 ${(sum90_25*AREA_90).toFixed(2)} m²)</span></div>
-                <div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${sum60_25} 块 (面积 ${(sum60_25*AREA_60).toFixed(2)} m²)</span></div>
-                <div class="result-item"><span class="result-label">　大角 / 小角</span><span class="result-value">${big25} / ${small25}</span></div>
-                <div class="result-item"><span class="result-label">　大T / 小T</span><span class="result-value">${bigT25} / ${smallT25}</span></div>
-                <div class="result-item"><span class="result-label">　📦 25模块总数量</span><span class="result-value">${blocks25_total} 块 (面积 ${totalArea25.toFixed(2)} m²)</span></div>
-                <div class="result-item"><span class="result-label">　💰 25模块总价</span><span class="result-value">${(totalArea25*p25).toFixed(2)} 元</span></div>
-                <div class="result-subtitle">🔴 32模块</div>
-                <div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${sum90_32} 块 (面积 ${(sum90_32*AREA_90).toFixed(2)} m²)</span></div>
-                <div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${sum60_32} 块 (面积 ${(sum60_32*AREA_60).toFixed(2)} m²)</span></div>
-                <div class="result-item"><span class="result-label">　大角 / 小角</span><span class="result-value">${big32} / ${small32}</span></div>
-                <div class="result-item"><span class="result-label">　大T / 小T</span><span class="result-value">${bigT32} / ${smallT32}</span></div>
-                <div class="result-item"><span class="result-label">　📦 32模块总数量</span><span class="result-value">${blocks32_total} 块 (面积 ${totalArea32.toFixed(2)} m²)</span></div>
-                <div class="result-item"><span class="result-label">　💰 32模块总价</span><span class="result-value">${(totalArea32*p32).toFixed(2)} 元</span></div>
-                <div class="result-item"><span class="result-label">32插板 / 25插板</span><span class="result-value">${ins32} / ${ins25}</span></div>
-                <div class="result-item"><span class="result-label">钢丝勾</span><span class="result-value">${hooks} 个 × ${pHook} = ${costHooks.toFixed(2)}</span></div>
-                <div class="result-item total"><span class="result-label">💰 价格合计</span><span class="result-value highlight">${costModuleParts.toFixed(2)} 元</span></div>
+            html += `<div class="result-section-title">📊 合计</div>`;
+            html += `<div class="result-item"><span class="result-label">25模块总面积/总价</span><span class="result-value">${totalArea25.toFixed(2)} m² / ${(totalArea25*p25).toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">32模块总面积/总价</span><span class="result-value">${totalArea32.toFixed(2)} m² / ${(totalArea32*p32).toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">插板总价</span><span class="result-value">${costInserts.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">钢丝勾总价</span><span class="result-value">${costHooks.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">模块及配件合计</span><span class="result-value">${costModuleParts.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">墙体混凝土</span><span class="result-value">${totalWallConc.toFixed(2)} m³</span></div>`;
+            html += `<div class="result-item"><span class="result-label">顶板混凝土</span><span class="result-value">${totalRoofConc.toFixed(2)} m³</span></div>`;
+            html += `<div class="result-item"><span class="result-label">梁混凝土</span><span class="result-value">${totalBeamConc.toFixed(2)} m³</span></div>`;
+            html += `<div class="result-item"><span class="result-label">混凝土总价</span><span class="result-value">${concCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">保温板总价</span><span class="result-value">${totalInsulCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">Φ6 总长/重量</span><span class="result-value">${totalRebar.lenPhi6.toFixed(1)} m / ${t(6, totalRebar.lenPhi6).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">箍筋总根数</span><span class="result-value">${totalStirrupCount} 根</span></div>`;
+            html += `<div class="result-item"><span class="result-label">Φ10</span><span class="result-value">${totalRebar.lenPhi10.toFixed(1)} m / ${t(10, totalRebar.lenPhi10).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">Φ12</span><span class="result-value">${totalRebar.lenPhi12.toFixed(1)} m / ${t(12, totalRebar.lenPhi12).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">Φ14</span><span class="result-value">${totalRebar.lenPhi14.toFixed(1)} m / ${t(14, totalRebar.lenPhi14).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">Φ18</span><span class="result-value">${totalRebar.lenPhi18.toFixed(1)} m / ${t(18, totalRebar.lenPhi18).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">Φ22</span><span class="result-value">${totalRebar.lenPhi22.toFixed(1)} m / ${t(22, totalRebar.lenPhi22).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">钢筋总价</span><span class="result-value">${rebarCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item total-heavy"><span class="result-label">🧾 合计总价</span><span class="result-value highlight">${totalCost.toFixed(2)} 元</span></div>`;
 
-                <div class="result-section-title">🔝 顶板</div>
-                <div class="result-item"><span class="result-label">顶板总面积</span><span class="result-value">${topArea.toFixed(2)} m²</span></div>
-                <div class="result-item"><span class="result-label">体积 / 单价</span><span class="result-value">${topVol.toFixed(4)} m³ × ${pTopPlate} 元/m³</span></div>
-                <div class="result-item"><span class="result-label">所需块数</span><span class="result-value">${topBlocks} 块 (单块 ${topUnitArea.toFixed(3)} m²)</span></div>
-                <div class="result-item"><span class="result-label">💰 顶板总价</span><span class="result-value highlight">${topCost.toFixed(2)} 元</span></div>
-
-                <div class="result-section-title">🧪 混凝土</div>
-                <div class="result-item"><span class="result-label">墙体混凝土</span><span class="result-value">${wallConc.toFixed(2)} m³</span></div>
-                <div class="result-item"><span class="result-label">屋顶混凝土 (合计)</span><span class="result-value">${roofConcTotal.toFixed(2)} m³</span></div>
-                <div class="result-item"><span class="result-label">梁混凝土 (合计)</span><span class="result-value">${totalBeamConc.toFixed(2)} m³</span></div>
-                <div class="result-item"><span class="result-label">混凝土总计</span><span class="result-value">${totalConc.toFixed(2)} m³</span></div>
-                <div class="result-item total"><span class="result-label">💰 混凝土总价</span><span class="result-value highlight">${concCost.toFixed(2)} 元</span></div>
-
-                <div class="result-section-title">⚙️ 钢筋</div>
-                <div class="result-item"><span class="result-label">Φ6 长度 / 重量</span><span class="result-value">${(rebar.lenPhi6||0).toFixed(1)} m / ${t6.toFixed(3)} t</span></div>
-                <div class="result-item"><span class="result-label">　箍筋总根数</span><span class="result-value">${totalStirrupCount} 根</span></div>
-                <div class="result-item"><span class="result-label">Φ10 长度 / 重量</span><span class="result-value">${(rebar.lenPhi10||0).toFixed(1)} m / ${t10.toFixed(3)} t</span></div>
-                <div class="result-item"><span class="result-label">Φ12 长度 / 重量</span><span class="result-value">${(rebar.lenPhi12||0).toFixed(1)} m / ${t12.toFixed(3)} t</span></div>
-                <div class="result-item"><span class="result-label">Φ14 长度 / 重量</span><span class="result-value">${(rebar.lenPhi14||0).toFixed(1)} m / ${t14.toFixed(3)} t</span></div>
-                <div class="result-item"><span class="result-label">Φ18 (梁) 长度/重量</span><span class="result-value">${(rebar.lenPhi18||0).toFixed(1)} m / ${t18.toFixed(3)} t</span></div>
-                <div class="result-item"><span class="result-label">Φ22 (梁) 长度/重量</span><span class="result-value">${(rebar.lenPhi22||0).toFixed(1)} m / ${t22.toFixed(3)} t</span></div>
-                <div class="result-item total"><span class="result-label">💰 钢筋总价</span><span class="result-value highlight">${rebarCost.toFixed(2)} 元</span></div>
-                <div class="result-item total-heavy"><span class="result-label">🧾 合计总价</span><span class="result-value highlight" style="font-size:1.05rem;">${totalCost.toFixed(2)} 元</span></div>`;
             $('resultContent').innerHTML = html;
         }
 
         function saveToLocal() {
-            const roofData = { houseFloors: roofEls.houseFloors.value, roof1: { length: roofEls.roof1.length.value, width: roofEls.roof1.width.value, thick: roofEls.roof1.thick.value, deduct: roofEls.roof1.deduct.checked }, roof2: { length: roofEls.roof2.length.value, width: roofEls.roof2.width.value, thick: roofEls.roof2.thick.value, deduct: roofEls.roof2.deduct.checked } };
-            const data = { prices: { module25: priceInputs.module25.value, module32: priceInputs.module32.value, insert25: priceInputs.insert25.value, insert32: priceInputs.insert32.value, hook: priceInputs.hook.value, concrete: priceInputs.concrete.value, topPlateArea: priceInputs.topPlateArea.value, topPlateUnitArea: priceInputs.topPlateUnitArea.value, topPlateThick: priceInputs.topPlateThick.value, priceTopPlate: priceInputs.priceTopPlate.value, phi6: priceInputs.phi6.value, phi10: priceInputs.phi10.value, phi12: priceInputs.phi12.value, phi14: priceInputs.phi14.value, phi18: priceInputs.phi18.value, phi22: priceInputs.phi22.value }, roof: roofData, floors: floorData };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                prices: {
+                    module25: priceInputs.module25.value, module32: priceInputs.module32.value,
+                    insert25: priceInputs.insert25.value, insert32: priceInputs.insert32.value,
+                    hook: priceInputs.hook.value, concrete: priceInputs.concrete.value,
+                    phi6: priceInputs.phi6.value, phi10: priceInputs.phi10.value, phi12: priceInputs.phi12.value,
+                    phi14: priceInputs.phi14.value, phi18: priceInputs.phi18.value, phi22: priceInputs.phi22.value
+                },
+                floors: floorData
+            }));
         }
 
         function loadFromLocal() {
-            const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return;
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
             try {
                 const saved = JSON.parse(raw);
-                if (saved.prices) { for (let k in saved.prices) { if (priceInputs[k]) priceInputs[k].value = saved.prices[k]; } }
-                if (saved.roof) { roofEls.houseFloors.value = saved.roof.houseFloors || 1; if (saved.roof.roof1) { roofEls.roof1.length.value = saved.roof.roof1.length || ''; roofEls.roof1.width.value = saved.roof.roof1.width || ''; roofEls.roof1.thick.value = saved.roof.roof1.thick || ''; roofEls.roof1.deduct.checked = saved.roof.roof1.deduct || false; } if (saved.roof.roof2) { roofEls.roof2.length.value = saved.roof.roof2.length || ''; roofEls.roof2.width.value = saved.roof.roof2.width || ''; roofEls.roof2.thick.value = saved.roof.roof2.thick || ''; roofEls.roof2.deduct.checked = saved.roof.roof2.deduct || false; } }
-                if (saved.floors) { for (let f of [1,2]) if (saved.floors[f]) floorData[f] = { ...floorData[f], ...saved.floors[f] }; }
-                updateRoofVisibility();
+                if (saved.prices) {
+                    for (let k in saved.prices) {
+                        if (priceInputs[k]) priceInputs[k].value = saved.prices[k];
+                    }
+                }
+                if (saved.floors) {
+                    for (let f of [1,2]) if (saved.floors[f]) floorData[f] = { ...floorData[f], ...saved.floors[f] };
+                }
             } catch (e) {}
         }
 
         function init() {
-            loadFromLocal(); renderFloorPanel(1); renderFloorPanel(2); renderOpenings(1); renderOpenings(2);
+            loadFromLocal();
+            renderFloorPanel(1); renderFloorPanel(2);
+            renderOpenings(1); renderOpenings(2);
             $('clearMaterialPrice').addEventListener('click', clearMaterialPrice);
-            $('clearTopPlate').addEventListener('click', clearTopPlate);
-            $('clearRebarPrice').addEventListener('click', clearRebarPrice);
-            $('clearRoof').addEventListener('click', clearRoof);
             $('clearFloor1').addEventListener('click', () => clearFloor(1));
             $('clearFloor2').addEventListener('click', () => clearFloor(2));
-            roofEls.houseFloors.addEventListener('change', () => { updateRoofVisibility(); saveToLocal(); calculateAll(); });
-            document.querySelectorAll('.floor-tab').forEach(btn => { btn.addEventListener('click', function() { const floor = this.dataset.floor; document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active')); this.classList.add('active'); $('floor1Panel').classList.toggle('active-panel', floor==='1'); $('floor2Panel').classList.toggle('active-panel', floor==='2'); }); });
-            document.querySelectorAll('input, select').forEach(el => { if (el.closest('.floor-panel')) return; el.addEventListener('input', () => { saveToLocal(); calculateAll(); }); if (el.type === 'checkbox') el.addEventListener('change', () => { saveToLocal(); calculateAll(); }); });
+            document.querySelectorAll('.floor-tab').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const floor = this.dataset.floor;
+                    document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    $('floor1Panel').classList.toggle('active-panel', floor==='1');
+                    $('floor2Panel').classList.toggle('active-panel', floor==='2');
+                });
+            });
+            document.querySelectorAll('input, select').forEach(el => {
+                if (el.closest('.floor-panel')) return;
+                el.addEventListener('input', () => { saveToLocal(); calculateAll(); });
+                if (el.type === 'checkbox') el.addEventListener('change', () => { saveToLocal(); calculateAll(); });
+            });
             calculateAll();
         }
         init();
