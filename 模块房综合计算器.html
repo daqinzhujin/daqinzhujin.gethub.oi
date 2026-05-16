@@ -3,63 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块房综合计算器 · 分层顶板保温板 · 最终版</title>
+    <title>模块房综合计算器 · 分层总价 · 大字体</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
-        body { background: #f5f7fa; padding: 16px; font-size: 16px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .container { background: white; border-radius: 24px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 1200px; margin: 0 auto; }
-        h1 { font-size: 1.8rem; text-align: center; color: #2d3748; font-weight: 600; margin-bottom: 8px; }
-        .subtitle { text-align: center; color: #718096; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
-        .section { background: #f8fafc; border-radius: 16px; padding: 16px; margin-bottom: 24px; border: 1px solid #e2e8f0; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .section-title { font-size: 1.1rem; font-weight: 600; color: #1e3a5f; display: flex; align-items: center; gap: 8px; }
-        .section-title::before { content: ''; display: inline-block; width: 4px; height: 20px; background: #4285f4; border-radius: 2px; }
-        .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #475569; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
+        body { background: #f5f7fa; padding: 16px; font-size: 18px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .container { background: white; border-radius: 24px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 1300px; margin: 0 auto; }
+        h1 { font-size: 2.2rem; text-align: center; color: #2d3748; font-weight: 600; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: #718096; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
+        .section { background: #f8fafc; border-radius: 16px; padding: 18px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .section-title { font-size: 1.2rem; font-weight: 600; color: #1e3a5f; display: flex; align-items: center; gap: 8px; }
+        .section-title::before { content: ''; display: inline-block; width: 5px; height: 22px; background: #4285f4; border-radius: 2px; }
+        .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #475569; border-radius: 20px; padding: 5px 14px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
         .btn-clear:hover { background: #fee2e2; border-color: #f87171; color: #b91c1c; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
-        .input-group { margin-bottom: 12px; }
-        label { display: block; font-weight: 500; color: #4a5568; margin-bottom: 6px; font-size: 0.82rem; }
-        input, select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; background: #f8fafc; outline: none; transition: 0.2s; }
+        .grid-3 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 12px; }
+        .input-group { margin-bottom: 14px; }
+        label { display: block; font-weight: 500; color: #4a5568; margin-bottom: 6px; font-size: 0.9rem; }
+        input, select { width: 100%; padding: 11px 14px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; background: #f8fafc; outline: none; transition: 0.2s; }
         input:focus, select:focus { border-color: #4285f4; background: white; box-shadow: 0 0 0 3px rgba(66,133,244,0.12); }
         .radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-        .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; font-size: 0.9rem; }
+        .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; font-size: 0.95rem; }
         .radio-group input[type="radio"] { width: auto; accent-color: #4285f4; }
-        .floor-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
-        .floor-tab { background: #e2e8f0; border: none; padding: 8px 20px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .floor-tabs { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+        .floor-tab { background: #e2e8f0; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
         .floor-tab.active { background: #4285f4; color: white; }
         .floor-panel { display: none; }
         .floor-panel.active-panel { display: block; }
-        .checkbox-row { margin: 8px 0; display: flex; align-items: center; gap: 8px; }
+        .checkbox-row { margin: 10px 0; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
         .checkbox-row input[type="checkbox"] { width: auto; accent-color: #4285f4; }
-        .beam-section, .roof-panel, .plate-panel { background: #f1f5f9; border-radius: 14px; padding: 12px; margin-top: 12px; border: 1px solid #e2e8f0; }
-        .result-card { background: white; border-radius: 16px; padding: 20px; margin-top: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-        .result-title { font-size: 1.2rem; font-weight: 600; color: #2d3748; text-align: center; margin-bottom: 20px; }
-        .result-section-title { font-size: 1rem; font-weight: 600; color: #1e3a5f; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
-        .result-subtitle { font-weight: 600; color: #475569; margin: 8px 0 4px; font-size: 0.9rem; }
-        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 0.9rem; border-bottom: 1px dashed #e2e8f0; }
+        .beam-section, .roof-panel, .plate-panel { background: #f1f5f9; border-radius: 14px; padding: 14px; margin-top: 14px; border: 1px solid #e2e8f0; }
+        .result-card { background: white; border-radius: 16px; padding: 22px; margin-top: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+        .result-title { font-size: 1.3rem; font-weight: 600; color: #2d3748; text-align: center; margin-bottom: 16px; }
+        .result-section-title { font-size: 1.1rem; font-weight: 600; color: #1e3a5f; margin: 14px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
+        .result-subtitle { font-weight: 600; color: #475569; margin: 10px 0 4px; font-size: 0.95rem; }
+        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 0.95rem; border-bottom: 1px dashed #e2e8f0; }
         .result-item:last-child { border-bottom: none; }
         .result-label { color: #4a5568; }
         .result-value { font-weight: 600; color: #1e293b; }
+        .price-value { font-weight: 700; color: #1e293b; }
         .total { font-weight: 700; border-top: 2px solid #4285f4; margin-top: 8px; padding-top: 8px; }
         .total-heavy { border-top: 3px solid #4285f4; margin-top: 10px; padding-top: 10px; }
-        .highlight { color: #4285f4; font-weight: 700; }
-        .subnote { font-size: 0.75rem; color: #718096; text-align: center; margin-top: 16px; }
+        .subnote { font-size: 0.8rem; color: #718096; text-align: center; margin-top: 14px; }
         .opening-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: white; padding: 8px; border-radius: 12px; flex-wrap: wrap; border: 1px solid #e2e8f0; }
         .opening-row input { flex: 1; min-width: 60px; margin: 0; }
-        .btn-small { background: #ea4335; border: none; border-radius: 30px; padding: 6px 10px; color: white; font-size: 0.7rem; cursor: pointer; white-space: nowrap; }
+        .btn-small { background: #ea4335; border: none; border-radius: 30px; padding: 6px 12px; color: white; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
         .btn-small.add { background: #34a853; }
 
         @media (max-width: 800px) {
             .grid-2, .grid-3 { grid-template-columns: 1fr; }
             .container { padding: 16px; }
+            body { font-size: 16px; }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🏗️ 模块房综合计算器</h1>
-    <div class="subtitle">25/32模块分离计价 · 分层顶板与保温板 · 分楼层结果</div>
+    <div class="subtitle">25/32模块分离计价 · 分层顶板与保温板 · 分层总价明细</div>
 
     <!-- 材料单价 -->
     <div class="section">
@@ -138,7 +139,7 @@
                   insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 }
         };
         const floorData = JSON.parse(JSON.stringify(defaultFloorData));
-        const STORAGE_KEY = 'houseCalcV24_full';
+        const STORAGE_KEY = 'houseCalcV27_priceBold';
 
         const $ = id => document.getElementById(id);
         const priceInputs = {
@@ -233,7 +234,6 @@
 
         function addOpening(floor) { floorData[floor].openings.push({ width:1.0, height:1.8, count:1 }); renderOpenings(floor); saveToLocal(); calculateAll(); }
 
-        // ---------- 核心计算函数 ----------
         function calcFloorModules(floor) {
             const data = floorData[floor];
             const H = Number(data.height); if (!H || H <= 0) return null;
@@ -387,6 +387,23 @@
                     lenPhi22: (beamRebar.lenPhi22||0)
                 };
 
+                const modCost25 = (floorResults[f].area25 * p25);
+                const modCost32 = (floorResults[f].area32 * p32);
+                const concVol = floorResults[f].wallConc + roofConc + beamConc;
+                const concCost = concVol * pConc;
+                const rebarCostFloor = floorResults[f].rebarTotal.lenPhi6*price.phi6 +
+                                       floorResults[f].rebarTotal.lenPhi10*price.phi10 +
+                                       floorResults[f].rebarTotal.lenPhi12*price.phi12 +
+                                       floorResults[f].rebarTotal.lenPhi14*price.phi14 +
+                                       floorResults[f].rebarTotal.lenPhi18*price.phi18 +
+                                       floorResults[f].rebarTotal.lenPhi22*price.phi22;
+
+                floorResults[f].modCost25 = modCost25;
+                floorResults[f].modCost32 = modCost32;
+                floorResults[f].concVol = concVol;
+                floorResults[f].concCost = concCost;
+                floorResults[f].rebarCostFloor = rebarCostFloor;
+
                 totalArea25 += floorResults[f].area25;
                 totalArea32 += floorResults[f].area32;
                 totalIns25 += floorResults[f].ins25;
@@ -414,7 +431,6 @@
             const rebarCost = totalRebar.lenPhi6*price.phi6 + totalRebar.lenPhi10*price.phi10 + totalRebar.lenPhi12*price.phi12 + totalRebar.lenPhi14*price.phi14 + totalRebar.lenPhi18*price.phi18 + totalRebar.lenPhi22*price.phi22;
             const totalCost = costModuleParts + concCost + totalInsulCost + rebarCost;
 
-            // 生成 HTML
             let html = '';
             const t = (d, len) => (len * theoreticalKgPerM(d) / 1000);
             for (let f of [1,2]) {
@@ -427,6 +443,7 @@
                 html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${r.big25} / ${r.small25}</span></div>`;
                 html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${r.bigT25} / ${r.smallT25}</span></div>`;
                 html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${r.blocks25} 块</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　💰 25模块总价</span><span class="result-value price-value">${r.modCost25.toFixed(2)} 元</span></div>`;
                 html += `<div class="result-subtitle">🔴 32模块</div>`;
                 html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${r.area32.toFixed(2)} m²</span></div>`;
                 html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${r.count90_32} 块 (${(r.count90_32*AREA_90).toFixed(2)} m²)</span></div>`;
@@ -434,41 +451,60 @@
                 html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${r.big32} / ${r.small32}</span></div>`;
                 html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${r.bigT32} / ${r.smallT32}</span></div>`;
                 html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${r.blocks32} 块</span></div>`;
+                html += `<div class="result-item"><span class="result-label">　💰 32模块总价</span><span class="result-value price-value">${r.modCost32.toFixed(2)} 元</span></div>`;
                 html += `<div class="result-item"><span class="result-label">插板 25/32</span><span class="result-value">${r.ins25} / ${r.ins32}</span></div>`;
                 html += `<div class="result-item"><span class="result-label">钢丝勾</span><span class="result-value">${r.hooks} 个</span></div>`;
                 html += `<div class="result-item"><span class="result-label">梁混凝土</span><span class="result-value">${r.beamConc.toFixed(2)} m³</span></div>`;
                 html += `<div class="result-item"><span class="result-label">顶板混凝土</span><span class="result-value">${r.roofConc.toFixed(2)} m³</span></div>`;
+                html += `<div class="result-item"><span class="result-label">🧪 混凝土用量总计</span><span class="result-value">${r.concVol.toFixed(2)} m³</span></div>`;
+                html += `<div class="result-item"><span class="result-label">💰 混凝土总价</span><span class="result-value price-value">${r.concCost.toFixed(2)} 元</span></div>`;
                 html += `<div class="result-item"><span class="result-label">保温板体积</span><span class="result-value">${r.insulVol.toFixed(4)} m³</span></div>`;
                 html += `<div class="result-item"><span class="result-label">保温板块数</span><span class="result-value">${r.insulBlocks} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">保温板价格</span><span class="result-value">${r.insulCost.toFixed(2)} 元</span></div>`;
-                html += `<div class="result-item"><span class="result-label">Φ6</span><span class="result-value">${r.rebarTotal.lenPhi6.toFixed(1)} m / ${t(6, r.rebarTotal.lenPhi6).toFixed(3)} t</span></div>`;
-                html += `<div class="result-item"><span class="result-label">Φ10</span><span class="result-value">${r.rebarTotal.lenPhi10.toFixed(1)} m / ${t(10, r.rebarTotal.lenPhi10).toFixed(3)} t</span></div>`;
-                html += `<div class="result-item"><span class="result-label">Φ12</span><span class="result-value">${r.rebarTotal.lenPhi12.toFixed(1)} m / ${t(12, r.rebarTotal.lenPhi12).toFixed(3)} t</span></div>`;
-                html += `<div class="result-item"><span class="result-label">Φ14</span><span class="result-value">${r.rebarTotal.lenPhi14.toFixed(1)} m / ${t(14, r.rebarTotal.lenPhi14).toFixed(3)} t</span></div>`;
-                html += `<div class="result-item"><span class="result-label">Φ18 (梁)</span><span class="result-value">${r.rebarTotal.lenPhi18.toFixed(1)} m / ${t(18, r.rebarTotal.lenPhi18).toFixed(3)} t</span></div>`;
-                html += `<div class="result-item"><span class="result-label">Φ22 (梁)</span><span class="result-value">${r.rebarTotal.lenPhi22.toFixed(1)} m / ${t(22, r.rebarTotal.lenPhi22).toFixed(3)} t</span></div>`;
+                html += `<div class="result-item"><span class="result-label">保温板价格</span><span class="result-value price-value">${r.insulCost.toFixed(2)} 元</span></div>`;
+                html += `<div class="result-subtitle">⚙️ 钢筋用量及价格</div>`;
+                const rebarItems = [
+                    { label: 'Φ6', len: r.rebarTotal.lenPhi6, dia: 6 },
+                    { label: 'Φ10', len: r.rebarTotal.lenPhi10, dia: 10 },
+                    { label: 'Φ12', len: r.rebarTotal.lenPhi12, dia: 12 },
+                    { label: 'Φ14', len: r.rebarTotal.lenPhi14, dia: 14 },
+                    { label: 'Φ18 (梁)', len: r.rebarTotal.lenPhi18, dia: 18 },
+                    { label: 'Φ22 (梁)', len: r.rebarTotal.lenPhi22, dia: 22 }
+                ];
+                rebarItems.forEach(item => {
+                    const cost = item.len * price['phi'+item.dia];
+                    html += `<div class="result-item"><span class="result-label">　${item.label}</span><span class="result-value">${item.len.toFixed(1)} m / ${t(item.dia, item.len).toFixed(3)} t · <span class="price-value">￥${cost.toFixed(2)}</span></span></div>`;
+                });
+                html += `<div class="result-item"><span class="result-label">　💰 钢筋合计总价</span><span class="result-value price-value">${r.rebarCostFloor.toFixed(2)} 元</span></div>`;
             }
 
             html += `<div class="result-section-title">📊 合计</div>`;
-            html += `<div class="result-item"><span class="result-label">25模块总面积/总价</span><span class="result-value">${totalArea25.toFixed(2)} m² / ${(totalArea25*p25).toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">32模块总面积/总价</span><span class="result-value">${totalArea32.toFixed(2)} m² / ${(totalArea32*p32).toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">插板总价</span><span class="result-value">${costInserts.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">钢丝勾总价</span><span class="result-value">${costHooks.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">模块及配件合计</span><span class="result-value">${costModuleParts.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">25模块总面积/总价</span><span class="result-value">${totalArea25.toFixed(2)} m² / <span class="price-value">${(totalArea25*p25).toFixed(2)} 元</span></span></div>`;
+            html += `<div class="result-item"><span class="result-label">32模块总面积/总价</span><span class="result-value">${totalArea32.toFixed(2)} m² / <span class="price-value">${(totalArea32*p32).toFixed(2)} 元</span></span></div>`;
+            html += `<div class="result-item"><span class="result-label">插板总价</span><span class="result-value price-value">${costInserts.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">钢丝勾总价</span><span class="result-value price-value">${costHooks.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">模块及配件合计</span><span class="result-value price-value">${costModuleParts.toFixed(2)} 元</span></div>`;
             html += `<div class="result-item"><span class="result-label">墙体混凝土</span><span class="result-value">${totalWallConc.toFixed(2)} m³</span></div>`;
             html += `<div class="result-item"><span class="result-label">顶板混凝土</span><span class="result-value">${totalRoofConc.toFixed(2)} m³</span></div>`;
             html += `<div class="result-item"><span class="result-label">梁混凝土</span><span class="result-value">${totalBeamConc.toFixed(2)} m³</span></div>`;
-            html += `<div class="result-item"><span class="result-label">混凝土总价</span><span class="result-value">${concCost.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">保温板总价</span><span class="result-value">${totalInsulCost.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">Φ6 总长/重量</span><span class="result-value">${totalRebar.lenPhi6.toFixed(1)} m / ${t(6, totalRebar.lenPhi6).toFixed(3)} t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">🧪 混凝土用量合计</span><span class="result-value">${totalConc.toFixed(2)} m³</span></div>`;
+            html += `<div class="result-item"><span class="result-label">混凝土总价</span><span class="result-value price-value">${concCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item"><span class="result-label">保温板总价</span><span class="result-value price-value">${totalInsulCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-subtitle">⚙️ 钢筋总价明细</div>`;
+            const allRebar = [
+                { label: 'Φ6', len: totalRebar.lenPhi6, dia: 6 },
+                { label: 'Φ10', len: totalRebar.lenPhi10, dia: 10 },
+                { label: 'Φ12', len: totalRebar.lenPhi12, dia: 12 },
+                { label: 'Φ14', len: totalRebar.lenPhi14, dia: 14 },
+                { label: 'Φ18', len: totalRebar.lenPhi18, dia: 18 },
+                { label: 'Φ22', len: totalRebar.lenPhi22, dia: 22 }
+            ];
+            allRebar.forEach(item => {
+                const cost = item.len * price['phi'+item.dia];
+                html += `<div class="result-item"><span class="result-label">　${item.label} 总价</span><span class="result-value price-value">${cost.toFixed(2)} 元 (${item.len.toFixed(1)} m / ${t(item.dia, item.len).toFixed(3)} t)</span></div>`;
+            });
             html += `<div class="result-item"><span class="result-label">箍筋总根数</span><span class="result-value">${totalStirrupCount} 根</span></div>`;
-            html += `<div class="result-item"><span class="result-label">Φ10</span><span class="result-value">${totalRebar.lenPhi10.toFixed(1)} m / ${t(10, totalRebar.lenPhi10).toFixed(3)} t</span></div>`;
-            html += `<div class="result-item"><span class="result-label">Φ12</span><span class="result-value">${totalRebar.lenPhi12.toFixed(1)} m / ${t(12, totalRebar.lenPhi12).toFixed(3)} t</span></div>`;
-            html += `<div class="result-item"><span class="result-label">Φ14</span><span class="result-value">${totalRebar.lenPhi14.toFixed(1)} m / ${t(14, totalRebar.lenPhi14).toFixed(3)} t</span></div>`;
-            html += `<div class="result-item"><span class="result-label">Φ18</span><span class="result-value">${totalRebar.lenPhi18.toFixed(1)} m / ${t(18, totalRebar.lenPhi18).toFixed(3)} t</span></div>`;
-            html += `<div class="result-item"><span class="result-label">Φ22</span><span class="result-value">${totalRebar.lenPhi22.toFixed(1)} m / ${t(22, totalRebar.lenPhi22).toFixed(3)} t</span></div>`;
-            html += `<div class="result-item"><span class="result-label">钢筋总价</span><span class="result-value">${rebarCost.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item total-heavy"><span class="result-label">🧾 合计总价</span><span class="result-value highlight">${totalCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item total"><span class="result-label">💰 钢筋总价</span><span class="result-value price-value">${rebarCost.toFixed(2)} 元</span></div>`;
+            html += `<div class="result-item total-heavy"><span class="result-label">🧾 合计总价</span><span class="result-value price-value">${totalCost.toFixed(2)} 元</span></div>`;
 
             $('resultContent').innerHTML = html;
         }
