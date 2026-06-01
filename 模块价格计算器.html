@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块价格计算器（双墙厚+独立单价+插板+顶板按立方）</title>
+    <title>模块价格计算器（双墙厚+独立单价+插板+顶板按立方+总体积）</title>
     <style>
         * {
             margin: 0;
@@ -364,12 +364,12 @@
 <body>
 <div class="container">
     <h1>🧮 模块价格计算器</h1>
-    <div class="sub">25墙和32墙分别设置单价，自动保存数据</div>
+    <div class="sub">25墙和32墙分别设置单价，自动保存数据，总体积汇总</div>
 
     <div class="info-card">
-        <p>📐 各模块单块面积：</p>
-        <p>25墙：90直板0.27㎡ | 60直板0.18㎡ | 大角0.36㎡ | 小角0.18㎡ | 大T0.4125㎡ | 小T0.3225㎡</p>
-        <p>32墙：90直板0.27㎡ | 60直板0.18㎡ | 大角0.456㎡ | 小角0.276㎡ | 大T0.402㎡ | 小T0.312㎡</p>
+        <p>📐 各模块单块面积及外轮廓体积：</p>
+        <p>25墙：90直板0.27㎡/0.0675m³ | 60直板0.18㎡/0.045m³ | 大角0.36㎡/0.09m³ | 小角0.18㎡/0.04538m³ | 大T0.4125㎡/0.10313m³ | 小T0.3225㎡/0.081m³</p>
+        <p>32墙：90直板0.27㎡/0.0864m³ | 60直板0.18㎡/0.0576m³ | 大角0.456㎡/0.1152m³ | 小角0.276㎡/0.0576m³ | 大T0.402㎡/0.1257m³ | 小T0.312㎡/0.0906m³</p>
     </div>
 
     <div class="dual-price-area">
@@ -423,7 +423,6 @@
         </div>
     </div>
 
-    <!-- 顶板：改为输入总面积、单块面积、厚度、单价（元/m³） -->
     <div class="roof-panel">
         <div class="roof-title">🏠 顶板</div>
         <div class="roof-grid">
@@ -462,27 +461,44 @@
 
 <script>
     (function() {
-        const STORAGE_KEY = 'modulePriceCalculatorV5_cubic';
+        const STORAGE_KEY = 'modulePriceCalculatorV6_volume';
         
         const moduleAreaConfig = {
             '25': { '90直板':0.27, '60直板':0.18, '大角':0.36, '小角':0.18, '大T':0.4125, '小T':0.3225 },
             '32': { '90直板':0.27, '60直板':0.18, '大角':0.456, '小角':0.276, '大T':0.402, '小T':0.312 }
         };
 
+        // 外轮廓体积（基于实测尺寸）
+        const moduleVolumeConfig = {
+            '25': {
+                '90直板': 0.9 * 0.25 * 0.3,
+                '60直板': 0.6 * 0.25 * 0.3,
+                '大角': (0.725+0.475) * 0.25 * 0.3,
+                '小角': (0.43+0.175) * 0.25 * 0.3,
+                '大T': (1.2+0.175) * 0.25 * 0.3,
+                '小T': (0.6+0.48) * 0.25 * 0.3
+            },
+            '32': {
+                '90直板': 0.9 * 0.32 * 0.3,
+                '60直板': 0.6 * 0.32 * 0.3,
+                '大角': (0.76+0.44) * 0.32 * 0.3,
+                '小角': (0.46+0.14) * 0.32 * 0.3,
+                '大T': (1.2*0.32*0.3) + (0.14*0.25*0.3),
+                '小T': (0.6*0.32*0.3) + (0.44*0.25*0.3)
+            }
+        };
+
         const moduleNames = ['90直板', '60直板', '大角', '小角', '大T', '小T'];
         let inputs25 = {}, inputs32 = {}, priceSpans25 = {}, priceSpans32 = {};
 
-        // 获取顶板数据（新算法）
         function getRoofData() {
             const totalArea = parseFloat(document.getElementById('roof_total_area').value) || 0;
             const unitArea = parseFloat(document.getElementById('roof_unit_area').value) || 0;
             const thickness = parseFloat(document.getElementById('roof_thickness').value) || 0;
             const pricePerCubic = parseFloat(document.getElementById('roof_price_per_cubic').value) || 0;
-            
             const volume = totalArea * (thickness / 1000);
             const totalPrice = volume * pricePerCubic;
             const blocks = unitArea > 0 ? Math.ceil(totalArea / unitArea) : 0;
-            
             return { totalArea, unitArea, thickness, pricePerCubic, volume, totalPrice, blocks };
         }
 
@@ -565,9 +581,13 @@
             const areas = moduleAreaConfig[wallType];
             let html = '';
             moduleNames.forEach(name => {
+                const area = areas[name];
                 html += `
                     <div class="module-row">
-                        <div class="module-name">${name}<div class="module-area">${areas[name].toFixed(4)}㎡/块</div></div>
+                        <div class="module-name">
+                            ${name}
+                            <div class="module-area">${area.toFixed(4)}㎡/块</div>
+                        </div>
                         <div class="module-input"><input type="number" id="input_${wallType}_${name}" step="1" min="0" value="0" placeholder="数量"></div>
                         <div class="module-price" id="price_${wallType}_${name}">0.00元</div>
                     </div>`;
@@ -623,26 +643,32 @@
             const accessories = getAccessoryData();
             const roof = getRoofData();
 
-            let results25=[], totalArea25=0, totalPrice25=0;
+            let results25=[], totalArea25=0, totalPrice25=0, totalVolume25=0;
             const areas25 = moduleAreaConfig['25'];
+            const volumes25 = moduleVolumeConfig['25'];
             moduleNames.forEach(name => {
                 const count = parseInt(inputs25[name]?.value||0,10);
                 const area = count * areas25[name];
                 const price = area * unitPrice25;
-                if(count>0) results25.push({name, count, area, price});
+                const volume = count * volumes25[name];
+                if(count>0) results25.push({name, count, area, price, volume});
                 totalArea25 += area;
                 totalPrice25 += price;
+                totalVolume25 += volume;
             });
             
-            let results32=[], totalArea32=0, totalPrice32=0;
+            let results32=[], totalArea32=0, totalPrice32=0, totalVolume32=0;
             const areas32 = moduleAreaConfig['32'];
+            const volumes32 = moduleVolumeConfig['32'];
             moduleNames.forEach(name => {
                 const count = parseInt(inputs32[name]?.value||0,10);
                 const area = count * areas32[name];
                 const price = area * unitPrice32;
-                if(count>0) results32.push({name, count, area, price});
+                const volume = count * volumes32[name];
+                if(count>0) results32.push({name, count, area, price, volume});
                 totalArea32 += area;
                 totalPrice32 += price;
+                totalVolume32 += volume;
             });
 
             const hookTotal = accessories.hookBags.count * accessories.hookBags.price;
@@ -653,29 +679,34 @@
             const totalAccessoryPrice = hookTotal + broken25Total + broken32Total + plate25Total + plate32Total;
             const totalModulePrice = totalPrice25 + totalPrice32;
             const grandTotal = totalModulePrice + totalAccessoryPrice + roof.totalPrice;
+            const totalModuleVolume = totalVolume25 + totalVolume32;
+            const totalVolumeAll = totalModuleVolume + roof.volume;   // 模块+顶板总体积
 
-            renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, grandTotal);
+            renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, totalVolume25, totalVolume32, totalModuleVolume, totalVolumeAll, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, grandTotal);
         }
 
-        function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, grandTotal) {
+        function renderResults(results25, results32, totalArea25, totalArea32, totalPrice25, totalPrice32, totalModulePrice, totalVolume25, totalVolume32, totalModuleVolume, totalVolumeAll, unitPrice25, unitPrice32, accessories, hookTotal, broken25Total, broken32Total, plate25Total, plate32Total, totalAccessoryPrice, roof, grandTotal) {
             const container = document.getElementById('resultContent');
             if(!container) return;
             let html = '';
             
             html += `<div style="margin-bottom:8px;"><span class="result-label" style="font-weight:600;">🧱 25墙模块 (单价 ${unitPrice25.toFixed(2)}元/㎡)</span></div>`;
-            if(results25.length) results25.forEach(r => { html += `<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ × ${unitPrice25.toFixed(2)} = ${r.price.toFixed(2)}元</span></div>`; });
+            if(results25.length) results25.forEach(r => { html += `<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ · ${r.price.toFixed(2)}元</span></div>`; });
             else html += '<div class="result-row"><span class="result-label">暂未输入25墙模块数量</span><span class="result-value">0.00元</span></div>';
             html += `<div class="result-row"><span class="result-label">📦 25墙模块总面积</span><span class="result-value">${totalArea25.toFixed(4)} ㎡</span></div>
+                     <div class="result-row"><span class="result-label">📦 25墙模块总方量</span><span class="result-value">${totalVolume25.toFixed(4)} m³</span></div>
                      <div class="result-row"><span class="result-label">💰 25墙模块总价</span><span class="result-value">${totalPrice25.toFixed(2)} 元</span></div>`;
 
             html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🧱 32墙模块 (单价 ${unitPrice32.toFixed(2)}元/㎡)</span></div>`;
-            if(results32.length) results32.forEach(r => { html += `<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ × ${unitPrice32.toFixed(2)} = ${r.price.toFixed(2)}元</span></div>`; });
+            if(results32.length) results32.forEach(r => { html += `<div class="result-row"><span class="result-label">${r.name} (${r.count}块)</span><span class="result-value">${r.area.toFixed(4)}㎡ · ${r.price.toFixed(2)}元</span></div>`; });
             else html += '<div class="result-row"><span class="result-label">暂未输入32墙模块数量</span><span class="result-value">0.00元</span></div>';
             html += `<div class="result-row"><span class="result-label">📦 32墙模块总面积</span><span class="result-value">${totalArea32.toFixed(4)} ㎡</span></div>
+                     <div class="result-row"><span class="result-label">📦 32墙模块总方量</span><span class="result-value">${totalVolume32.toFixed(4)} m³</span></div>
                      <div class="result-row"><span class="result-label">💰 32墙模块总价</span><span class="result-value">${totalPrice32.toFixed(2)} 元</span></div>`;
 
             html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">📊 模块汇总</span></div>
                      <div class="result-row"><span class="result-label">📦 模块总面积合计</span><span class="result-value">${(totalArea25+totalArea32).toFixed(4)} ㎡</span></div>
+                     <div class="result-row"><span class="result-label">📦 模块总方量合计</span><span class="result-value">${totalModuleVolume.toFixed(4)} m³</span></div>
                      <div class="result-row"><span class="result-label">💰 模块总价合计</span><span class="result-value">${totalModulePrice.toFixed(2)} 元</span></div>`;
 
             html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🔧 辅料部分</span></div>`;
@@ -688,7 +719,9 @@
             if(!hasAcc) html += '<div class="result-row"><span class="result-label">暂未输入辅料数量</span><span class="result-value">0.00元</span></div>';
             html += `<div class="result-row"><span class="result-label">🔧 辅料总价</span><span class="result-value">${totalAccessoryPrice.toFixed(2)} 元</span></div>`;
 
-            // 顶板显示
+            // 模块及顶板总体积（放在辅料总价下方）
+            html += `<div class="result-row"><span class="result-label">📦 模块及顶板总体积</span><span class="result-value">${totalVolumeAll.toFixed(4)} m³</span></div>`;
+
             if(roof.totalArea > 0){
                 html += `<div style="margin:12px 0 8px 0;"><span class="result-label" style="font-weight:600;">🏠 顶板</span></div>`;
                 html += `<div class="result-row"><span class="result-label">总面积</span><span class="result-value">${roof.totalArea.toFixed(2)} m²</span></div>`;
