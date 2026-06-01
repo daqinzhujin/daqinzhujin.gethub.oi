@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块房综合计算器 · 分层总价 · 大字体</title>
+    <title>模块房综合计算器 · 新空腔体积 · 分层总价</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
         body { background: #f5f7fa; padding: 16px; font-size: 18px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
@@ -60,7 +60,7 @@
 <body>
 <div class="container">
     <h1>🏗️ 模块房综合计算器</h1>
-    <div class="subtitle">25/32模块分离计价 · 分层顶板与保温板 · 分层总价明细</div>
+    <div class="subtitle">25/32模块分离计价 · 分层顶板与保温板 · 新空腔体积</div>
 
     <!-- 材料单价 -->
     <div class="section">
@@ -117,11 +117,33 @@
         const MODULE_HEIGHT = 0.3;
         const AREA_90 = 0.27;
         const AREA_60 = 0.18;
-        const CAVITY_THICK = 0.14;
+
+        // 模块墙面投影面积（用于计算模块数量）
         const MODULE_AREA = {
             '25': { 大角:0.36, 小角:0.18, 大T:0.4125, 小T:0.3225 },
             '32': { 大角:0.456, 小角:0.276, 大T:0.402,  小T:0.312 }
         };
+
+        // 单块空腔体积 (m³) —— 根据实测尺寸计算
+        const cavityVolume = {
+            '25': {
+                '90直板': 0.9 * 0.14 * 0.3,      // 0.0378
+                '60直板': 0.6 * 0.14 * 0.3,      // 0.0252
+                '大角': (0.725+0.475) * 0.14 * 0.3, // 1.2*0.14*0.3 = 0.0504
+                '小角': (0.43+0.175) * 0.14 * 0.3,  // 0.605*0.14*0.3 = 0.02541
+                '大T': (1.2+0.175) * 0.14 * 0.3,   // 1.375*0.14*0.3 = 0.05775
+                '小T': (0.6+0.48) * 0.14 * 0.3      // 1.08*0.14*0.3 = 0.04536
+            },
+            '32': {
+                '90直板': 0.9 * 0.21 * 0.3,      // 0.0567
+                '60直板': 0.6 * 0.21 * 0.3,      // 0.0378
+                '大角': (0.76+0.44) * 0.21 * 0.3, // 1.2*0.21*0.3 = 0.0756
+                '小角': (0.46+0.14) * 0.21 * 0.3,  // 0.6*0.21*0.3 = 0.0378
+                '大T': 1.2*0.21*0.3 + 0.14*0.14*0.3, // 0.0756+0.00588=0.08148
+                '小T': 0.6*0.21*0.3 + 0.44*0.14*0.3  // 0.0378+0.01848=0.05628
+            }
+        };
+
         const theoreticalKgPerM = (d) => 0.00617 * d * d;
 
         const defaultFloorData = {
@@ -139,7 +161,7 @@
                   insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 }
         };
         const floorData = JSON.parse(JSON.stringify(defaultFloorData));
-        const STORAGE_KEY = 'houseCalcV27_priceBold';
+        const STORAGE_KEY = 'houseCalcV28_cavity';
 
         const $ = id => document.getElementById(id);
         const priceInputs = {
@@ -317,7 +339,9 @@
             const price = { phi6: parseFloat(priceInputs.phi6.value)||0, phi10: parseFloat(priceInputs.phi10.value)||0, phi12: parseFloat(priceInputs.phi12.value)||0, phi14: parseFloat(priceInputs.phi14.value)||0, phi18: parseFloat(priceInputs.phi18.value)||0, phi22: parseFloat(priceInputs.phi22.value)||0 };
 
             const floorResults = { 1: {}, 2: {} };
-            let totalArea25=0, totalArea32=0, totalIns25=0, totalIns32=0, totalHooks=0, totalWallConc=0, totalRoofConc=0, totalBeamConc=0;
+            let totalArea25=0, totalArea32=0, totalIns25=0, totalIns32=0, totalHooks=0;
+            // 混凝土总量（墙体+顶板+梁）
+            let totalWallConc=0, totalRoofConc=0, totalBeamConc=0;
             let totalRebar = { lenPhi6:0, lenPhi10:0, lenPhi12:0, lenPhi14:0, lenPhi18:0, lenPhi22:0 };
             let totalInsulCost = 0, totalStirrupCount = 0;
 
@@ -330,9 +354,29 @@
                 let roofConc = 0, roofRebar = { lenPhi12:0, lenPhi10:0 };
                 let insulArea = safeEval(data.insulAreaExpr);
                 let insulVol = 0, insulCost = 0, insulBlocks = 0;
+                // 本层墙体混凝土（通过模块空腔体积累加）
+                let wallConc = 0;
 
                 if (mod) {
                     const reb = calcFloorRebar(f, mod);
+                    // 计算每种模块的数量及混凝土量
+                    const cv25 = cavityVolume['25'];
+                    const cv32 = cavityVolume['32'];
+                    // 25模块混凝土
+                    wallConc += mod.count90_25 * cv25['90直板'];
+                    wallConc += mod.count60_25 * cv25['60直板'];
+                    wallConc += mod.bigCorner25 * cv25['大角'];
+                    wallConc += mod.smallCorner25 * cv25['小角'];
+                    wallConc += mod.bigT25 * cv25['大T'];
+                    wallConc += mod.smallT25 * cv25['小T'];
+                    // 32模块混凝土
+                    wallConc += mod.count90_32 * cv32['90直板'];
+                    wallConc += mod.count60_32 * cv32['60直板'];
+                    wallConc += mod.bigCorner32 * cv32['大角'];
+                    wallConc += mod.smallCorner32 * cv32['小角'];
+                    wallConc += mod.bigT32 * cv32['大T'];
+                    wallConc += mod.smallT32 * cv32['小T'];
+
                     floorResults[f] = {
                         area25: mod.area25, area32: mod.area32,
                         blocks25: mod.count90_25 + mod.count60_25 + mod.bigCorner25 + mod.smallCorner25 + mod.bigT25 + mod.smallT25,
@@ -343,7 +387,7 @@
                         big32: mod.bigCorner32, small32: mod.smallCorner32, bigT32: mod.bigT32, smallT32: mod.smallT32,
                         ins25: mod.insert25, ins32: mod.insert32,
                         hooks: mod.totalHooks,
-                        wallConc: mod.S_net * CAVITY_THICK,
+                        wallConc: wallConc,
                         rebar: reb
                     };
                 } else {
@@ -389,7 +433,7 @@
 
                 const modCost25 = (floorResults[f].area25 * p25);
                 const modCost32 = (floorResults[f].area32 * p32);
-                const concVol = floorResults[f].wallConc + roofConc + beamConc;
+                const concVol = wallConc + roofConc + beamConc;
                 const concCost = concVol * pConc;
                 const rebarCostFloor = floorResults[f].rebarTotal.lenPhi6*price.phi6 +
                                        floorResults[f].rebarTotal.lenPhi10*price.phi10 +
@@ -409,7 +453,7 @@
                 totalIns25 += floorResults[f].ins25;
                 totalIns32 += floorResults[f].ins32;
                 totalHooks += floorResults[f].hooks;
-                totalWallConc += floorResults[f].wallConc;
+                totalWallConc += wallConc;
                 totalRoofConc += roofConc;
                 totalBeamConc += beamConc;
                 totalRebar.lenPhi6 += floorResults[f].rebarTotal.lenPhi6;
