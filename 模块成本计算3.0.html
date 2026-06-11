@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块成本价格计算器（双墙厚同时计算）</title>
+    <title>模块成本价格计算器（指定体积·修改32面积）</title>
     <style>
         * {
             margin: 0;
@@ -209,8 +209,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>模块成本价格计算器</h1>
-        <p style="text-align:center; color:#718096; margin-bottom:20px;">同时计算25墙与32墙所有模块成本</p>
+        <h1>模块成本价格计算器（指定体积·修改32面积）</h1>
+        <p style="text-align:center; color:#718096; margin-bottom:20px;">基于指定EPS实心体积 · 32墙面积按您的要求调整</p>
         
         <div class="form-wrapper">
             <div class="form-group">
@@ -227,7 +227,7 @@
             </div>
         </div>
 
-        <!-- 连接件区域：25连接件 和 32连接件分开 -->
+        <!-- 连接件区域 -->
         <div style="margin-bottom: 24px;">
             <label style="font-weight:600; font-size:1rem; margin-bottom:10px; display:block;">🔗 连接件成本</label>
             <div class="connector-section">
@@ -283,7 +283,7 @@
     </div>
 
     <script>
-        // 25墙模块配置
+        // EPS实心体积（指定值）
         const moduleConfig25 = {
             "90直板": { conn25: 6, conn32: 0, area: 0.27, volume: 0.027870261 },
             "60直板": { conn25: 4, conn32: 0, area: 0.18, volume: 0.018595375 },
@@ -293,7 +293,7 @@
             "小T":    { conn25: 8, conn32: 0, area: 0.3225, volume: 0.031314649 }
         };
 
-        // 32墙模块配置
+        // 32墙体积不变，面积按您的要求修改
         const moduleConfig32 = {
             "90直板": { conn25: 0, conn32: 6, area: 0.27, volume: 0.027942198 },
             "60直板": { conn25: 0, conn32: 4, area: 0.18, volume: 0.018646211 },
@@ -303,7 +303,7 @@
             "小T":    { conn25: 4, conn32: 4, area: 0.312, volume: 0.03043443 }
         };
 
-        const STORAGE_KEY = 'moduleCostCalculatorV5_bothWalls';
+        const STORAGE_KEY = 'moduleCostCalculatorV8_area';
 
         const rawMaterialCostInput = document.getElementById('rawMaterialCost');
         const productionCostInput = document.getElementById('productionCost');
@@ -466,26 +466,26 @@
                         </div>
                         <div class="result-item">
                             <span class="result-label">原料成本：</span>
-                            <span class="result-value">${item.totalRawMaterialCost.toFixed(2)} 元</span>
+                            <span class="result-value">${item.totalRawMaterialCost.toFixed(4)} 元</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">生产成本：</span>
-                            <span class="result-value">${item.totalProductionCost.toFixed(2)} 元</span>
+                            <span class="result-value">${item.totalProductionCost.toFixed(4)} 元</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">连接件成本：</span>
-                            <span class="result-value">${item.totalConnectorCost.toFixed(2)} 元</span>
+                            <span class="result-value">${item.totalConnectorCost.toFixed(4)} 元</span>
                         </div>
                         <div style="font-size:0.7rem; color:#718096; padding-left: 6px;">
                             　25连接件：${item.conn25Count}个 (单价${actual25.toFixed(4)}) | 32连接件：${item.conn32Count}个 (单价${actual32.toFixed(4)})
                         </div>
                         <div class="result-item">
                             <span class="result-label">总成本：</span>
-                            <span class="result-value highlight">${item.totalCost.toFixed(2)} 元</span>
+                            <span class="result-value highlight">${item.totalCost.toFixed(4)} 元</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">每平价格：</span>
-                            <span class="result-value highlight">${item.pricePerSquare.toFixed(2)} 元/㎡</span>
+                            <span class="result-value highlight">${item.pricePerSquare.toFixed(4)} 元/㎡</span>
                         </div>
                     </div>`;
                 });
@@ -494,11 +494,11 @@
                         <div class="average-title">${title} 平均值</div>
                         <div class="result-item">
                             <span class="result-label">总成本平均值：</span>
-                            <span class="result-value highlight">${data.averageTotalCost.toFixed(2)} 元</span>
+                            <span class="result-value highlight">${data.averageTotalCost.toFixed(4)} 元</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">每平价格平均值：</span>
-                            <span class="result-value highlight">${data.averagePricePerSquare.toFixed(2)} 元/㎡</span>
+                            <span class="result-value highlight">${data.averagePricePerSquare.toFixed(4)} 元/㎡</span>
                         </div>
                     </div>
                 </div>`;
