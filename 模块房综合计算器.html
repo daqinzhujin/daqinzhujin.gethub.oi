@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>模块房综合计算器 · 输入标签</title>
+    <title>模块房综合计算器 · 内外墙独立T型</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
         body { background: #f5f7fa; padding: 16px; font-size: 18px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
@@ -62,9 +62,8 @@
 <body>
 <div class="container">
     <h1>🏗️ 模块房综合计算器</h1>
-    <div class="subtitle">梁钢筋分组汇总 · 顶板长宽精确 · 洞口过梁恢复</div>
+    <div class="subtitle">内外墙独立T型 · 梁钢筋分组汇总 · 顶板长宽精确</div>
 
-    <!-- 材料单价 -->
     <div class="section">
         <div class="section-header">
             <span class="section-title">⚙️ 材料单价</span>
@@ -84,7 +83,6 @@
         </div>
     </div>
 
-    <!-- 楼层参数 -->
     <div class="section">
         <div class="section-header">
             <span class="section-title">🏠 楼层参数</span>
@@ -101,7 +99,6 @@
         <div id="floor2Panel" class="floor-panel"></div>
     </div>
 
-    <!-- 结果 -->
     <div class="result-card" id="results">
         <div class="result-title">📊 计算结果</div>
         <div id="resultContent">输入参数后自动计算</div>
@@ -135,20 +132,20 @@
 
         const defaultFloorData = {
             1: { mode: 'all25', openings: [], beams: [], height: 3.6, wallCount: 6,
-                  extHor: '', extVer: '', extCorners: 0, intHor: '', intVer: '', intCorners: 0, tWalls: 6,
+                  extHor: '', extVer: '', extCorners: 0, extTWalls: 0, intHor: '', intVer: '', intCorners: 0, intTWalls: 0,
                   wallVertDia: 12, wallHorizDia: 10,
                   colCount: 6, colMainDia: 12, colMainCount: 4, colStirrupDia: 6, colStirrupSpacing: 200, colWidth: 250, colHeight: 250,
                   roofLengthExpr: '10', roofWidthExpr: '8', roofThick: 0.12, roofDeduct: false, roofBottomDia: 12, roofTopDia: 10, roofSpacing: 200,
                   insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 },
             2: { mode: 'mixed', openings: [], beams: [], height: 3.3, wallCount: 6,
-                  extHor: '', extVer: '', extCorners: 5, intHor: '', intVer: '', intCorners: 0, tWalls: 4,
+                  extHor: '', extVer: '', extCorners: 5, extTWalls: 0, intHor: '', intVer: '', intCorners: 0, intTWalls: 4,
                   wallVertDia: 12, wallHorizDia: 10,
                   colCount: 5, colMainDia: 12, colMainCount: 4, colStirrupDia: 6, colStirrupSpacing: 200, colWidth: 250, colHeight: 250,
                   roofLengthExpr: '8', roofWidthExpr: '6', roofThick: 0.12, roofDeduct: false, roofBottomDia: 12, roofTopDia: 10, roofSpacing: 200,
                   insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 }
         };
         const floorData = JSON.parse(JSON.stringify(defaultFloorData));
-        const STORAGE_KEY = 'houseCalcV40_labels';
+        const STORAGE_KEY = 'houseCalcV42_extT';
         const $ = id => document.getElementById(id);
         const priceInputs = {
             module25: $('priceModule25'), module32: $('priceModule32'),
@@ -178,12 +175,14 @@
             const h = c.querySelector(`#height${f}`); if (h) d.height = parseFloat(h.value) || '';
             const wc = c.querySelector(`#wallCount${f}`); if (wc) d.wallCount = parseInt(wc.value) || '';
             if (d.mode === 'all25') {
-                d.extHor = ''; d.extVer = ''; d.extCorners = '';
+                d.extHor = ''; d.extVer = ''; d.extCorners = ''; d.extTWalls = '';
                 const hor = c.querySelector(`#hor${f}`), ver = c.querySelector(`#ver${f}`), corners = c.querySelector(`#corners${f}`), tWalls = c.querySelector(`#tWalls${f}`);
-                if (hor) d.intHor = hor.value; if (ver) d.intVer = ver.value; if (corners) d.intCorners = parseInt(corners.value) || ''; if (tWalls) d.tWalls = parseInt(tWalls.value) || '';
+                if (hor) d.intHor = hor.value; if (ver) d.intVer = ver.value; if (corners) d.intCorners = parseInt(corners.value) || ''; if (tWalls) d.intTWalls = parseInt(tWalls.value) || '';
             } else {
-                const extHor = c.querySelector(`#extHor${f}`), extVer = c.querySelector(`#extVer${f}`), extCorners = c.querySelector(`#extCorners${f}`), intHor = c.querySelector(`#intHor${f}`), intVer = c.querySelector(`#intVer${f}`), intCorners = c.querySelector(`#intCorners${f}`), tWalls = c.querySelector(`#tWalls${f}`);
-                if (extHor) d.extHor = extHor.value; if (extVer) d.extVer = extVer.value; if (extCorners) d.extCorners = parseInt(extCorners.value) || ''; if (intHor) d.intHor = intHor.value; if (intVer) d.intVer = intVer.value; if (intCorners) d.intCorners = parseInt(intCorners.value) || ''; if (tWalls) d.tWalls = parseInt(tWalls.value) || '';
+                const extHor = c.querySelector(`#extHor${f}`), extVer = c.querySelector(`#extVer${f}`), extCorners = c.querySelector(`#extCorners${f}`), extTWalls = c.querySelector(`#extTWalls${f}`);
+                const intHor = c.querySelector(`#intHor${f}`), intVer = c.querySelector(`#intVer${f}`), intCorners = c.querySelector(`#intCorners${f}`), intTWalls = c.querySelector(`#intTWalls${f}`);
+                if (extHor) d.extHor = extHor.value; if (extVer) d.extVer = extVer.value; if (extCorners) d.extCorners = parseInt(extCorners.value) || ''; if (extTWalls) d.extTWalls = parseInt(extTWalls.value) || '';
+                if (intHor) d.intHor = intHor.value; if (intVer) d.intVer = intVer.value; if (intCorners) d.intCorners = parseInt(intCorners.value) || ''; if (intTWalls) d.intTWalls = parseInt(intTWalls.value) || '';
             }
             const wvd = c.querySelector(`#wallVertDia${f}`); if (wvd) d.wallVertDia = parseInt(wvd.value) || 12;
             const whd = c.querySelector(`#wallHorizDia${f}`); if (whd) d.wallHorizDia = parseInt(whd.value) || 10;
@@ -248,8 +247,8 @@
             const d = floorData[f], isMixed = d.mode === 'mixed';
             let html = `<div class="radio-group"><label><input type="radio" name="mode${f}" value="all25" ${!isMixed?'checked':''}> 全25墙</label><label><input type="radio" name="mode${f}" value="mixed" ${isMixed?'checked':''}> 32外墙 + 25内墙</label></div>
                 <div class="grid-2"><div class="input-group"><label>墙体高度 (m)</label><input type="number" id="height${f}" step="0.1" value="${d.height}"></div><div class="input-group"><label>墙面数量</label><input type="number" id="wallCount${f}" value="${d.wallCount}" min="1"></div></div>`;
-            if (!isMixed) html += `<div class="grid-2"><div class="input-group"><label>横墙总长 (m) 可算式</label><input type="text" id="hor${f}" value="${d.intHor}"></div><div class="input-group"><label>纵墙总长 (m) 可算式</label><input type="text" id="ver${f}" value="${d.intVer}"></div><div class="input-group"><label>拐角数量</label><input type="number" id="corners${f}" value="${d.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${f}" value="${d.tWalls}" min="0"></div></div>`;
-            else html += `<div style="font-weight:600;margin:12px 0 6px;">🧱 外墙 (32模块)</div><div class="grid-2"><div class="input-group"><label>外墙横长 (m)</label><input type="text" id="extHor${f}" value="${d.extHor}"></div><div class="input-group"><label>外墙纵长 (m)</label><input type="text" id="extVer${f}" value="${d.extVer}"></div><div class="input-group"><label>外墙拐角</label><input type="number" id="extCorners${f}" value="${d.extCorners}" min="0"></div></div><div style="font-weight:600;margin:12px 0 6px;">🧱 内墙 (25模块)</div><div class="grid-2"><div class="input-group"><label>内墙横长 (m)</label><input type="text" id="intHor${f}" value="${d.intHor}"></div><div class="input-group"><label>内墙纵长 (m)</label><input type="text" id="intVer${f}" value="${d.intVer}"></div><div class="input-group"><label>内墙拐角</label><input type="number" id="intCorners${f}" value="${d.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${f}" value="${d.tWalls}" min="0"></div></div>`;
+            if (!isMixed) html += `<div class="grid-2"><div class="input-group"><label>横墙总长 (m) 可算式</label><input type="text" id="hor${f}" value="${d.intHor}"></div><div class="input-group"><label>纵墙总长 (m) 可算式</label><input type="text" id="ver${f}" value="${d.intVer}"></div><div class="input-group"><label>拐角数量</label><input type="number" id="corners${f}" value="${d.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${f}" value="${d.intTWalls}" min="0"></div></div>`;
+            else html += `<div style="font-weight:600;margin:12px 0 6px;">🧱 外墙 (32模块)</div><div class="grid-2"><div class="input-group"><label>外墙横长 (m)</label><input type="text" id="extHor${f}" value="${d.extHor}"></div><div class="input-group"><label>外墙纵长 (m)</label><input type="text" id="extVer${f}" value="${d.extVer}"></div><div class="input-group"><label>外墙拐角</label><input type="number" id="extCorners${f}" value="${d.extCorners}" min="0"></div><div class="input-group"><label>外墙T型墙</label><input type="number" id="extTWalls${f}" value="${d.extTWalls}" min="0"></div></div><div style="font-weight:600;margin:12px 0 6px;">🧱 内墙 (25模块)</div><div class="grid-2"><div class="input-group"><label>内墙横长 (m)</label><input type="text" id="intHor${f}" value="${d.intHor}"></div><div class="input-group"><label>内墙纵长 (m)</label><input type="text" id="intVer${f}" value="${d.intVer}"></div><div class="input-group"><label>内墙拐角</label><input type="number" id="intCorners${f}" value="${d.intCorners}" min="0"></div><div class="input-group"><label>内墙T型墙</label><input type="number" id="intTWalls${f}" value="${d.intTWalls}" min="0"></div></div>`;
             html += `<div class="rebar-panel"><div style="font-weight:600;margin-bottom:8px;">🔩 墙体钢筋配置</div><div class="grid-2"><div class="input-group"><label>竖筋直径 (mm)</label><input type="number" id="wallVertDia${f}" value="${d.wallVertDia||12}" min="6" max="25"></div><div class="input-group"><label>横筋直径 (mm)</label><input type="number" id="wallHorizDia${f}" value="${d.wallHorizDia||10}" min="6" max="25"></div></div></div>`;
             html += `<div class="column-panel"><div style="font-weight:600;margin-bottom:8px;">🏛️ 构造柱</div><div class="grid-3"><div class="input-group"><label>根数</label><input type="number" id="colCount${f}" value="${d.colCount||0}" min="0"></div><div class="input-group"><label>主筋直径(mm)</label><input type="number" id="colMainDia${f}" value="${d.colMainDia||12}" min="6" max="25"></div><div class="input-group"><label>每根主筋根数</label><input type="number" id="colMainCount${f}" value="${d.colMainCount||4}" min="4" max="10"></div></div><div class="grid-3"><div class="input-group"><label>箍筋直径(mm)</label><input type="number" id="colStirrupDia${f}" value="${d.colStirrupDia||6}" min="6" max="12"></div><div class="input-group"><label>箍筋间距(mm)</label><input type="number" id="colStirrupSpacing${f}" value="${d.colStirrupSpacing||200}" min="100" max="300"></div><div class="input-group"><label>截面宽×高(mm)</label><div style="display:flex;gap:4px;"><input type="number" id="colWidth${f}" value="${d.colWidth||250}" min="150" max="500" style="flex:1" placeholder="宽"><input type="number" id="colHeight${f}" value="${d.colHeight||250}" min="150" max="500" style="flex:1" placeholder="高"></div></div></div></div>`;
             html += `<div class="beam-section"><div style="font-weight:600;margin-bottom:8px;">📏 本层梁</div>
@@ -293,19 +292,24 @@
             const layers = Math.ceil(H / MODULE_HEIGHT); const openings = d.openings;
             let twa = 0, tib = 0;
             for (let op of openings) { if (op.width>0 && op.height>0 && op.count>0) { twa += op.width*op.height*op.count; tib += op.count*2*Math.ceil(op.height/MODULE_HEIGHT); } }
-            let extHor=0, extVer=0, intHor=0, intVer=0, extCorners=0, intCorners=0, tWalls=Number(d.tWalls)||0;
-            if (d.mode === 'all25') { intHor = safeEval(d.intHor); intVer = safeEval(d.intVer); intCorners = Number(d.intCorners)||0; }
-            else { extHor = safeEval(d.extHor); extVer = safeEval(d.extVer); extCorners = Number(d.extCorners)||0; intHor = safeEval(d.intHor); intVer = safeEval(d.intVer); intCorners = Number(d.intCorners)||0; }
+            let extHor=0, extVer=0, intHor=0, intVer=0, extCorners=0, intCorners=0, extTW=0, intTW=0;
+            if (d.mode === 'all25') { intHor = safeEval(d.intHor); intVer = safeEval(d.intVer); intCorners = Number(d.intCorners)||0; intTW = Number(d.intTWalls)||0; }
+            else { extHor = safeEval(d.extHor); extVer = safeEval(d.extVer); extCorners = Number(d.extCorners)||0; extTW = Number(d.extTWalls)||0; intHor = safeEval(d.intHor); intVer = safeEval(d.intVer); intCorners = Number(d.intCorners)||0; intTW = Number(d.intTWalls)||0; }
             const extTL = extHor+extVer, intTL = intHor+intVer, tl = extTL+intTL; if (tl <= 0) return null;
             const St = tl*layers*MODULE_HEIGHT, Sn = Math.max(0, St-twa);
             const bl = Math.ceil(layers/2), sl = Math.floor(layers/2);
+
+            // 32墙异形模块（外墙使用）
             const bc32 = extCorners*bl, sc32 = extCorners*sl;
-            const bt32 = (d.mode==='mixed')?tWalls*bl:0, st32 = (d.mode==='mixed')?tWalls*sl:0;
+            const bt32 = (d.mode==='mixed') ? extTW*bl : 0, st32 = (d.mode==='mixed') ? extTW*sl : 0;
             const as32 = bc32*MODULE_AREA['32'].大角+sc32*MODULE_AREA['32'].小角+bt32*MODULE_AREA['32'].大T+st32*MODULE_AREA['32'].小T;
+
+            // 25墙异形模块（内墙使用）
             let bc25, sc25, bt25, st25;
-            if (d.mode==='all25') { bc25=intCorners*bl; sc25=intCorners*sl; bt25=tWalls*bl; st25=tWalls*sl; }
-            else { bc25=intCorners*bl; sc25=intCorners*sl; bt25=0; st25=0; }
+            if (d.mode==='all25') { bc25=intCorners*bl; sc25=intCorners*sl; bt25=intTW*bl; st25=intTW*sl; }
+            else { bc25=intCorners*bl; sc25=intCorners*sl; bt25=intTW*bl; st25=intTW*sl; }
             const as25 = bc25*MODULE_AREA['25'].大角+sc25*MODULE_AREA['25'].小角+bt25*MODULE_AREA['25'].大T+st25*MODULE_AREA['25'].小T;
+
             const Ssp = as32+as25; let Sst = Math.max(0, Sn-Ssp);
             const wc = Number(d.wallCount)||1; const M = Math.ceil(wc*layers/2);
             let c60 = M, rem = Sst-M*AREA_60; if (rem<0) rem=0;
@@ -318,8 +322,8 @@
             const c90_32 = Math.round(c90*r32), c90_25 = c90-c90_32;
             const c60_32 = Math.round(c60*r32), c60_25 = c60-c60_32;
             const i32 = Math.round(tib*r32), i25 = tib-i32;
-            const tC = extCorners+intCorners;
-            const cH = tC*6, tH = tWalls*9, wH = Math.ceil(tl*layers/3);
+            const tC = extCorners+intCorners, tTW = extTW+intTW;
+            const cH = tC*6, tH = tTW*9, wH = Math.ceil(tl*layers/3);
             return { layers, totalLength:tl, S_net:Sn, count90:c90, count60:c60, count90_25:c90_25, count90_32:c90_32, count60_25:c60_25, count60_32:c60_32, bigCorner32:bc32, smallCorner32:sc32, bigT32:bt32, smallT32:st32, bigCorner25:bc25, smallCorner25:sc25, bigT25:bt25, smallT25:st25, insert32:i32, insert25:i25, totalHooks:cH+tH+wH, area32:a32, area25:a25 };
         }
 
