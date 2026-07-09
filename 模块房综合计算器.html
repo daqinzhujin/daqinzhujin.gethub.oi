@@ -6,38 +6,59 @@
     <title>模块房综合计算器 · 内外墙独立T型</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
-        body { background: #f5f7fa; padding: 16px; font-size: 18px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .container { background: white; border-radius: 24px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 1300px; margin: 0 auto; }
-        h1 { font-size: 2.2rem; text-align: center; color: #2d3748; font-weight: 600; margin-bottom: 6px; }
-        .subtitle { text-align: center; color: #718096; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
-        .section { background: #f8fafc; border-radius: 16px; padding: 18px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        body { background: #eef2f7; padding: 16px; font-size: 18px; color: #1e293b; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .container { background: white; border-radius: 10px; padding: 22px; box-shadow: 0 4px 18px rgba(15,23,42,0.08); width: 100%; max-width: 1320px; margin: 0 auto; }
+        .page-head { border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; margin-bottom: 16px; }
+        h1 { font-size: 1.8rem; color: #172033; font-weight: 700; margin-bottom: 6px; }
+        .subtitle { color: #64748b; font-size: 0.95rem; line-height: 1.6; }
+        .workflow { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+        .workflow span { background:#f8fafc; border:1px solid #dbe4ee; border-radius:999px; padding:6px 12px; color:#334155; font-size:0.82rem; font-weight:600; }
+        .section { background: #f8fafc; border-radius: 8px; padding: 18px; margin-bottom: 16px; border: 1px solid #e2e8f0; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-        .section-title { font-size: 1.2rem; font-weight: 600; color: #1e3a5f; display: flex; align-items: center; gap: 8px; }
-        .section-title::before { content: ''; display: inline-block; width: 5px; height: 22px; background: #4285f4; border-radius: 2px; }
-        .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #475569; border-radius: 20px; padding: 5px 14px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+        .section-title { font-size: 1.08rem; font-weight: 700; color: #1e3a5f; display: flex; align-items: center; gap: 8px; }
+        .section-title::before { content: ''; display: inline-block; width: 4px; height: 20px; background: #2563eb; border-radius: 2px; }
+        .btn-clear { background: #fff; border: 1px solid #cbd5e1; color: #475569; border-radius: 6px; padding: 7px 12px; font-size: 0.82rem; cursor: pointer; transition: 0.2s; }
         .btn-clear:hover { background: #fee2e2; border-color: #f87171; color: #b91c1c; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
         .grid-3 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 12px; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 8px; }
         .input-group { margin-bottom: 10px; }
         label { display: block; font-weight: 500; color: #4a5568; margin-bottom: 6px; font-size: 0.85rem; }
-        input, select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; outline: none; transition: 0.2s; }
-        input:focus, select:focus { border-color: #4285f4; background: white; box-shadow: 0 0 0 3px rgba(66,133,244,0.12); }
+        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; background: #f8fafc; outline: none; transition: 0.2s; }
+        textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+        input:focus, select:focus, textarea:focus { border-color: #4285f4; background: white; box-shadow: 0 0 0 3px rgba(66,133,244,0.12); }
         .radio-group { display: flex; gap: 20px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
         .radio-group label { display: flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; font-size: 0.95rem; }
         .radio-group input[type="radio"] { width: auto; accent-color: #4285f4; }
         .floor-tabs { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
-        .floor-tab { background: #e2e8f0; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+        .floor-tab { background: #e2e8f0; border: none; padding: 10px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
         .floor-tab.active { background: #4285f4; color: white; }
         .floor-panel { display: none; }
         .floor-panel.active-panel { display: block; }
         .checkbox-row { margin: 10px 0; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
         .checkbox-row input[type="checkbox"] { width: auto; accent-color: #4285f4; }
-        .beam-section, .roof-panel, .plate-panel, .rebar-panel, .column-panel { background: #f1f5f9; border-radius: 14px; padding: 14px; margin-top: 14px; border: 1px solid #e2e8f0; }
-        .result-card { background: white; border-radius: 16px; padding: 22px; margin-top: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-        .result-title { font-size: 1.3rem; font-weight: 600; color: #2d3748; text-align: center; margin-bottom: 16px; }
+        .beam-section, .roof-panel, .plate-panel, .rebar-panel, .column-panel { background: #f1f5f9; border-radius: 8px; padding: 14px; margin-top: 14px; border: 1px solid #e2e8f0; }
+        .result-card { background: white; border-radius: 8px; padding: 22px; margin-top: 12px; border: 1px solid #dbe4ee; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+        .result-title { font-size: 1.22rem; font-weight: 700; color: #172033; margin-bottom: 12px; }
+        .result-actions { display:flex; gap:8px; justify-content:flex-start; flex-wrap:wrap; margin:0 0 14px; }
+        .result-actions .btn-clear:hover { background:#e0f2fe; border-color:#38bdf8; color:#075985; }
         .result-section-title { font-size: 1.1rem; font-weight: 600; color: #1e3a5f; margin: 14px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
         .result-subtitle { font-weight: 600; color: #475569; margin: 10px 0 4px; font-size: 0.95rem; }
+        .result-summary-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; margin:10px 0 16px; }
+        .summary-tile { background:#f8fafc; border:1px solid #dbe4ee; border-radius:8px; padding:12px; min-height:86px; }
+        .summary-tile .tile-label { color:#64748b; font-size:0.82rem; font-weight:700; margin-bottom:6px; }
+        .summary-tile .tile-value { color:#0f172a; font-size:1.35rem; font-weight:800; line-height:1.2; }
+        .summary-tile .tile-note { color:#64748b; font-size:0.76rem; margin-top:6px; line-height:1.35; }
+        .result-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; align-items:start; margin-bottom:12px; }
+        .result-block { background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; }
+        .result-block.wide { grid-column:1 / -1; }
+        .result-block-title { color:#172033; font-weight:800; font-size:0.98rem; margin-bottom:8px; padding-bottom:7px; border-bottom:1px solid #e2e8f0; }
+        .metric-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; }
+        .metric { display:flex; justify-content:space-between; align-items:center; gap:10px; background:#f8fafc; border:1px solid #eef2f7; border-radius:6px; padding:7px 9px; min-height:36px; }
+        .metric .result-label { font-size:0.82rem; line-height:1.25; }
+        .metric .result-value { font-size:0.9rem; text-align:right; line-height:1.25; }
+        .metric.important { background:#eff6ff; border-color:#bfdbfe; }
+        .metric.total-line { background:#ecfdf5; border-color:#bbf7d0; }
         .result-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 0.95rem; border-bottom: 1px dashed #e2e8f0; }
         .result-item:last-child { border-bottom: none; }
         .result-label { color: #4a5568; }
@@ -46,14 +67,33 @@
         .total { font-weight: 700; border-top: 2px solid #4285f4; margin-top: 8px; padding-top: 8px; }
         .total-heavy { border-top: 3px solid #4285f4; margin-top: 10px; padding-top: 10px; }
         .subnote { font-size: 0.8rem; color: #718096; text-align: center; margin-top: 14px; }
-        .opening-row, .beam-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: white; padding: 8px; border-radius: 12px; flex-wrap: wrap; border: 1px solid #e2e8f0; }
+        .note-box { background:#fff7ed; border:1px solid #fed7aa; color:#9a3412; border-radius:8px; padding:10px 12px; font-size:0.82rem; line-height:1.55; margin:10px 0 12px; }
+        .table-wrap { overflow-x:auto; margin-top:10px; border:1px solid #e2e8f0; border-radius:8px; background:white; }
+        .cut-table { width:100%; border-collapse:collapse; min-width:980px; font-size:0.82rem; }
+        .cut-table th, .cut-table td { border-bottom:1px solid #e2e8f0; padding:8px 10px; text-align:right; white-space:nowrap; }
+        .cut-table th { background:#f1f5f9; color:#334155; font-weight:700; }
+        .cut-table td:first-child, .cut-table td:nth-child(2), .cut-table td:nth-child(3), .cut-table th:first-child, .cut-table th:nth-child(2), .cut-table th:nth-child(3) { text-align:left; }
+        .cut-table tr:last-child td { border-bottom:none; }
+        .opening-row, .beam-row, .wall-row, .column-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: white; padding: 8px; border-radius: 8px; flex-wrap: wrap; border: 1px solid #e2e8f0; }
         .beam-row input { flex: 1; min-width: 45px; margin: 0; font-size: 0.8rem; padding: 6px; }
-        .beam-header, .opening-header { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; font-size: 0.7rem; color: #64748b; font-weight: 600; padding: 0 4px; }
-        .beam-header span, .opening-header span { text-align: center; }
-        .btn-small { background: #ea4335; border: none; border-radius: 30px; padding: 6px 12px; color: white; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
+        .beam-header, .opening-header, .wall-header, .column-header { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; font-size: 0.7rem; color: #64748b; font-weight: 600; padding: 0 4px; }
+        .beam-header span, .opening-header span, .wall-header span, .column-header span { text-align: center; }
+        .btn-small { background: #dc2626; border: none; border-radius: 6px; padding: 6px 12px; color: white; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
         .btn-small.add { background: #34a853; }
+        .rebar-print-section { margin-top: 18px; padding-top: 14px; border-top: 3px solid #1e293b; }
+        .rebar-print-section .result-subtitle:first-child { color:#111827; font-size:1.08rem; }
+        @media print {
+            body { background:#fff; padding:0; }
+            .container { box-shadow:none; border-radius:0; max-width:none; padding:12px; }
+            .page-head, .section, .result-actions, .subnote { display:none !important; }
+            .result-card { border:none; box-shadow:none; padding:0; }
+            .result-title { margin-bottom:8px; }
+            .table-wrap { overflow:visible; border:1px solid #cbd5e1; }
+            .cut-table { min-width:0; font-size:10px; }
+            .cut-table th, .cut-table td { padding:4px 5px; white-space:normal; }
+        }
         @media (max-width: 800px) {
-            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .grid-2, .grid-3, .grid-4, .result-summary-grid, .result-grid, .metric-grid { grid-template-columns: 1fr; }
             .container { padding: 16px; }
             body { font-size: 16px; }
         }
@@ -61,46 +101,69 @@
 </head>
 <body>
 <div class="container">
-    <h1>🏗️ 模块房综合计算器</h1>
-    <div class="subtitle">内外墙独立T型 · 梁钢筋分组汇总 · 顶板长宽精确</div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-title">⚙️ 材料单价</span>
-            <button class="btn-clear" id="clearMaterialPrice">🗑️ 清空</button>
-        </div>
-        <div class="grid-2">
-            <div class="input-group"><label>25模块单价 (元/㎡)</label><input type="number" id="priceModule25" value="55" step="1"></div>
-            <div class="input-group"><label>32模块单价 (元/㎡)</label><input type="number" id="priceModule32" value="65" step="1"></div>
-            <div class="input-group"><label>25插板单价 (元/块)</label><input type="number" id="priceInsert25" value="10"></div>
-            <div class="input-group"><label>32插板单价 (元/块)</label><input type="number" id="priceInsert32" value="10"></div>
-            <div class="input-group"><label>钢丝勾单价 (元/个)</label><input type="number" id="priceHook" value="0.5" step="0.1"></div>
-            <div class="input-group"><label>混凝土单价 (元/m³)</label><input type="number" id="priceConcrete" value="500" step="10"></div>
-        </div>
-        <div class="section-title" style="margin-top:12px;">⚡ 钢筋单价</div>
-        <div class="grid-2">
-            <div class="input-group"><label>统一钢筋单价 (元/吨)</label><input type="number" id="priceRebar" step="10" value="3000"></div>
+    <div class="page-head">
+        <h1>模块房综合计算器</h1>
+        <div class="subtitle">按平面图录入墙段、洞口、梁、构造柱和顶板参数，自动生成模块用量、混凝土用量和钢筋下料单。</div>
+        <div class="workflow">
+            <span>1. 设置单价和下料参数</span>
+            <span>2. 录入楼层图纸参数</span>
+            <span>3. 查看汇总并打印下料单</span>
         </div>
     </div>
 
     <div class="section">
         <div class="section-header">
-            <span class="section-title">🏠 楼层参数</span>
+            <span class="section-title">1. 单价与钢筋下料设置</span>
+            <button class="btn-clear" id="clearMaterialPrice">清空单价</button>
+        </div>
+        <div class="grid-2">
+            <div class="input-group"><label>25模块单价 (元/㎡)</label><input type="number" id="priceModule25" value="55" step="1"></div>
+            <div class="input-group"><label>32模块单价 (元/㎡)</label><input type="number" id="priceModule32" value="65" step="1"></div>
+            <div class="input-group"><label>25洞口插板单价 (元/块)</label><input type="number" id="priceInsert25" value="10"></div>
+            <div class="input-group"><label>32洞口插板单价 (元/块)</label><input type="number" id="priceInsert32" value="10"></div>
+            <div class="input-group"><label>钢丝勾单价 (元/个)</label><input type="number" id="priceHook" value="0.5" step="0.1"></div>
+            <div class="input-group"><label>混凝土单价 (元/m³)</label><input type="number" id="priceConcrete" value="500" step="10"></div>
+        </div>
+        <div class="section-title" style="margin-top:12px;">钢筋单价</div>
+        <div class="grid-2">
+            <div class="input-group"><label>统一钢筋单价 (元/吨)</label><input type="number" id="priceRebar" step="10" value="3000"></div>
+        </div>
+        <div class="section-title" style="margin-top:12px;">钢筋下料参数</div>
+        <div class="note-box">下料单为预算和现场复核用的估算表。采购量按规则分开：Φ10及以下按米数购买，Φ12及以上按整根购买。实际下料还需要按施工图、设计说明、抗震构造和现场搭接位置复核。</div>
+        <div class="grid-3">
+            <div class="input-group"><label>Φ12及以上整根长度 (m)</label><input type="number" id="cutStockLen" step="0.1" value="9"></div>
+            <div class="input-group"><label>损耗率 (%)</label><input type="number" id="cutWasteRate" step="0.5" value="3"></div>
+            <div class="input-group"><label>墙筋端部弯头/锚固 (d/端)</label><input type="number" id="cutWallHookD" step="1" value="12"></div>
+            <div class="input-group"><label>梁/柱主筋弯头/锚固 (d/端)</label><input type="number" id="cutMainHookD" step="1" value="12"></div>
+            <div class="input-group"><label>板筋端部弯头/锚固 (d/端)</label><input type="number" id="cutRoofHookD" step="1" value="10"></div>
+            <div class="input-group"><label>箍筋弯钩 (d/端)</label><input type="number" id="cutStirrupHookD" step="1" value="10"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <span class="section-title">2. 楼层图纸参数</span>
             <span>
-                <button class="btn-clear" id="clearFloor1">🗑️ 清空一层</button>
-                <button class="btn-clear" id="clearFloor2" style="margin-left:8px;">🗑️ 清空二层</button>
+                <button class="btn-clear" id="clearFloor1">清空一层</button>
+                <button class="btn-clear" id="clearFloor2" style="margin-left:8px;">清空二层</button>
             </span>
         </div>
         <div class="floor-tabs" id="floorTabs">
-            <button class="floor-tab active" data-floor="1">🏡 一层</button>
-            <button class="floor-tab" data-floor="2">🏡 二层</button>
+            <button class="floor-tab active" data-floor="1">一层</button>
+            <button class="floor-tab" data-floor="2">二层</button>
         </div>
         <div id="floor1Panel" class="floor-panel active-panel"></div>
         <div id="floor2Panel" class="floor-panel"></div>
     </div>
 
     <div class="result-card" id="results">
-        <div class="result-title">📊 计算结果</div>
+        <div class="result-title">3. 计算结果</div>
+        <div class="result-actions">
+            <button class="btn-clear" id="exportMaterialCsv">导出材料汇总CSV</button>
+            <button class="btn-clear" id="exportRebarCsv">导出钢筋下料CSV</button>
+            <button class="btn-clear" id="printRebarPdf">打印钢筋下料单/另存PDF</button>
+            <button class="btn-clear" id="printResults">打印全部结果</button>
+        </div>
         <div id="resultContent">输入参数后自动计算</div>
     </div>
     <div class="subnote">* 数据自动保存 · 钢筋按吨计价 · 墙体长度按中线</div>
@@ -127,17 +190,31 @@
                 '大T': 1.2*0.21*0.3+0.14*0.14*0.3, '小T': 0.6*0.21*0.3+0.44*0.14*0.3
             }
         };
+        const CONNECTOR_COUNT = {
+            '25': {
+                '90直板': { p25:6, p32:0 }, '60直板': { p25:4, p32:0 },
+                '大角': { p25:8, p32:0 }, '小角': { p25:4, p32:0 },
+                '大T': { p25:10, p32:0 }, '小T': { p25:8, p32:0 }
+            },
+            '32': {
+                '90直板': { p25:0, p32:6 }, '60直板': { p25:0, p32:4 },
+                '大角': { p25:0, p32:8 }, '小角': { p25:0, p32:4 },
+                '大T': { p25:2, p32:8 }, '小T': { p25:4, p32:4 }
+            }
+        };
         const theoreticalKgPerM = (d) => 0.00617 * d * d;
         const defaultBeamConfig = { len:3, wid:0.24, hgt:0.5, mainDia:22, mainCount:3, secDia:18, secCount:2, stirrupDia:6, stirrupSpacing:200 };
+        const defaultWallConfig = { name:'墙段1', type:'32', dir:'hor', len:'3', count:1, corners:0, tWalls:0 };
+        const defaultColumnConfig = { name:'Z1', count:1, height:'', width:250, depth:250, mainDia:12, mainCount:4, stirrupDia:6, stirrupSpacing:200 };
 
         const defaultFloorData = {
-            1: { mode: 'all25', openings: [], beams: [], height: 3.6, wallCount: 6,
+            1: { mode: 'all25', openings: [], beams: [], walls: [], columns: [], height: 3.6, wallCount: 6,
                   extHor: '', extVer: '', extCorners: 0, extTWalls: 0, intHor: '', intVer: '', intCorners: 0, intTWalls: 0,
                   wallVertDia: 12, wallHorizDia: 10,
                   colCount: 6, colMainDia: 12, colMainCount: 4, colStirrupDia: 6, colStirrupSpacing: 200, colWidth: 250, colHeight: 250,
                   roofLengthExpr: '10', roofWidthExpr: '8', roofThick: 0.12, roofDeduct: false, roofBottomDia: 12, roofTopDia: 10, roofSpacing: 200,
                   insulAreaExpr: '0', insulUnitArea: 0.732, insulThick: 50, insulPrice: 330 },
-            2: { mode: 'mixed', openings: [], beams: [], height: 3.3, wallCount: 6,
+            2: { mode: 'mixed', openings: [], beams: [], walls: [], columns: [], height: 3.3, wallCount: 6,
                   extHor: '', extVer: '', extCorners: 5, extTWalls: 0, intHor: '', intVer: '', intCorners: 0, intTWalls: 4,
                   wallVertDia: 12, wallHorizDia: 10,
                   colCount: 5, colMainDia: 12, colMainCount: 4, colStirrupDia: 6, colStirrupSpacing: 200, colWidth: 250, colHeight: 250,
@@ -153,6 +230,7 @@
             hook: $('priceHook'), concrete: $('priceConcrete'),
             rebar: $('priceRebar')
         };
+        let latestResult = { materialRows: [], rebarRows: [], rebarPrintHtml: '' };
 
         function safeEval(e) {
             if (!e || typeof e !== 'string') return 0;
@@ -160,11 +238,77 @@
             if (/^[0-9+\-*/().]+$/.test(t)) { try { return eval(t); } catch { return 0; } }
             return parseFloat(e) || 0;
         }
+        function emptyParts() { return { p25:0, p32:0 }; }
+        function addParts(base, add, count=1) {
+            base.p25 += (add.p25||0) * count;
+            base.p32 += (add.p32||0) * count;
+            return base;
+        }
+        function calcConnectors(type, counts) {
+            const cfg = CONNECTOR_COUNT[type], parts = emptyParts();
+            addParts(parts, cfg['90直板'], counts.c90);
+            addParts(parts, cfg['60直板'], counts.c60);
+            addParts(parts, cfg['大角'], counts.big);
+            addParts(parts, cfg['小角'], counts.small);
+            addParts(parts, cfg['大T'], counts.bigT);
+            addParts(parts, cfg['小T'], counts.smallT);
+            return parts;
+        }
+        function splitWallRuns(totalRuns, extTL, intTL) {
+            const runs = Math.max(1, Number(totalRuns)||1);
+            if (extTL <= 0) return { ext:0, int:runs };
+            if (intTL <= 0) return { ext:runs, int:0 };
+            let ext = Math.round(runs * extTL / (extTL + intTL));
+            ext = Math.min(runs - 1, Math.max(1, ext));
+            return { ext, int:runs - ext };
+        }
+        function resolveOpeningWallType(mode, op, extTL, intTL) {
+            if (mode === 'all25' || extTL <= 0) return '25';
+            if (intTL <= 0) return '32';
+            if (op.wallType === '25' || op.wallType === '32') return op.wallType;
+            return 'auto';
+        }
+        function calcStraightBlocks(area, wallRuns, layers) {
+            if (area <= 0) return { c90:0, c60:0, area:0 };
+            const min60 = Math.ceil(Math.max(1, wallRuns) * layers / 2);
+            let c60 = min60, rem = area - c60 * AREA_60;
+            if (rem < 0) rem = 0;
+            let c90 = Math.floor(rem / AREA_90), rem2 = rem - c90 * AREA_90;
+            if (rem2 > 1e-6) c60 += Math.ceil(rem2 / AREA_60);
+            return { c90, c60, area:c90*AREA_90 + c60*AREA_60 };
+        }
+        function calcPlanWalls(d) {
+            const out = { extHor:0, extVer:0, intHor:0, intVer:0, extRuns:0, intRuns:0, totalRuns:0, extCorners:0, intCorners:0, extTWalls:0, intTWalls:0, has:false, hasNodes:false };
+            (d.walls||[]).forEach(w => {
+                const len = safeEval(w.len) * (parseInt(w.count)||0);
+                if (len <= 0) return;
+                const type = d.mode === 'all25' ? '25' : (w.type === '32' ? '32' : '25');
+                const dir = w.dir === 'ver' ? 'ver' : 'hor';
+                const count = parseInt(w.count)||1;
+                const corners = Math.max(0, parseInt(w.corners)||0);
+                const tWalls = Math.max(0, parseInt(w.tWalls)||0);
+                if (type === '32') {
+                    if (dir === 'ver') out.extVer += len; else out.extHor += len;
+                    out.extRuns += count;
+                    out.extCorners += corners;
+                    out.extTWalls += tWalls;
+                } else {
+                    if (dir === 'ver') out.intVer += len; else out.intHor += len;
+                    out.intRuns += count;
+                    out.intCorners += corners;
+                    out.intTWalls += tWalls;
+                }
+                out.totalRuns += count;
+                if (corners > 0 || tWalls > 0) out.hasNodes = true;
+                out.has = true;
+            });
+            return out;
+        }
         function clearInputs(ids) { ids.forEach(id => { const el = $(id); if (el) el.value = ''; }); }
         function clearMaterialPrice() { clearInputs(['priceModule25','priceModule32','priceInsert25','priceInsert32','priceHook','priceConcrete']); saveToLocal(); calculateAll(); }
         function clearFloor(f) {
             floorData[f] = JSON.parse(JSON.stringify(defaultFloorData[f]));
-            renderFloorPanel(f); renderOpenings(f); renderBeams(f); saveToLocal(); calculateAll();
+            renderFloorPanel(f); renderWalls(f); renderColumns(f); renderOpenings(f); renderBeams(f); saveToLocal(); calculateAll();
         }
         function collectFloorInputs(f) {
             const d = floorData[f];
@@ -202,20 +346,52 @@
             const rsp = c.querySelector(`#roofSpacing${f}`); if (rsp) d.roofSpacing = parseInt(rsp.value) || 200;
             const ia = c.querySelector(`#insulArea${f}`), iu = c.querySelector(`#insulUnit${f}`), it = c.querySelector(`#insulThick${f}`), ip = c.querySelector(`#insulPrice${f}`);
             if (ia) d.insulAreaExpr = ia.value; if (iu) d.insulUnitArea = parseFloat(iu.value) || ''; if (it) d.insulThick = parseFloat(it.value) || ''; if (ip) d.insulPrice = parseFloat(ip.value) || '';
-            d.beams = [];
             const bc = c.querySelector(`#beamContainer${f}`);
-            if (bc) bc.querySelectorAll('.beam-row').forEach(row => {
-                const len = parseFloat(row.querySelector('.beam-len').value) || 0;
-                const wid = parseFloat(row.querySelector('.beam-wid').value) || 0;
-                const hgt = parseFloat(row.querySelector('.beam-hgt').value) || 0;
-                const md = parseInt(row.querySelector('.beam-md').value) || 22;
-                const mc = parseInt(row.querySelector('.beam-mc').value) || 3;
-                const sd = parseInt(row.querySelector('.beam-sd').value) || 18;
-                const sc = parseInt(row.querySelector('.beam-sc').value) || 2;
-                const std = parseInt(row.querySelector('.beam-std').value) || 6;
-                const sts = parseInt(row.querySelector('.beam-sts').value) || 200;
-                if (len > 0 && wid > 0 && hgt > 0) d.beams.push({ len, wid, hgt, mainDia:md, mainCount:mc, secDia:sd, secCount:sc, stirrupDia:std, stirrupSpacing:sts });
-            });
+            if (bc) {
+                d.beams = [];
+                bc.querySelectorAll('.beam-row').forEach(row => {
+                    const len = parseFloat(row.querySelector('.beam-len').value) || 0;
+                    const wid = parseFloat(row.querySelector('.beam-wid').value) || 0;
+                    const hgt = parseFloat(row.querySelector('.beam-hgt').value) || 0;
+                    const md = parseInt(row.querySelector('.beam-md').value) || 22;
+                    const mc = parseInt(row.querySelector('.beam-mc').value) || 3;
+                    const sd = parseInt(row.querySelector('.beam-sd').value) || 18;
+                    const sc = parseInt(row.querySelector('.beam-sc').value) || 2;
+                    const std = parseInt(row.querySelector('.beam-std').value) || 6;
+                    const sts = parseInt(row.querySelector('.beam-sts').value) || 200;
+                    if (len > 0 && wid > 0 && hgt > 0) d.beams.push({ len, wid, hgt, mainDia:md, mainCount:mc, secDia:sd, secCount:sc, stirrupDia:std, stirrupSpacing:sts });
+                });
+            }
+            const wcBox = c.querySelector(`#wallContainer${f}`);
+            if (wcBox) {
+                d.walls = [];
+                wcBox.querySelectorAll('.wall-row').forEach((row, idx) => {
+                    const name = row.querySelector('.wall-name').value || `墙段${idx+1}`;
+                    const type = row.querySelector('.wall-type').value;
+                    const dir = row.querySelector('.wall-dir').value;
+                    const len = row.querySelector('.wall-len').value;
+                    const count = parseInt(row.querySelector('.wall-count').value) || 0;
+                    const corners = parseInt(row.querySelector('.wall-corners').value) || 0;
+                    const tWalls = parseInt(row.querySelector('.wall-twalls').value) || 0;
+                    if (safeEval(len) > 0 && count > 0) d.walls.push({ name, type, dir, len, count, corners, tWalls });
+                });
+            }
+            const colBox = c.querySelector(`#columnContainer${f}`);
+            if (colBox) {
+                d.columns = [];
+                colBox.querySelectorAll('.column-row').forEach((row, idx) => {
+                    const name = row.querySelector('.column-name').value || `Z${idx+1}`;
+                    const count = parseInt(row.querySelector('.column-count').value) || 0;
+                    const height = row.querySelector('.column-height').value;
+                    const width = parseInt(row.querySelector('.column-width').value) || 250;
+                    const depth = parseInt(row.querySelector('.column-depth').value) || 250;
+                    const mainDia = parseInt(row.querySelector('.column-main-dia').value) || 12;
+                    const mainCount = parseInt(row.querySelector('.column-main-count').value) || 4;
+                    const stirrupDia = parseInt(row.querySelector('.column-stirrup-dia').value) || 6;
+                    const stirrupSpacing = parseInt(row.querySelector('.column-stirrup-spacing').value) || 200;
+                    if (count > 0) d.columns.push({ name, count, height, width, depth, mainDia, mainCount, stirrupDia, stirrupSpacing });
+                });
+            }
         }
 
         function renderBeams(f) {
@@ -242,6 +418,194 @@
 
         function addBeam(f) { if (!floorData[f].beams) floorData[f].beams = []; floorData[f].beams.push({ ...defaultBeamConfig }); renderBeams(f); saveToLocal(); calculateAll(); }
 
+        function parseBeamImportLine(line, idx) {
+            const text = (line||'').trim();
+            if (!text || text.startsWith('#')) return null;
+            const parts = text.split(/[,，\t ]+/).filter(Boolean);
+            if (parts.length < 4) return null;
+            const len = parseFloat(parts[1]);
+            const wid = parseFloat(parts[2]);
+            const hgt = parseFloat(parts[3]);
+            if (!(len > 0 && wid > 0 && hgt > 0)) return null;
+            return {
+                name:parts[0] || `梁${idx+1}`,
+                len, wid, hgt,
+                mainDia:parseInt(parts[4]) || 22,
+                mainCount:parseInt(parts[5]) || 3,
+                secDia:parseInt(parts[6]) || 18,
+                secCount:parseInt(parts[7]) || 2,
+                stirrupDia:parseInt(parts[8]) || 6,
+                stirrupSpacing:parseInt(parts[9]) || 200
+            };
+        }
+
+        function importBeams(f) {
+            const area = $(`beamImport${f}`);
+            if (!area) return;
+            const imported = [];
+            area.value.split(/\r?\n/).forEach((line, idx) => {
+                const row = parseBeamImportLine(line, idx);
+                if (row) imported.push(row);
+            });
+            if (!imported.length) return;
+            if (!floorData[f].beams) floorData[f].beams = [];
+            floorData[f].beams.push(...imported);
+            area.value = '';
+            renderBeams(f); saveToLocal(); calculateAll();
+        }
+
+        function clearBeams(f) {
+            floorData[f].beams = [];
+            renderBeams(f); saveToLocal(); calculateAll();
+        }
+
+        function renderColumns(f) {
+            const c = document.getElementById(`columnContainer${f}`);
+            if (!c) return; c.innerHTML = '';
+            if (!floorData[f].columns) floorData[f].columns = [];
+            floorData[f].columns.forEach((col, idx) => {
+                const row = document.createElement('div'); row.className = 'column-row';
+                row.innerHTML = `
+                    <input type="text" placeholder="名称" value="${col.name||`Z${idx+1}`}" class="column-name" style="flex:1">
+                    <input type="number" step="1" placeholder="数量" value="${col.count||1}" class="column-count" style="width:70px">
+                    <input type="text" placeholder="高度(m)" value="${col.height||''}" class="column-height" style="width:90px">
+                    <input type="number" step="1" placeholder="宽(mm)" value="${col.width||250}" class="column-width" style="width:86px">
+                    <input type="number" step="1" placeholder="厚(mm)" value="${col.depth||250}" class="column-depth" style="width:86px">
+                    <input type="number" step="1" placeholder="主径" value="${col.mainDia||12}" class="column-main-dia" style="width:70px">
+                    <input type="number" step="1" placeholder="主根" value="${col.mainCount||4}" class="column-main-count" style="width:70px">
+                    <input type="number" step="1" placeholder="箍径" value="${col.stirrupDia||6}" class="column-stirrup-dia" style="width:70px">
+                    <input type="number" step="10" placeholder="箍距" value="${col.stirrupSpacing||200}" class="column-stirrup-spacing" style="width:80px">
+                    <button class="btn-small">删除</button>`;
+                row.querySelector('.btn-small').addEventListener('click', () => { floorData[f].columns.splice(idx,1); renderColumns(f); saveToLocal(); calculateAll(); });
+                row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { collectFloorInputs(f); saveToLocal(); calculateAll(); }));
+                c.appendChild(row);
+            });
+        }
+
+        function addColumn(f) {
+            if (!floorData[f].columns) floorData[f].columns = [];
+            const next = floorData[f].columns.length + 1;
+            floorData[f].columns.push({ ...defaultColumnConfig, name:`Z${next}`, height:floorData[f].height || '' });
+            renderColumns(f); saveToLocal(); calculateAll();
+        }
+
+        function parseColumnImportLine(line, idx, floorHeight) {
+            const text = (line||'').trim();
+            if (!text || text.startsWith('#')) return null;
+            const parts = text.split(/[,，\t ]+/).filter(Boolean);
+            if (parts.length < 2) return null;
+            const count = parseInt(parts[1]) || 0;
+            if (count <= 0) return null;
+            return {
+                name:parts[0] || `Z${idx+1}`,
+                count,
+                height:parts[2] || floorHeight || '',
+                width:parseInt(parts[3]) || 250,
+                depth:parseInt(parts[4]) || 250,
+                mainDia:parseInt(parts[5]) || 12,
+                mainCount:parseInt(parts[6]) || 4,
+                stirrupDia:parseInt(parts[7]) || 6,
+                stirrupSpacing:parseInt(parts[8]) || 200
+            };
+        }
+
+        function importColumns(f) {
+            const area = $(`columnImport${f}`);
+            if (!area) return;
+            const imported = [];
+            area.value.split(/\r?\n/).forEach((line, idx) => {
+                const row = parseColumnImportLine(line, idx, floorData[f].height);
+                if (row) imported.push(row);
+            });
+            if (!imported.length) return;
+            if (!floorData[f].columns) floorData[f].columns = [];
+            floorData[f].columns.push(...imported);
+            area.value = '';
+            renderColumns(f); saveToLocal(); calculateAll();
+        }
+
+        function clearColumns(f) {
+            floorData[f].columns = [];
+            renderColumns(f); saveToLocal(); calculateAll();
+        }
+
+        function renderWalls(f) {
+            const c = document.getElementById(`wallContainer${f}`);
+            if (!c) return; c.innerHTML = '';
+            if (!floorData[f].walls) floorData[f].walls = [];
+            floorData[f].walls.forEach((w, idx) => {
+                const row = document.createElement('div'); row.className = 'wall-row';
+                const type = w.type || (floorData[f].mode === 'mixed' ? '32' : '25');
+                const dir = w.dir || 'hor';
+                row.innerHTML = `
+                    <input type="text" placeholder="墙名" value="${w.name||`墙段${idx+1}`}" class="wall-name" style="flex:1.2">
+                    <select class="wall-type" style="width:110px">
+                        <option value="32" ${type==='32'?'selected':''}>32外墙</option>
+                        <option value="25" ${type==='25'?'selected':''}>25内墙</option>
+                    </select>
+                    <select class="wall-dir" style="width:90px">
+                        <option value="hor" ${dir==='hor'?'selected':''}>横向</option>
+                        <option value="ver" ${dir==='ver'?'selected':''}>纵向</option>
+                    </select>
+                    <input type="text" placeholder="长度(m)" value="${w.len||''}" class="wall-len" style="flex:1">
+                    <input type="number" step="1" placeholder="数量" value="${w.count||1}" class="wall-count" style="width:70px">
+                    <input type="number" step="1" placeholder="拐角" value="${w.corners||0}" class="wall-corners" style="width:70px">
+                    <input type="number" step="1" placeholder="T型" value="${w.tWalls||0}" class="wall-twalls" style="width:70px">
+                    <button class="btn-small">删除</button>`;
+                row.querySelector('.btn-small').addEventListener('click', () => { floorData[f].walls.splice(idx,1); renderWalls(f); saveToLocal(); calculateAll(); });
+                row.querySelectorAll('input, select').forEach(inp => inp.addEventListener('input', () => { collectFloorInputs(f); saveToLocal(); calculateAll(); }));
+                row.querySelectorAll('select').forEach(sel => sel.addEventListener('change', () => { collectFloorInputs(f); saveToLocal(); calculateAll(); }));
+                c.appendChild(row);
+            });
+        }
+
+        function addWall(f) {
+            if (!floorData[f].walls) floorData[f].walls = [];
+            const next = floorData[f].walls.length + 1;
+            const type = floorData[f].mode === 'mixed' ? '32' : '25';
+            floorData[f].walls.push({ ...defaultWallConfig, name:`墙段${next}`, type });
+            renderWalls(f); saveToLocal(); calculateAll();
+        }
+
+        function parseWallImportLine(line, idx, mode) {
+            const text = (line||'').trim();
+            if (!text || text.startsWith('#')) return null;
+            const parts = text.split(/[,，\t ]+/).filter(Boolean);
+            if (parts.length < 4) return null;
+            const name = parts[0] || `墙段${idx+1}`;
+            const typeText = parts[1] || '';
+            const dirText = parts[2] || '';
+            const len = parts[3] || '';
+            const count = parseInt(parts[4]) || 1;
+            const corners = Math.max(0, parseInt(parts[5]) || 0);
+            const tWalls = Math.max(0, parseInt(parts[6]) || 0);
+            if (safeEval(len) <= 0 || count <= 0) return null;
+            const type = mode === 'all25' ? '25' : (/32|外/.test(typeText) ? '32' : '25');
+            const dir = /纵|竖|ver|v/i.test(dirText) ? 'ver' : 'hor';
+            return { name, type, dir, len, count, corners, tWalls };
+        }
+
+        function importWalls(f) {
+            const area = $(`wallImport${f}`);
+            if (!area) return;
+            const lines = area.value.split(/\r?\n/);
+            const imported = [];
+            lines.forEach((line, idx) => {
+                const row = parseWallImportLine(line, idx, floorData[f].mode);
+                if (row) imported.push(row);
+            });
+            if (!imported.length) return;
+            if (!floorData[f].walls) floorData[f].walls = [];
+            floorData[f].walls.push(...imported);
+            area.value = '';
+            renderWalls(f); saveToLocal(); calculateAll();
+        }
+
+        function clearWalls(f) {
+            floorData[f].walls = [];
+            renderWalls(f); saveToLocal(); calculateAll();
+        }
+
         function renderFloorPanel(f) {
             const c = document.getElementById(`floor${f}Panel`);
             const d = floorData[f], isMixed = d.mode === 'mixed';
@@ -249,9 +613,21 @@
                 <div class="grid-2"><div class="input-group"><label>墙体高度 (m)</label><input type="number" id="height${f}" step="0.1" value="${d.height}"></div><div class="input-group"><label>墙面数量</label><input type="number" id="wallCount${f}" value="${d.wallCount}" min="1"></div></div>`;
             if (!isMixed) html += `<div class="grid-2"><div class="input-group"><label>横墙总长 (m) 可算式</label><input type="text" id="hor${f}" value="${d.intHor}"></div><div class="input-group"><label>纵墙总长 (m) 可算式</label><input type="text" id="ver${f}" value="${d.intVer}"></div><div class="input-group"><label>拐角数量</label><input type="number" id="corners${f}" value="${d.intCorners}" min="0"></div><div class="input-group"><label>T型墙数量</label><input type="number" id="tWalls${f}" value="${d.intTWalls}" min="0"></div></div>`;
             else html += `<div style="font-weight:600;margin:12px 0 6px;">🧱 外墙 (32模块)</div><div class="grid-2"><div class="input-group"><label>外墙横长 (m)</label><input type="text" id="extHor${f}" value="${d.extHor}"></div><div class="input-group"><label>外墙纵长 (m)</label><input type="text" id="extVer${f}" value="${d.extVer}"></div><div class="input-group"><label>外墙拐角</label><input type="number" id="extCorners${f}" value="${d.extCorners}" min="0"></div><div class="input-group"><label>外墙T型墙</label><input type="number" id="extTWalls${f}" value="${d.extTWalls}" min="0"></div></div><div style="font-weight:600;margin:12px 0 6px;">🧱 内墙 (25模块)</div><div class="grid-2"><div class="input-group"><label>内墙横长 (m)</label><input type="text" id="intHor${f}" value="${d.intHor}"></div><div class="input-group"><label>内墙纵长 (m)</label><input type="text" id="intVer${f}" value="${d.intVer}"></div><div class="input-group"><label>内墙拐角</label><input type="number" id="intCorners${f}" value="${d.intCorners}" min="0"></div><div class="input-group"><label>内墙T型墙</label><input type="number" id="intTWalls${f}" value="${d.intTWalls}" min="0"></div></div>`;
-            html += `<div class="rebar-panel"><div style="font-weight:600;margin-bottom:8px;">🔩 墙体钢筋配置</div><div class="grid-2"><div class="input-group"><label>竖筋直径 (mm)</label><input type="number" id="wallVertDia${f}" value="${d.wallVertDia||12}" min="6" max="25"></div><div class="input-group"><label>横筋直径 (mm)</label><input type="number" id="wallHorizDia${f}" value="${d.wallHorizDia||10}" min="6" max="25"></div></div></div>`;
-            html += `<div class="column-panel"><div style="font-weight:600;margin-bottom:8px;">🏛️ 构造柱</div><div class="grid-3"><div class="input-group"><label>根数</label><input type="number" id="colCount${f}" value="${d.colCount||0}" min="0"></div><div class="input-group"><label>主筋直径(mm)</label><input type="number" id="colMainDia${f}" value="${d.colMainDia||12}" min="6" max="25"></div><div class="input-group"><label>每根主筋根数</label><input type="number" id="colMainCount${f}" value="${d.colMainCount||4}" min="4" max="10"></div></div><div class="grid-3"><div class="input-group"><label>箍筋直径(mm)</label><input type="number" id="colStirrupDia${f}" value="${d.colStirrupDia||6}" min="6" max="12"></div><div class="input-group"><label>箍筋间距(mm)</label><input type="number" id="colStirrupSpacing${f}" value="${d.colStirrupSpacing||200}" min="100" max="300"></div><div class="input-group"><label>截面宽×高(mm)</label><div style="display:flex;gap:4px;"><input type="number" id="colWidth${f}" value="${d.colWidth||250}" min="150" max="500" style="flex:1" placeholder="宽"><input type="number" id="colHeight${f}" value="${d.colHeight||250}" min="150" max="500" style="flex:1" placeholder="高"></div></div></div></div>`;
-            html += `<div class="beam-section"><div style="font-weight:600;margin-bottom:8px;">📏 本层梁</div>
+            html += `<div class="beam-section"><div style="font-weight:700;margin-bottom:8px;">A. 平面图墙段明细</div>
+                <div class="note-box">按平面图逐道录入墙段。填写后系统优先使用这里的墙长和墙面数量；不填写时继续使用上面的总长输入。</div>
+                <div class="input-group"><label>批量导入墙段（每行：墙名,墙体,方向,长度,数量,拐角数,T型数）</label><textarea id="wallImport${f}" placeholder="例：&#10;北外墙,32,横,10,1,2,0&#10;南外墙,32,横,10,1,2,0&#10;东外墙,32,纵,8,1,0,0&#10;客厅隔墙,25,横,4.2,1,0,1"></textarea></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"><button class="btn-small add" data-floor="${f}" data-type="wallImport">批量导入</button><button class="btn-small" data-floor="${f}" data-type="wallClear">清空墙段</button></div>
+                <div class="wall-header"><span style="flex:1.2">墙名</span><span style="width:110px">墙体</span><span style="width:90px">方向</span><span style="flex:1">长度(m)</span><span style="width:70px">数量</span><span style="width:70px">拐角</span><span style="width:70px">T型</span><span style="width:40px"></span></div>
+                <div id="wallContainer${f}"></div><button class="btn-small add" data-floor="${f}" data-type="wall">添加墙段</button></div>`;
+            html += `<div class="rebar-panel"><div style="font-weight:700;margin-bottom:8px;">B. 墙体钢筋配置</div><div class="grid-2"><div class="input-group"><label>竖筋直径 (mm)</label><input type="number" id="wallVertDia${f}" value="${d.wallVertDia||12}" min="6" max="25"></div><div class="input-group"><label>横筋直径 (mm)</label><input type="number" id="wallHorizDia${f}" value="${d.wallHorizDia||10}" min="6" max="25"></div></div></div>`;
+            html += `<div class="column-panel"><div style="font-weight:700;margin-bottom:8px;">C. 构造柱</div><div class="grid-3"><div class="input-group"><label>根数（无明细时使用）</label><input type="number" id="colCount${f}" value="${d.colCount||0}" min="0"></div><div class="input-group"><label>主筋直径(mm)</label><input type="number" id="colMainDia${f}" value="${d.colMainDia||12}" min="6" max="25"></div><div class="input-group"><label>每根主筋根数</label><input type="number" id="colMainCount${f}" value="${d.colMainCount||4}" min="4" max="10"></div></div><div class="grid-3"><div class="input-group"><label>箍筋直径(mm)</label><input type="number" id="colStirrupDia${f}" value="${d.colStirrupDia||6}" min="6" max="12"></div><div class="input-group"><label>箍筋间距(mm)</label><input type="number" id="colStirrupSpacing${f}" value="${d.colStirrupSpacing||200}" min="100" max="300"></div><div class="input-group"><label>截面宽×高(mm)</label><div style="display:flex;gap:4px;"><input type="number" id="colWidth${f}" value="${d.colWidth||250}" min="150" max="500" style="flex:1" placeholder="宽"><input type="number" id="colHeight${f}" value="${d.colHeight||250}" min="150" max="500" style="flex:1" placeholder="高"></div></div></div>
+                <div class="input-group"><label>批量导入构造柱（每行：名称,数量,高度,宽mm,厚mm,主筋径,主筋根数,箍筋径,箍距）</label><textarea id="columnImport${f}" placeholder="例：&#10;Z1,4,3.0,250,250,12,4,6,200&#10;Z2,2,3.0,300,300,14,4,6,200"></textarea></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"><button class="btn-small add" data-floor="${f}" data-type="columnImport">批量导入柱</button><button class="btn-small" data-floor="${f}" data-type="columnClear">清空柱明细</button></div>
+                <div class="column-header"><span style="flex:1">名称</span><span style="width:70px">数量</span><span style="width:90px">高度</span><span style="width:86px">宽</span><span style="width:86px">厚</span><span style="width:70px">主径</span><span style="width:70px">主根</span><span style="width:70px">箍径</span><span style="width:80px">箍距</span><span style="width:40px"></span></div>
+                <div id="columnContainer${f}"></div><button class="btn-small add" data-floor="${f}" data-type="column">添加柱组</button></div>`;
+            html += `<div class="beam-section"><div style="font-weight:700;margin-bottom:8px;">D. 本层梁</div>
+                <div class="input-group"><label>批量导入梁（每行：名称,长,宽,高,主筋径,主筋根数,面筋径,面筋根数,箍筋径,箍距）</label><textarea id="beamImport${f}" placeholder="例：&#10;L1,3.6,0.24,0.5,22,3,18,2,6,200&#10;L2,4.2,0.24,0.5,22,3,18,2,6,200"></textarea></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"><button class="btn-small add" data-floor="${f}" data-type="beamImport">批量导入梁</button><button class="btn-small" data-floor="${f}" data-type="beamClear">清空梁</button></div>
                 <div class="beam-header">
                     <span style="flex:1.2">长(m)</span><span style="flex:1">宽(m)</span><span style="flex:1">高(m)</span>
                     <span style="flex:0.8">主径(mm)</span><span style="flex:0.7">根数</span>
@@ -259,18 +635,34 @@
                     <span style="flex:0.7">箍径(mm)</span><span style="flex:0.8">箍距(mm)</span>
                     <span style="width:40px"></span>
                 </div>
-                <div id="beamContainer${f}"></div><button class="btn-small add" data-floor="${f}" data-type="beam">➕ 添加梁</button></div>`;
-            html += `<div class="roof-panel"><div style="font-weight:600;margin-bottom:8px;">🏗️ 本层顶板（现浇屋顶 · 双层双向）</div><div class="grid-2"><div class="input-group"><label>长度 (m) 可算式</label><input type="text" id="roofLength${f}" value="${d.roofLengthExpr||'10'}" placeholder="例:10"></div><div class="input-group"><label>宽度 (m) 可算式</label><input type="text" id="roofWidth${f}" value="${d.roofWidthExpr||'8'}" placeholder="例:8"></div></div><div class="grid-2"><div class="input-group"><label>厚度 (m)</label><input type="number" id="roofThick${f}" step="0.01" value="${d.roofThick}"></div><div class="checkbox-row"><input type="checkbox" id="roofDeduct${f}" ${d.roofDeduct?'checked':''}><label for="roofDeduct${f}">扣除本层梁投影</label></div></div><div class="grid-3" style="margin-top:8px;"><div class="input-group"><label>底筋直径(mm)</label><input type="number" id="roofBottomDia${f}" value="${d.roofBottomDia||12}" min="6" max="25"></div><div class="input-group"><label>面筋直径(mm)</label><input type="number" id="roofTopDia${f}" value="${d.roofTopDia||10}" min="6" max="25"></div><div class="input-group"><label>钢筋间距 (mm×mm)</label><input type="number" id="roofSpacing${f}" value="${d.roofSpacing||200}" min="50" max="300"></div></div></div>`;
-            html += `<div class="plate-panel"><div style="font-weight:600;margin-bottom:8px;">🔲 本层保温板</div><div class="grid-2"><div class="input-group"><label>总面积 (m²) 可算式</label><input type="text" id="insulArea${f}" value="${d.insulAreaExpr}" placeholder="0"></div><div class="input-group"><label>单块面积 (m²)</label><input type="number" id="insulUnit${f}" step="0.0001" value="${d.insulUnitArea}"></div><div class="input-group"><label>厚度 (mm)</label><input type="number" id="insulThick${f}" step="1" value="${d.insulThick}"></div><div class="input-group"><label>单价 (元/m³)</label><input type="number" id="insulPrice${f}" step="1" value="${d.insulPrice}"></div></div></div>`;
-            html += `<div class="section-title" style="margin-top:12px;">🚪 门窗洞口</div>
+                <div id="beamContainer${f}"></div><button class="btn-small add" data-floor="${f}" data-type="beam">添加梁</button></div>`;
+            html += `<div class="roof-panel"><div style="font-weight:700;margin-bottom:8px;">E. 本层顶板（现浇屋顶，双层双向）</div><div class="grid-2"><div class="input-group"><label>长度 (m) 可算式</label><input type="text" id="roofLength${f}" value="${d.roofLengthExpr||'10'}" placeholder="例:10"></div><div class="input-group"><label>宽度 (m) 可算式</label><input type="text" id="roofWidth${f}" value="${d.roofWidthExpr||'8'}" placeholder="例:8"></div></div><div class="grid-2"><div class="input-group"><label>厚度 (m)</label><input type="number" id="roofThick${f}" step="0.01" value="${d.roofThick}"></div><div class="checkbox-row"><input type="checkbox" id="roofDeduct${f}" ${d.roofDeduct?'checked':''}><label for="roofDeduct${f}">扣除本层梁投影</label></div></div><div class="grid-3" style="margin-top:8px;"><div class="input-group"><label>底筋直径(mm)</label><input type="number" id="roofBottomDia${f}" value="${d.roofBottomDia||12}" min="6" max="25"></div><div class="input-group"><label>面筋直径(mm)</label><input type="number" id="roofTopDia${f}" value="${d.roofTopDia||10}" min="6" max="25"></div><div class="input-group"><label>钢筋间距 (mm×mm)</label><input type="number" id="roofSpacing${f}" value="${d.roofSpacing||200}" min="50" max="300"></div></div></div>`;
+            html += `<div class="plate-panel"><div style="font-weight:700;margin-bottom:8px;">F. 本层保温板</div><div class="grid-2"><div class="input-group"><label>总面积 (m²) 可算式</label><input type="text" id="insulArea${f}" value="${d.insulAreaExpr}" placeholder="0"></div><div class="input-group"><label>单块面积 (m²)</label><input type="number" id="insulUnit${f}" step="0.0001" value="${d.insulUnitArea}"></div><div class="input-group"><label>厚度 (mm)</label><input type="number" id="insulThick${f}" step="1" value="${d.insulThick}"></div><div class="input-group"><label>单价 (元/m³)</label><input type="number" id="insulPrice${f}" step="1" value="${d.insulPrice}"></div></div></div>`;
+            html += `<div class="section-title" style="margin-top:12px;">G. 门窗洞口</div>
+                <div class="input-group"><label>批量导入洞口（旧格式：名称,宽,高,数量,墙体；图纸格式：编号,数量,墙体,带单位离地高度）</label><textarea id="openingImport${f}" placeholder="例：&#10;入户门,1.0,2.1,1,32&#10;C1820,3,32,900mm&#10;C2224,2,32,380mm&#10;M0921,3,25"></textarea></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"><button class="btn-small add" data-floor="${f}" data-type="openingImport">批量导入洞口</button><button class="btn-small" data-floor="${f}" data-type="openingClear">清空洞口</button></div>
                 <div class="opening-header">
-                    <span style="flex:1">宽(m)</span><span style="flex:1">高(m)</span><span style="width:70px">数量</span><span style="width:40px"></span>
+                    <span style="flex:1">名称</span><span style="flex:1">宽(m)</span><span style="flex:1">高(m)</span><span style="width:70px">数量</span><span style="width:120px">所属墙体</span><span style="width:86px">离地mm</span><span style="width:40px"></span>
                 </div>
-                <div id="openingsContainer${f}"></div><button class="btn-small add" data-floor="${f}" data-type="opening">➕ 添加洞口</button>`;
+                <div id="openingsContainer${f}"></div><button class="btn-small add" data-floor="${f}" data-type="opening">添加洞口</button>`;
             c.innerHTML = html;
-            c.querySelectorAll(`input[name="mode${f}"]`).forEach(radio => radio.addEventListener('change', () => { collectFloorInputs(f); floorData[f].mode = radio.value; renderFloorPanel(f); renderOpenings(f); renderBeams(f); saveToLocal(); calculateAll(); }));
+            c.querySelectorAll(`input[name="mode${f}"]`).forEach(radio => radio.addEventListener('change', () => { collectFloorInputs(f); floorData[f].mode = radio.value; renderFloorPanel(f); renderWalls(f); renderColumns(f); renderOpenings(f); renderBeams(f); saveToLocal(); calculateAll(); }));
             c.querySelectorAll('input, select').forEach(el => { if (el.type !== 'radio') el.addEventListener('input', () => { collectFloorInputs(f); saveToLocal(); calculateAll(); }); });
-            c.querySelectorAll('.btn-small.add').forEach(btn => btn.addEventListener('click', function() { if (this.dataset.type === 'beam') addBeam(parseInt(this.dataset.floor)); else addOpening(parseInt(this.dataset.floor)); }));
+            c.querySelectorAll('button[data-type]').forEach(btn => btn.addEventListener('click', function() {
+                const floor = parseInt(this.dataset.floor);
+                if (this.dataset.type === 'beam') addBeam(floor);
+                else if (this.dataset.type === 'beamImport') importBeams(floor);
+                else if (this.dataset.type === 'beamClear') clearBeams(floor);
+                else if (this.dataset.type === 'wall') addWall(floor);
+                else if (this.dataset.type === 'wallImport') importWalls(floor);
+                else if (this.dataset.type === 'wallClear') clearWalls(floor);
+                else if (this.dataset.type === 'column') addColumn(floor);
+                else if (this.dataset.type === 'columnImport') importColumns(floor);
+                else if (this.dataset.type === 'columnClear') clearColumns(floor);
+                else if (this.dataset.type === 'openingImport') importOpenings(floor);
+                else if (this.dataset.type === 'openingClear') clearOpenings(floor);
+                else addOpening(floor);
+            }));
         }
 
         function renderOpenings(f) {
@@ -278,25 +670,123 @@
             if (!c) return; c.innerHTML = '';
             floorData[f].openings.forEach((op, idx) => {
                 const row = document.createElement('div'); row.className = 'opening-row';
-                row.innerHTML = `<input type="number" step="0.01" placeholder="宽(m)" value="${op.width}" class="op-width" style="flex:1"><input type="number" step="0.01" placeholder="高(m)" value="${op.height}" class="op-height" style="flex:1"><input type="number" step="1" placeholder="数量" value="${op.count}" class="op-count" style="width:70px"><button class="btn-small">删除</button>`;
+                const wallType = op.wallType || 'auto';
+                row.innerHTML = `<input type="text" placeholder="名称/编号" value="${op.name||`洞口${idx+1}`}" class="op-name" style="flex:1"><input type="number" step="0.01" placeholder="宽(m)" value="${op.width}" class="op-width" style="flex:1"><input type="number" step="0.01" placeholder="高(m)" value="${op.height}" class="op-height" style="flex:1"><input type="number" step="1" placeholder="数量" value="${op.count}" class="op-count" style="width:70px"><select class="op-wall" style="width:120px"><option value="auto" ${wallType==='auto'?'selected':''}>按墙长估算</option><option value="25" ${wallType==='25'?'selected':''}>25墙</option><option value="32" ${wallType==='32'?'selected':''}>32墙</option></select><input type="number" step="1" placeholder="离地" value="${op.sill||''}" class="op-sill" style="width:86px"><button class="btn-small">删除</button>`;
                 row.querySelector('.btn-small').addEventListener('click', () => { floorData[f].openings.splice(idx,1); renderOpenings(f); saveToLocal(); calculateAll(); });
-                row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { op.width = parseFloat(row.querySelector('.op-width').value)||0; op.height = parseFloat(row.querySelector('.op-height').value)||0; op.count = parseInt(row.querySelector('.op-count').value)||0; saveToLocal(); calculateAll(); }));
+                const syncOpening = () => { op.name = row.querySelector('.op-name').value || `洞口${idx+1}`; op.width = parseFloat(row.querySelector('.op-width').value)||0; op.height = parseFloat(row.querySelector('.op-height').value)||0; op.count = parseInt(row.querySelector('.op-count').value)||0; op.wallType = row.querySelector('.op-wall').value; op.sill = parseFloat(row.querySelector('.op-sill').value)||''; saveToLocal(); calculateAll(); };
+                row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', syncOpening));
+                row.querySelector('.op-wall').addEventListener('change', syncOpening);
                 c.appendChild(row);
             });
         }
 
-        function addOpening(f) { floorData[f].openings.push({ width:1.0, height:1.8, count:1 }); renderOpenings(f); saveToLocal(); calculateAll(); }
+        function addOpening(f) { floorData[f].openings.push({ name:'洞口', width:1.0, height:1.8, count:1, wallType:'auto', sill:'' }); renderOpenings(f); saveToLocal(); calculateAll(); }
+
+        function parseOpeningCode(code) {
+            const m = String(code||'').trim().match(/^([CM])(\d{2})(\d{2})$/i);
+            if (!m) return null;
+            return {
+                name: m[0].toUpperCase(),
+                width: parseInt(m[2], 10) / 10,
+                height: parseInt(m[3], 10) / 10
+            };
+        }
+
+        function parseSillHeight(text, requireUnit=false) {
+            const raw = String(text||'').trim();
+            if (!raw) return '';
+            const hasUnit = /mm|毫米|m|米/i.test(raw);
+            if (requireUnit && !hasUnit) return '';
+            const n = parseFloat(raw);
+            if (!Number.isFinite(n) || n <= 0) return '';
+            return /^(m|米)$/i.test(raw.replace(/[0-9.\s]/g, '')) ? n * 1000 : n;
+        }
+
+        function parseOpeningImportLine(line, idx, mode) {
+            const text = (line||'').trim();
+            if (!text || text.startsWith('#')) return null;
+            const parts = text.split(/[,，\t ]+/).filter(Boolean);
+            if (parts.length < 2) return null;
+            const coded = parseOpeningCode(parts[0]);
+            let name, width, height, count, wallText, sill;
+            if (coded && parts.length <= 4) {
+                name = coded.name;
+                width = coded.width;
+                height = coded.height;
+                count = parseInt(parts[1]) || 1;
+                wallText = parts[2] || 'auto';
+                sill = parseSillHeight(parts[3], true);
+            } else {
+                if (parts.length < 4) return null;
+                name = parts[0] || `洞口${idx+1}`;
+                width = parseFloat(parts[1]);
+                height = parseFloat(parts[2]);
+                count = parseInt(parts[3]) || 1;
+                wallText = parts[4] || 'auto';
+                sill = parseSillHeight(parts[5], false);
+            }
+            if (!(width > 0 && height > 0 && count > 0)) return null;
+            let wallType = 'auto';
+            if (mode === 'all25') wallType = '25';
+            else if (/32|外/.test(wallText)) wallType = '32';
+            else if (/25|内/.test(wallText)) wallType = '25';
+            return { name, width, height, count, wallType, sill };
+        }
+
+        function importOpenings(f) {
+            const area = $(`openingImport${f}`);
+            if (!area) return;
+            const imported = [];
+            area.value.split(/\r?\n/).forEach((line, idx) => {
+                const row = parseOpeningImportLine(line, idx, floorData[f].mode);
+                if (row) imported.push(row);
+            });
+            if (!imported.length) return;
+            if (!floorData[f].openings) floorData[f].openings = [];
+            floorData[f].openings.push(...imported);
+            area.value = '';
+            renderOpenings(f); saveToLocal(); calculateAll();
+        }
+
+        function clearOpenings(f) {
+            floorData[f].openings = [];
+            renderOpenings(f); saveToLocal(); calculateAll();
+        }
 
         function calcFloorModules(f) {
             const d = floorData[f]; const H = Number(d.height); if (!H || H <= 0) return null;
-            const layers = Math.ceil(H / MODULE_HEIGHT); const openings = d.openings;
-            let twa = 0, tib = 0;
-            for (let op of openings) { if (op.width>0 && op.height>0 && op.count>0) { twa += op.width*op.height*op.count; tib += op.count*2*Math.ceil(op.height/MODULE_HEIGHT); } }
+            const layers = Math.ceil(H / MODULE_HEIGHT); const openings = d.openings || [];
             let extHor=0, extVer=0, intHor=0, intVer=0, extCorners=0, intCorners=0, extTW=0, intTW=0;
             if (d.mode === 'all25') { intHor = safeEval(d.intHor); intVer = safeEval(d.intVer); intCorners = Number(d.intCorners)||0; intTW = Number(d.intTWalls)||0; }
             else { extHor = safeEval(d.extHor); extVer = safeEval(d.extVer); extCorners = Number(d.extCorners)||0; extTW = Number(d.extTWalls)||0; intHor = safeEval(d.intHor); intVer = safeEval(d.intVer); intCorners = Number(d.intCorners)||0; intTW = Number(d.intTWalls)||0; }
-            const extTL = extHor+extVer, intTL = intHor+intVer, tl = extTL+intTL; if (tl <= 0) return null;
-            const St = tl*layers*MODULE_HEIGHT, Sn = Math.max(0, St-twa);
+            const plan = calcPlanWalls(d);
+            if (plan.has) {
+                extHor = plan.extHor; extVer = plan.extVer;
+                intHor = plan.intHor; intVer = plan.intVer;
+                if (plan.hasNodes) {
+                    extCorners = plan.extCorners; intCorners = plan.intCorners;
+                    extTW = plan.extTWalls; intTW = plan.intTWalls;
+                }
+            }
+            const extTL = Math.max(0, extHor+extVer), intTL = Math.max(0, intHor+intVer), tl = extTL+intTL; if (tl <= 0) return null;
+            const r32 = tl>0?extTL/tl:0;
+            const opening = { area25:0, area32:0, insert25:0, insert32:0 };
+            for (let op of openings) {
+                if (op.width>0 && op.height>0 && op.count>0) {
+                    const area = op.width*op.height*op.count;
+                    const inserts = op.count*2*Math.ceil(op.height/MODULE_HEIGHT);
+                    const wallType = resolveOpeningWallType(d.mode, op, extTL, intTL);
+                    if (wallType === '32') { opening.area32 += area; opening.insert32 += inserts; }
+                    else if (wallType === '25') { opening.area25 += area; opening.insert25 += inserts; }
+                    else {
+                        const i32 = Math.round(inserts*r32);
+                        opening.area32 += area*r32; opening.area25 += area*(1-r32);
+                        opening.insert32 += i32; opening.insert25 += inserts-i32;
+                    }
+                }
+            }
+            const net32 = Math.max(0, extTL*layers*MODULE_HEIGHT-opening.area32);
+            const net25 = Math.max(0, intTL*layers*MODULE_HEIGHT-opening.area25);
             const bl = Math.ceil(layers/2), sl = Math.floor(layers/2);
 
             // 32墙异形模块（外墙使用）
@@ -310,45 +800,107 @@
             else { bc25=intCorners*bl; sc25=intCorners*sl; bt25=intTW*bl; st25=intTW*sl; }
             const as25 = bc25*MODULE_AREA['25'].大角+sc25*MODULE_AREA['25'].小角+bt25*MODULE_AREA['25'].大T+st25*MODULE_AREA['25'].小T;
 
-            const Ssp = as32+as25; let Sst = Math.max(0, Sn-Ssp);
-            const wc = Number(d.wallCount)||1; const M = Math.ceil(wc*layers/2);
-            let c60 = M, rem = Sst-M*AREA_60; if (rem<0) rem=0;
-            let c90 = Math.floor(rem/AREA_90), rem2 = rem-c90*AREA_90;
-            if (rem2>1e-6) c60 += Math.ceil(rem2/AREA_60);
-            const aStr = c90*AREA_90+c60*AREA_60;
-            const r32 = tl>0?extTL/tl:0;
-            const aS32 = aStr*r32, aS25 = aStr-aS32;
-            const a32 = as32+aS32, a25 = as25+aS25;
-            const c90_32 = Math.round(c90*r32), c90_25 = c90-c90_32;
-            const c60_32 = Math.round(c60*r32), c60_25 = c60-c60_32;
-            const i32 = Math.round(tib*r32), i25 = tib-i32;
+            const runs = plan.has ? { ext:plan.extRuns, int:plan.intRuns } : splitWallRuns(d.wallCount, extTL, intTL);
+            const straight32 = calcStraightBlocks(Math.max(0, net32-as32), runs.ext, layers);
+            const straight25 = calcStraightBlocks(Math.max(0, net25-as25), runs.int, layers);
+            const a32 = as32+straight32.area, a25 = as25+straight25.area;
+            const c90_32 = straight32.c90, c90_25 = straight25.c90;
+            const c60_32 = straight32.c60, c60_25 = straight25.c60;
+            const moduleParts = emptyParts();
+            addParts(moduleParts, calcConnectors('25', { c90:c90_25, c60:c60_25, big:bc25, small:sc25, bigT:bt25, smallT:st25 }));
+            addParts(moduleParts, calcConnectors('32', { c90:c90_32, c60:c60_32, big:bc32, small:sc32, bigT:bt32, smallT:st32 }));
+            const totalParts = { p25:moduleParts.p25+opening.insert25, p32:moduleParts.p32+opening.insert32 };
             const tC = extCorners+intCorners, tTW = extTW+intTW;
             const cH = tC*6, tH = tTW*9, wH = Math.ceil(tl*layers/3);
-            return { layers, totalLength:tl, S_net:Sn, count90:c90, count60:c60, count90_25:c90_25, count90_32:c90_32, count60_25:c60_25, count60_32:c60_32, bigCorner32:bc32, smallCorner32:sc32, bigT32:bt32, smallT32:st32, bigCorner25:bc25, smallCorner25:sc25, bigT25:bt25, smallT25:st25, insert32:i32, insert25:i25, totalHooks:cH+tH+wH, area32:a32, area25:a25 };
+            return { layers, totalLength:tl, S_net:net25+net32, count90:c90_25+c90_32, count60:c60_25+c60_32, count90_25:c90_25, count90_32:c90_32, count60_25:c60_25, count60_32:c60_32, bigCorner32:bc32, smallCorner32:sc32, bigT32:bt32, smallT32:st32, bigCorner25:bc25, smallCorner25:sc25, bigT25:bt25, smallT25:st25, insert32:totalParts.p32, insert25:totalParts.p25, modulePart25:moduleParts.p25, modulePart32:moduleParts.p32, openingInsert25:opening.insert25, openingInsert32:opening.insert32, totalHooks:cH+tH+wH, area32:a32, area25:a25 };
         }
 
         function calcFloorRebar(f, mod) {
             if (!mod) return { lenHoriz:0, lenVert:0, horizDia:10, vertDia:12 };
             const d = floorData[f], ops = d.openings;
-            let tww = 0; for (let op of ops) tww += (op.width||0)*(op.count||0);
             const H = Number(d.height), vd = d.wallVertDia||12, hd = d.wallHorizDia||10;
-            const hLen = mod.layers*(mod.totalLength-tww);
+            const layerLens = [];
+            for (let i = 0; i < mod.layers; i++) {
+                const layerBottom = i * MODULE_HEIGHT;
+                const layerTop = Math.min(H, (i + 1) * MODULE_HEIGHT);
+                let deduct = 0;
+                for (let op of ops) {
+                    const width = (op.width||0) * (op.count||0);
+                    if (!(width > 0 && op.height > 0)) continue;
+                    const rawSill = op.sill;
+                    const sill = Number(rawSill);
+                    const hasSill = rawSill !== '' && rawSill !== null && rawSill !== undefined && Number.isFinite(sill) && sill >= 0;
+                    const isDoor = /^M/i.test(op.name||'') || /门/.test(op.name||'');
+                    if (!hasSill && !isDoor) {
+                        deduct += width;
+                        continue;
+                    }
+                    const bottom = hasSill ? sill / 1000 : 0;
+                    const top = bottom + (op.height||0);
+                    if (top > layerBottom && bottom < layerTop) deduct += width;
+                }
+                layerLens.push(Math.max(0, mod.totalLength-deduct));
+            }
+            const hLen = layerLens.reduce((sum, len) => sum + len, 0);
+            const groupMap = new Map();
+            layerLens.forEach(len => {
+                const key = len.toFixed(3);
+                const item = groupMap.get(key) || { baseLen:len, count:0 };
+                item.count++;
+                groupMap.set(key, item);
+            });
+            const horizGroups = Array.from(groupMap.values()).sort((a,b) => b.baseLen-a.baseLen);
+            const hBaseLen = mod.layers > 0 ? hLen / mod.layers : 0;
             const vBars = Math.ceil(mod.totalLength/0.3);
             const vLen = vBars*H;
             let topLen = 0; for (let op of ops) topLen += (op.count||0)*((op.width||0)+0.4);
-            return { lenHoriz:hLen, lenVert:vLen+topLen, horizDia:hd, vertDia:vd };
+            return { lenHoriz:hLen, lenVert:vLen+topLen, horizDia:hd, vertDia:vd, horizCount:mod.layers, horizBaseLen:hBaseLen, horizGroups, vertCount:vBars, vertBaseLen:H, openingTopLen:topLen };
+        }
+
+        function getColumnSpecs(d) {
+            const floorH = Number(d.height)||0;
+            const specs = [];
+            if (d.columns && d.columns.length) {
+                d.columns.forEach((c, idx) => {
+                    const count = parseInt(c.count)||0;
+                    const H = safeEval(String(c.height||'')) || floorH;
+                    if (count>0 && H>0) specs.push({
+                        name:c.name||`Z${idx+1}`, count, height:H,
+                        width:parseInt(c.width)||250, depth:parseInt(c.depth)||250,
+                        mainDia:parseInt(c.mainDia)||12, mainCount:parseInt(c.mainCount)||4,
+                        stirrupDia:parseInt(c.stirrupDia)||6, stirrupSpacing:parseInt(c.stirrupSpacing)||200
+                    });
+                });
+            }
+            if (!specs.length) {
+                const count = d.colCount||0;
+                if (count>0 && floorH>0) specs.push({
+                    name:'构造柱', count, height:floorH,
+                    width:d.colWidth||250, depth:d.colHeight||250,
+                    mainDia:d.colMainDia||12, mainCount:d.colMainCount||4,
+                    stirrupDia:d.colStirrupDia||6, stirrupSpacing:d.colStirrupSpacing||200
+                });
+            }
+            return specs;
         }
 
         function calcColumnRebar(d) {
-            const cnt = d.colCount||0, md = d.colMainDia||12, mc = d.colMainCount||4;
-            const sd = d.colStirrupDia||6, sp = d.colStirrupSpacing||200;
-            const cw = (d.colWidth||250)/1000, ch = (d.colHeight||250)/1000;
-            const H = Number(d.height)||0;
-            if (cnt<=0||H<=0) return { mainLen:0, stirrupLen:0, mainDia:md, stirrupDia:sd, stirrupCount:0 };
-            const mLen = cnt*mc*H;
-            const sCnt = Math.ceil(H/(sp/1000))+1;
-            const sLen = cnt*sCnt*(2*(cw+ch)+0.2);
-            return { mainLen:mLen, stirrupLen:sLen, mainDia:md, stirrupDia:sd, stirrupCount:cnt*sCnt };
+            const specs = getColumnSpecs(d);
+            const res = { mainLen:0, stirrupLen:0, mainDia:12, stirrupDia:6, stirrupCount:0, concreteVolume:0, items:[] };
+            specs.forEach((s, idx) => {
+                const cw = s.width/1000, ch = s.depth/1000;
+                const sCnt = Math.ceil(s.height/((s.stirrupSpacing||200)/1000))+1;
+                const mainLen = s.count*s.mainCount*s.height;
+                const stirrupLen = s.count*sCnt*(2*(cw+ch)+0.2);
+                const concreteVolume = s.count*cw*ch*s.height;
+                res.mainLen += mainLen;
+                res.stirrupLen += stirrupLen;
+                res.stirrupCount += s.count*sCnt;
+                res.concreteVolume += concreteVolume;
+                if (idx===0) { res.mainDia=s.mainDia; res.stirrupDia=s.stirrupDia; }
+                res.items.push({ ...s, stirrupCount:s.count*sCnt, stirrupPerColumn:sCnt, concreteVolume });
+            });
+            return res;
         }
 
         function calcRoofRebar(len, wid, bd, td, sp) {
@@ -356,9 +908,9 @@
             const sm = sp/1000;
             const barsLen = Math.ceil(wid/sm)+1;
             const barsWid = Math.ceil(len/sm)+1;
-            const lenBottom = (barsLen*len + barsWid*wid)*2;
-            const lenTop = (barsLen*len + barsWid*wid)*2;
-            return { lenBottom, lenTop, bottomDia:bd, topDia:td, spacing:sp };
+            const lenBottom = barsLen*len + barsWid*wid;
+            const lenTop = barsLen*len + barsWid*wid;
+            return { lenBottom, lenTop, bottomDia:bd, topDia:td, spacing:sp, barsLen, barsWid, len, wid };
         }
 
         function calcSingleBeamRebar(b) {
@@ -372,16 +924,272 @@
 
         function ton(d, len) { return len*theoreticalKgPerM(d)/1000; }
 
+        function getCutParams() {
+            const val = (id, fallback) => {
+                const el = $(id);
+                const n = el ? parseFloat(el.value) : fallback;
+                return Number.isFinite(n) ? n : fallback;
+            };
+            return {
+                stockLen: Math.max(0, val('cutStockLen', 9)),
+                wasteRate: Math.max(0, val('cutWasteRate', 3)),
+                wallHookD: Math.max(0, val('cutWallHookD', 12)),
+                mainHookD: Math.max(0, val('cutMainHookD', 12)),
+                roofHookD: Math.max(0, val('cutRoofHookD', 10)),
+                stirrupHookD: Math.max(0, val('cutStirrupHookD', 10))
+            };
+        }
+
+        function hookLen(dia, multiple, ends=2) {
+            return dia * multiple * ends / 1000;
+        }
+
+        function isMeterPurchase(dia) {
+            return dia <= 10;
+        }
+
+        function purchaseRuleText(dia, params) {
+            if (isMeterPurchase(dia)) return 'Φ10及以下按实际米数采购';
+            return `Φ12及以上按${params.stockLen.toFixed(1)}m/根采购`;
+        }
+
+        function purchaseText(dia, len, stockCount, params) {
+            if (isMeterPurchase(dia)) return `${len.toFixed(2)}m`;
+            return `${stockCount} 根 × ${params.stockLen.toFixed(1)}m`;
+        }
+
+        function addCutItem(rows, params, item) {
+            const count = Math.ceil(Number(item.count)||0);
+            const dia = Number(item.dia)||0;
+            const baseLen = Number(item.baseLen)||0;
+            if (count <= 0 || dia <= 0 || baseLen <= 0) return null;
+            const addLen = Math.max(0, Number(item.addLen)||0);
+            const unitLen = baseLen + addLen;
+            const totalLen = unitLen * count;
+            const withWasteLen = totalLen * (1 + params.wasteRate/100);
+            const weight = ton(dia, withWasteLen);
+            const stockCount = (!isMeterPurchase(dia) && params.stockLen > 0) ? Math.ceil(withWasteLen / params.stockLen) : 0;
+            const row = {
+                floor:item.floor, part:item.part, name:item.name, dia, count,
+                baseLen, addLen, unitLen, totalLen, withWasteLen, weight,
+                stockCount, purchaseMode:isMeterPurchase(dia)?'meter':'stock', note:item.note || ''
+            };
+            rows.push(row);
+            return row;
+        }
+
+        function addCutTon(rebarTons, row) {
+            if (!row) return;
+            rebarTons[row.dia] = (rebarTons[row.dia]||0) + row.weight;
+        }
+
+        function summarizeRebarByDia(rows, params) {
+            const sum = {};
+            rows.forEach(r => {
+                if (!sum[r.dia]) sum[r.dia] = { dia:r.dia, weight:0, len:0 };
+                sum[r.dia].weight += r.weight;
+                sum[r.dia].len += r.withWasteLen;
+            });
+            return Object.keys(sum).map(Number).sort((a,b)=>a-b).map(dia => {
+                const s = sum[dia];
+                s.stock = (!isMeterPurchase(dia) && params.stockLen > 0) ? Math.ceil(s.len / params.stockLen) : 0;
+                s.purchaseLen = isMeterPurchase(dia) ? s.len : (params.stockLen > 0 ? s.stock * params.stockLen : s.len);
+                s.purchaseWeight = ton(dia, s.purchaseLen);
+                return s;
+            });
+        }
+
+        function buildCutListHtml(rows, params, pRebar) {
+            if (!rows.length) return '<div class="result-subtitle">🔩 钢筋下料单</div><div class="subnote">暂无可生成的钢筋下料数据</div>';
+            const summaries = summarizeRebarByDia(rows, params);
+            let totalWeight = 0, totalLen = 0, totalWasteLen = 0;
+            rows.forEach(r => {
+                totalWeight += r.weight; totalLen += r.totalLen; totalWasteLen += r.withWasteLen;
+            });
+            let totalPurchaseLen = 0, totalPurchaseWeight = 0;
+            summaries.forEach(s => {
+                totalPurchaseLen += s.purchaseLen;
+                totalPurchaseWeight += s.purchaseWeight;
+            });
+            let html = '<div class="result-subtitle">🔩 钢筋下料单（含弯头/锚固估算）</div>';
+            html += `<div class="subnote">Φ10及以下按米数购买，Φ12及以上按 ${params.stockLen.toFixed(1)}m/根估算；已计入 ${params.wasteRate.toFixed(1)}% 损耗。最终采购量看下方“按直径汇总”。</div>`;
+            html += '<div class="table-wrap"><table class="cut-table"><thead><tr><th>楼层</th><th>部位</th><th>名称</th><th>规格</th><th>根数</th><th>净长/根</th><th>弯头/锚固</th><th>下料/根</th><th>合计长度</th><th>含损耗长度</th><th>重量</th><th>本行折算</th><th>备注</th></tr></thead><tbody>';
+            rows.forEach(r => {
+                const warn = (!isMeterPurchase(r.dia) && params.stockLen > 0 && r.unitLen > params.stockLen) ? '需接长' : r.note;
+                html += `<tr><td>${r.floor}</td><td>${r.part}</td><td>${r.name}</td><td>Φ${r.dia}</td><td>${r.count}</td><td>${r.baseLen.toFixed(2)}m</td><td>${r.addLen.toFixed(2)}m</td><td>${r.unitLen.toFixed(2)}m</td><td>${r.totalLen.toFixed(2)}m</td><td>${r.withWasteLen.toFixed(2)}m</td><td>${r.weight.toFixed(3)}t</td><td>${purchaseText(r.dia, r.withWasteLen, r.stockCount, params)}</td><td>${warn}</td></tr>`;
+            });
+            html += '</tbody></table></div>';
+            html += '<div class="result-subtitle">🔩 下料汇总（按直径）</div>';
+            summaries.forEach(s => {
+                const cost = s.purchaseWeight*pRebar;
+                html += `<div class="result-item"><span class="result-label">Φ${s.dia}</span><span class="result-value">计算${s.len.toFixed(2)}m · 采购 ${purchaseText(s.dia, s.len, s.stock, params)} · 采购重量${s.purchaseWeight.toFixed(3)}t · <span class="price-value">￥${cost.toFixed(2)}</span></span></div>`;
+            });
+            html += `<div class="result-item total"><span class="result-label">钢筋采购总长度/重量</span><span class="result-value">${totalPurchaseLen.toFixed(2)}m · ${totalPurchaseWeight.toFixed(3)}t</span></div>`;
+            html += `<div class="result-item"><span class="result-label">计算含损耗长度/理论重量</span><span class="result-value">${totalWasteLen.toFixed(2)}m · ${totalWeight.toFixed(3)}t</span></div>`;
+            return html;
+        }
+
+        function metricHtml(label, value, className='') {
+            return `<div class="metric ${className}"><span class="result-label">${label}</span><span class="result-value">${value}</span></div>`;
+        }
+
+        function blockHtml(title, items, className='') {
+            return `<div class="result-block ${className}"><div class="result-block-title">${title}</div><div class="metric-grid">${items.join('')}</div></div>`;
+        }
+
+        function summaryTileHtml(label, value, note='') {
+            return `<div class="summary-tile"><div class="tile-label">${label}</div><div class="tile-value">${value}</div>${note ? `<div class="tile-note">${note}</div>` : ''}</div>`;
+        }
+
+        function makeRebarCsvRows(rows, params) {
+            const detailRows = rows.map((r, idx) => {
+                const warn = (!isMeterPurchase(r.dia) && params.stockLen > 0 && r.unitLen > params.stockLen) ? '需接长' : r.note;
+                return {
+                    行类型: '下料明细',
+                    序号: idx + 1,
+                    楼层: r.floor,
+                    部位: r.part,
+                    名称: r.name,
+                    规格: `Φ${r.dia}`,
+                    直径mm: r.dia,
+                    根数: r.count,
+                    净长每根m: r.baseLen.toFixed(2),
+                    弯头锚固每根m: r.addLen.toFixed(2),
+                    下料长度每根m: r.unitLen.toFixed(2),
+                    合计长度m: r.totalLen.toFixed(2),
+                    含损耗长度m: r.withWasteLen.toFixed(2),
+                    理论重量t: r.weight.toFixed(3),
+                    采购方式: purchaseRuleText(r.dia, params),
+                    本行折算采购量: purchaseText(r.dia, r.withWasteLen, r.stockCount, params),
+                    备注: warn
+                };
+            });
+            const summaryRows = summarizeRebarByDia(rows, params).map(s => ({
+                行类型: '按直径汇总',
+                序号: '',
+                楼层: '汇总',
+                部位: '采购',
+                名称: `Φ${s.dia}采购汇总`,
+                规格: `Φ${s.dia}`,
+                直径mm: s.dia,
+                根数: '',
+                净长每根m: '',
+                弯头锚固每根m: '',
+                下料长度每根m: '',
+                合计长度m: '',
+                含损耗长度m: s.len.toFixed(2),
+                理论重量t: s.purchaseWeight.toFixed(3),
+                采购方式: purchaseRuleText(s.dia, params),
+                本行折算采购量: purchaseText(s.dia, s.len, s.stock, params),
+                备注: `计算长度${s.len.toFixed(2)}m，采购长度${s.purchaseLen.toFixed(2)}m`
+            }));
+            return [...detailRows, ...summaryRows];
+        }
+
+        function makeRebarSummaryCsvRows(rows, params, pRebar) {
+            return summarizeRebarByDia(rows, params).map(s => ({
+                分类: '钢筋采购汇总',
+                项目: `Φ${s.dia}`,
+                数量: isMeterPurchase(s.dia) ? s.len.toFixed(2) : s.stock,
+                单位: isMeterPurchase(s.dia) ? 'm' : '根',
+                采购规则: purchaseRuleText(s.dia, params),
+                单价: pRebar ? `${pRebar.toFixed(2)}元/吨` : '',
+                金额: (s.purchaseWeight * pRebar).toFixed(2),
+                备注: `计算长度${s.len.toFixed(2)}m，采购长度${s.purchaseLen.toFixed(2)}m，采购重量${s.purchaseWeight.toFixed(3)}t`
+            }));
+        }
+
+        function csvCell(value) {
+            const text = value === undefined || value === null ? '' : String(value);
+            return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+        }
+
+        function dateStamp() {
+            const d = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+        }
+
+        function downloadCsv(filename, rows, label) {
+            if (!rows || !rows.length) {
+                alert(`${label}暂无可导出的数据，请先输入房屋参数。`);
+                return;
+            }
+            const headers = Object.keys(rows[0]);
+            const csv = [
+                headers.map(csvCell).join(','),
+                ...rows.map(row => headers.map(h => csvCell(row[h])).join(','))
+            ].join('\r\n');
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportMaterialCsv() {
+            calculateAll();
+            downloadCsv(`模块房材料汇总_${dateStamp()}.csv`, latestResult.materialRows, '材料汇总');
+        }
+
+        function exportRebarCsv() {
+            calculateAll();
+            downloadCsv(`钢筋下料单_${dateStamp()}.csv`, latestResult.rebarRows, '钢筋下料单');
+        }
+
+        function printRebarPdf() {
+            calculateAll();
+            if (!latestResult.rebarRows.length || !latestResult.rebarPrintHtml) {
+                alert('暂无可打印的钢筋下料单，请先输入房屋参数。');
+                return;
+            }
+            const win = window.open('', '_blank');
+            if (!win) {
+                alert('浏览器拦截了打印窗口，请允许弹出窗口后再试。');
+                return;
+            }
+            win.document.write(`<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>钢筋下料单</title>
+                <style>
+                    @page { size: A4 landscape; margin: 10mm; }
+                    * { box-sizing: border-box; font-family: system-ui, -apple-system, 'Microsoft YaHei', sans-serif; }
+                    body { color:#111827; margin:0; padding:14px; font-size:12px; }
+                    h1 { margin:0 0 6px; font-size:20px; }
+                    .print-meta { color:#64748b; margin-bottom:10px; }
+                    .result-subtitle { font-weight:700; margin:10px 0 5px; font-size:14px; }
+                    .subnote { color:#64748b; margin:4px 0 8px; }
+                    .table-wrap { overflow:visible; border:1px solid #cbd5e1; }
+                    .cut-table { width:100%; border-collapse:collapse; font-size:10px; }
+                    .cut-table th, .cut-table td { border-bottom:1px solid #e2e8f0; padding:4px 5px; text-align:right; }
+                    .cut-table th { background:#f1f5f9; }
+                    .cut-table td:first-child, .cut-table td:nth-child(2), .cut-table td:nth-child(3), .cut-table th:first-child, .cut-table th:nth-child(2), .cut-table th:nth-child(3) { text-align:left; }
+                    .result-item { display:flex; justify-content:space-between; gap:12px; border-bottom:1px dashed #e2e8f0; padding:5px 0; }
+                    .result-value { font-weight:700; }
+                    .price-value { font-weight:700; }
+                </style></head><body>
+                <h1>钢筋下料单</h1>
+                <div class="print-meta">生成时间：${new Date().toLocaleString()} · 打印时可选择“另存为 PDF”</div>
+                ${latestResult.rebarPrintHtml}
+                </body></html>`);
+            win.document.close();
+            win.focus();
+            setTimeout(() => win.print(), 300);
+        }
+
         function calculateAll() {
             for (let f of [1,2]) collectFloorInputs(f);
             const p25 = parseFloat(priceInputs.module25.value)||0, p32 = parseFloat(priceInputs.module32.value)||0;
             const pI25 = parseFloat(priceInputs.insert25.value)||0, pI32 = parseFloat(priceInputs.insert32.value)||0;
             const pH = parseFloat(priceInputs.hook.value)||0, pC = parseFloat(priceInputs.concrete.value)||0;
             const pRebar = parseFloat(priceInputs.rebar.value)||0;
+            const cutParams = getCutParams();
 
             const fr = { 1:{}, 2:{} };
-            let tA25=0, tA32=0, tI25=0, tI32=0, tH=0, tWC=0, tRC=0, tBC=0, tIC=0, tSC=0;
-            let rebarTons = {};
+            let tA25=0, tA32=0, tI25=0, tI32=0, tMI25=0, tMI32=0, tOI25=0, tOI32=0, tH=0, tWC=0, tRC=0, tBC=0, tCC=0, tIC=0, tSC=0;
+            let rebarTons = {}, rebarCutRows = [];
             let totalMod25 = { area:0, c90:0, c60:0, big:0, small:0, bT:0, sT:0, blk:0 };
             let totalMod32 = { area:0, c90:0, c60:0, big:0, small:0, bT:0, sT:0, blk:0 };
 
@@ -389,7 +1197,7 @@
                 const d = floorData[f];
                 const mod = calcFloorModules(f);
                 const beams = d.beams || [];
-                let bC=0, bP=0;
+                let bC=0, bP=0, colC=0;
                 let rLen = safeEval(d.roofLengthExpr), rWid = safeEval(d.roofWidthExpr);
                 let rC=0, rR={ lenBottom:0, lenTop:0, bottomDia:12, topDia:10, spacing:200 };
                 let iA = safeEval(d.insulAreaExpr), iV=0, iCost=0, iBlk=0;
@@ -408,7 +1216,7 @@
                         c90_25:mod.count90_25, c90_32:mod.count90_32, c60_25:mod.count60_25, c60_32:mod.count60_32,
                         b25:mod.bigCorner25, s25:mod.smallCorner25, bt25:mod.bigT25, st25:mod.smallT25,
                         b32:mod.bigCorner32, s32:mod.smallCorner32, bt32:mod.bigT32, st32:mod.smallT32,
-                        i25:mod.insert25, i32:mod.insert32, hooks:mod.totalHooks, wC:wC, wR:wR
+                        i25:mod.insert25, i32:mod.insert32, mp25:mod.modulePart25, mp32:mod.modulePart32, oi25:mod.openingInsert25, oi32:mod.openingInsert32, hooks:mod.totalHooks, wC:wC, wR:wR
                     };
                     totalMod25.area += mod.area25; totalMod25.c90 += mod.count90_25; totalMod25.c60 += mod.count60_25;
                     totalMod25.big += mod.bigCorner25; totalMod25.small += mod.smallCorner25;
@@ -417,21 +1225,20 @@
                     totalMod32.big += mod.bigCorner32; totalMod32.small += mod.smallCorner32;
                     totalMod32.bT += mod.bigT32; totalMod32.sT += mod.smallT32; totalMod32.blk += fr[f].blk32;
                 } else {
-                    fr[f] = { a25:0, a32:0, blk25:0, blk32:0, c90_25:0, c90_32:0, c60_25:0, c60_32:0, b25:0, s25:0, bt25:0, st25:0, b32:0, s32:0, bt32:0, st32:0, i25:0, i32:0, hooks:0, wC:0, wR:{ lenHoriz:0, lenVert:0, horizDia:10, vertDia:12 } };
+                    fr[f] = { a25:0, a32:0, blk25:0, blk32:0, c90_25:0, c90_32:0, c60_25:0, c60_32:0, b25:0, s25:0, bt25:0, st25:0, b32:0, s32:0, bt32:0, st32:0, i25:0, i32:0, mp25:0, mp32:0, oi25:0, oi32:0, hooks:0, wC:0, wR:{ lenHoriz:0, lenVert:0, horizDia:10, vertDia:12 } };
                 }
                 cR = calcColumnRebar(d);
+                colC = cR.concreteVolume || 0;
 
-                let beamStirrupCount=0;
+                let beamStirrupCount=0, beamIndex=0;
                 for (const b of beams) {
+                    beamIndex++;
                     if (b.len>0 && b.wid>0 && b.hgt>0) {
                         bC += b.len*b.wid*b.hgt; bP += b.len*b.wid;
                         const s = calcSingleBeamRebar(b);
-                        const mainTon = ton(s.mainDia, s.mainLen);
-                        rebarTons[s.mainDia] = (rebarTons[s.mainDia]||0) + mainTon;
-                        const secTon = ton(s.secDia, s.secLen);
-                        rebarTons[s.secDia] = (rebarTons[s.secDia]||0) + secTon;
-                        const stirrupTon = ton(s.stirrupDia, s.stirrupLen);
-                        rebarTons[s.stirrupDia] = (rebarTons[s.stirrupDia]||0) + stirrupTon;
+                        addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'梁', name:`梁${beamIndex}主筋`, dia:s.mainDia, count:b.mainCount||3, baseLen:b.len, addLen:hookLen(s.mainDia, cutParams.mainHookD), note:'两端弯头/锚固' }));
+                        addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'梁', name:`梁${beamIndex}面筋`, dia:s.secDia, count:b.secCount||2, baseLen:b.len, addLen:hookLen(s.secDia, cutParams.mainHookD), note:'两端弯头/锚固' }));
+                        addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'梁', name:`梁${beamIndex}箍筋`, dia:s.stirrupDia, count:s.stirrupCount, baseLen:2*((b.wid||0.24)+(b.hgt||0.5)), addLen:hookLen(s.stirrupDia, cutParams.stirrupHookD), note:'箍筋两端弯钩' }));
                         beamStirrupCount += s.stirrupCount;
                     }
                 }
@@ -444,116 +1251,192 @@
                 if (iA>0) { iV = iA*((d.insulThick||50)/1000); iCost = iV*(d.insulPrice||330); iBlk = (d.insulUnitArea>0)?Math.ceil(iA/d.insulUnitArea):0; }
 
                 const wr = fr[f].wR;
-                const wht = ton(wr.horizDia, wr.lenHoriz);
-                rebarTons[wr.horizDia] = (rebarTons[wr.horizDia]||0) + wht;
-                const wvt = ton(wr.vertDia, wr.lenVert);
-                rebarTons[wr.vertDia] = (rebarTons[wr.vertDia]||0) + wvt;
+                const horizGroups = (wr.horizGroups && wr.horizGroups.length) ? wr.horizGroups : [{ count:wr.horizCount||0, baseLen:wr.horizBaseLen||0 }];
+                horizGroups.forEach((g, idx) => {
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'墙体', name:horizGroups.length>1 ? `水平分布筋${idx+1}` : '水平分布筋', dia:wr.horizDia, count:g.count||0, baseLen:g.baseLen||0, addLen:hookLen(wr.horizDia, cutParams.wallHookD), note:'按洞口离地高度分层扣减估算' }));
+                });
+                addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'墙体', name:'竖向筋', dia:wr.vertDia, count:wr.vertCount||0, baseLen:wr.vertBaseLen||0, addLen:hookLen(wr.vertDia, cutParams.wallHookD), note:'上下端锚固估算' }));
+                (d.openings||[]).forEach((op, idx) => {
+                    if (op.width>0 && op.count>0) {
+                        addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'洞口', name:`洞口${idx+1}上部加强筋`, dia:wr.vertDia, count:op.count, baseLen:(op.width||0)+0.4, addLen:hookLen(wr.vertDia, cutParams.wallHookD), note:'含两侧各0.2m伸入' }));
+                    }
+                });
 
-                const cmt = ton(cR.mainDia, cR.mainLen);
-                rebarTons[cR.mainDia] = (rebarTons[cR.mainDia]||0) + cmt;
-                const cst = ton(cR.stirrupDia, cR.stirrupLen);
-                rebarTons[cR.stirrupDia] = (rebarTons[cR.stirrupDia]||0) + cst;
+                (cR.items||[]).forEach(col => {
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'构造柱', name:`${col.name}主筋`, dia:col.mainDia, count:col.count*col.mainCount, baseLen:col.height, addLen:hookLen(col.mainDia, cutParams.mainHookD), note:'上下端锚固估算' }));
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'构造柱', name:`${col.name}箍筋`, dia:col.stirrupDia, count:col.stirrupCount, baseLen:2*((col.width/1000)+(col.depth/1000)), addLen:hookLen(col.stirrupDia, cutParams.stirrupHookD), note:'箍筋两端弯钩' }));
+                });
 
-                const rbbt = ton(rR.bottomDia, rR.lenBottom);
-                rebarTons[rR.bottomDia] = (rebarTons[rR.bottomDia]||0) + rbbt;
-                const rbtt = ton(rR.topDia, rR.lenTop);
-                rebarTons[rR.topDia] = (rebarTons[rR.topDia]||0) + rbtt;
+                if (rR.len > 0 && rR.wid > 0) {
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'顶板', name:'底筋长向', dia:rR.bottomDia, count:rR.barsLen, baseLen:rR.len, addLen:hookLen(rR.bottomDia, cutParams.roofHookD), note:'双层双向底筋' }));
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'顶板', name:'底筋短向', dia:rR.bottomDia, count:rR.barsWid, baseLen:rR.wid, addLen:hookLen(rR.bottomDia, cutParams.roofHookD), note:'双层双向底筋' }));
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'顶板', name:'面筋长向', dia:rR.topDia, count:rR.barsLen, baseLen:rR.len, addLen:hookLen(rR.topDia, cutParams.roofHookD), note:'双层双向面筋' }));
+                    addCutTon(rebarTons, addCutItem(rebarCutRows, cutParams, { floor:`${f}层`, part:'顶板', name:'面筋短向', dia:rR.topDia, count:rR.barsWid, baseLen:rR.wid, addLen:hookLen(rR.topDia, cutParams.roofHookD), note:'双层双向面筋' }));
+                }
 
                 fr[f].mC25 = fr[f].a25*p25; fr[f].mC32 = fr[f].a32*p32;
-                fr[f].cV = wC+rC+bC; fr[f].cCost = fr[f].cV*pC;
+                fr[f].cV = wC+rC+bC+colC; fr[f].cCost = fr[f].cV*pC;
                 fr[f].rCostF = 0;
-                fr[f].bC=bC; fr[f].rC=rC; fr[f].iV=iV; fr[f].iCost=iCost; fr[f].iBlk=iBlk;
+                fr[f].bC=bC; fr[f].rC=rC; fr[f].colC=colC; fr[f].iV=iV; fr[f].iCost=iCost; fr[f].iBlk=iBlk;
                 fr[f].sC = beamStirrupCount + cR.stirrupCount;
                 fr[f].wr = wr; fr[f].cR = cR; fr[f].rR = rR;
 
-                tA25+=fr[f].a25; tA32+=fr[f].a32; tI25+=fr[f].i25; tI32+=fr[f].i32; tH+=fr[f].hooks;
-                tWC+=wC; tRC+=rC; tBC+=bC;
+                tA25+=fr[f].a25; tA32+=fr[f].a32; tI25+=fr[f].i25; tI32+=fr[f].i32; tMI25+=fr[f].mp25; tMI32+=fr[f].mp32; tOI25+=fr[f].oi25; tOI32+=fr[f].oi32; tH+=fr[f].hooks;
+                tWC+=wC; tRC+=rC; tBC+=bC; tCC+=colC;
                 tSC += beamStirrupCount + cR.stirrupCount;
                 tIC+=iCost;
             }
 
-            const tC = tWC+tRC+tBC, cCost = tC*pC;
+            const tC = tWC+tRC+tBC+tCC, cCost = tC*pC;
             const cM = tA25*p25+tA32*p32;
-            const cI = tI25*pI25+tI32*pI32;
+            const cI = tOI25*pI25+tOI32*pI32;
             const cH = tH*pH;
             const cMP = cM+cI+cH;
+            const rebarPurchaseSummaries = summarizeRebarByDia(rebarCutRows, cutParams);
             let totalRebarCostAll = 0;
-            for (let dia in rebarTons) { totalRebarCostAll += rebarTons[dia] * pRebar; }
+            rebarPurchaseSummaries.forEach(s => { totalRebarCostAll += s.purchaseWeight * pRebar; });
             const totalCost = cMP+cCost+tIC+totalRebarCostAll;
+            const materialRows = [
+                { 分类:'25模块', 项目:'25模块面积', 数量:totalMod25.area.toFixed(2), 单位:'m2', 采购规则:'按投影面积计价', 单价:p25 ? `${p25.toFixed(2)}元/m2` : '', 金额:(totalMod25.area*p25).toFixed(2), 备注:'' },
+                { 分类:'25模块', 项目:'90直板', 数量:totalMod25.c90, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'25模块', 项目:'60直板', 数量:totalMod25.c60, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'25模块', 项目:'大角', 数量:totalMod25.big, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'25模块', 项目:'小角', 数量:totalMod25.small, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'25模块', 项目:'大T', 数量:totalMod25.bT, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'25模块', 项目:'小T', 数量:totalMod25.sT, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'25模块', 项目:'总块数', 数量:totalMod25.blk, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'32模块面积', 数量:totalMod32.area.toFixed(2), 单位:'m2', 采购规则:'按投影面积计价', 单价:p32 ? `${p32.toFixed(2)}元/m2` : '', 金额:(totalMod32.area*p32).toFixed(2), 备注:'' },
+                { 分类:'32模块', 项目:'90直板', 数量:totalMod32.c90, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'60直板', 数量:totalMod32.c60, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'大角', 数量:totalMod32.big, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'小角', 数量:totalMod32.small, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'大T', 数量:totalMod32.bT, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'小T', 数量:totalMod32.sT, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'32模块', 项目:'总块数', 数量:totalMod32.blk, 单位:'块', 采购规则:'按块数备料', 单价:'', 金额:'', 备注:'' },
+                { 分类:'建房配件', 项目:'25洞口插板', 数量:tOI25, 单位:'块', 采购规则:'门窗洞口两侧插板', 单价:pI25 ? `${pI25.toFixed(2)}元/块` : '', 金额:(tOI25*pI25).toFixed(2), 备注:'' },
+                { 分类:'建房配件', 项目:'32洞口插板', 数量:tOI32, 单位:'块', 采购规则:'门窗洞口两侧插板', 单价:pI32 ? `${pI32.toFixed(2)}元/块` : '', 金额:(tOI32*pI32).toFixed(2), 备注:'' },
+                { 分类:'建房配件', 项目:'钢丝勾', 数量:tH, 单位:'个', 采购规则:'角部/T型/长直墙估算', 单价:pH ? `${pH.toFixed(2)}元/个` : '', 金额:(tH*pH).toFixed(2), 备注:'' },
+                { 分类:'混凝土', 项目:'墙体混凝土', 数量:tWC.toFixed(2), 单位:'m3', 采购规则:'按空腔体积估算', 单价:pC ? `${pC.toFixed(2)}元/m3` : '', 金额:(tWC*pC).toFixed(2), 备注:'' },
+                { 分类:'混凝土', 项目:'顶板混凝土', 数量:tRC.toFixed(2), 单位:'m3', 采购规则:'按板面积×厚度估算', 单价:pC ? `${pC.toFixed(2)}元/m3` : '', 金额:(tRC*pC).toFixed(2), 备注:'' },
+                { 分类:'混凝土', 项目:'梁混凝土', 数量:tBC.toFixed(2), 单位:'m3', 采购规则:'按梁长×宽×高估算', 单价:pC ? `${pC.toFixed(2)}元/m3` : '', 金额:(tBC*pC).toFixed(2), 备注:'' },
+                { 分类:'混凝土', 项目:'构造柱混凝土', 数量:tCC.toFixed(2), 单位:'m3', 采购规则:'按柱截面×高度估算', 单价:pC ? `${pC.toFixed(2)}元/m3` : '', 金额:(tCC*pC).toFixed(2), 备注:'' },
+                { 分类:'混凝土', 项目:'混凝土用量合计', 数量:tC.toFixed(2), 单位:'m3', 采购规则:'以上混凝土合计', 单价:pC ? `${pC.toFixed(2)}元/m3` : '', 金额:cCost.toFixed(2), 备注:'' },
+                { 分类:'保温板', 项目:'保温板总价', 数量:'', 单位:'', 采购规则:'按各楼层保温板参数估算', 单价:'', 金额:tIC.toFixed(2), 备注:'' },
+                ...makeRebarSummaryCsvRows(rebarCutRows, cutParams, pRebar),
+                { 分类:'费用合计', 项目:'模块及建房配件合计', 数量:'', 单位:'', 采购规则:'模块+洞口插板+钢丝勾', 单价:'', 金额:cMP.toFixed(2), 备注:'' },
+                { 分类:'费用合计', 项目:'钢筋总价', 数量:'', 单位:'', 采购规则:'由钢筋下料单汇总', 单价:pRebar ? `${pRebar.toFixed(2)}元/吨` : '', 金额:totalRebarCostAll.toFixed(2), 备注:'' },
+                { 分类:'费用合计', 项目:'合计总价', 数量:'', 单位:'', 采购规则:'模块+建房配件+混凝土+保温板+钢筋', 单价:'', 金额:totalCost.toFixed(2), 备注:'' }
+            ];
+            const rebarListHtml = buildCutListHtml(rebarCutRows, cutParams, pRebar);
+            latestResult = {
+                materialRows,
+                rebarRows: makeRebarCsvRows(rebarCutRows, cutParams),
+                rebarPrintHtml: rebarListHtml
+            };
 
-            let html = '';
+            let html = '<div class="result-summary-grid">';
+            html += summaryTileHtml('合计总价', `${totalCost.toFixed(2)} 元`, '模块、建房配件、混凝土、保温板、钢筋合计');
+            html += summaryTileHtml('混凝土合计', `${tC.toFixed(2)} m³`, `墙体${tWC.toFixed(2)} + 顶板${tRC.toFixed(2)} + 梁柱${(tBC+tCC).toFixed(2)}`);
+            html += summaryTileHtml('模块面积', `${(totalMod25.area+totalMod32.area).toFixed(2)} m²`, `25墙${totalMod25.area.toFixed(2)}，32墙${totalMod32.area.toFixed(2)}`);
+            html += summaryTileHtml('钢筋费用', `${totalRebarCostAll.toFixed(2)} 元`, '由最下面钢筋下料单汇总');
+            html += '</div>';
+
+            html += '<div class="result-section-title">各楼层用量</div>';
             for (let f of [1,2]) {
                 const r = fr[f];
-                html += `<div class="result-section-title">🏡 ${f}层用量</div>`;
-                html += `<div class="result-subtitle">🔵 25模块</div>`;
-                html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${r.a25.toFixed(2)} m²</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${r.c90_25} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${r.c60_25} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${r.b25} / ${r.s25}</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${r.bt25} / ${r.st25}</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${r.blk25} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　💰 25模块总价</span><span class="result-value price-value">${r.mC25.toFixed(2)} 元</span></div>`;
-                html += `<div class="result-subtitle">🔴 32模块</div>`;
-                html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${r.a32.toFixed(2)} m²</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${r.c90_32} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${r.c60_32} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${r.b32} / ${r.s32}</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${r.bt32} / ${r.st32}</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${r.blk32} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">　💰 32模块总价</span><span class="result-value price-value">${r.mC32.toFixed(2)} 元</span></div>`;
-                html += `<div class="result-item"><span class="result-label">插板 25/32</span><span class="result-value">${r.i25} / ${r.i32}</span></div>`;
-                html += `<div class="result-item"><span class="result-label">钢丝勾</span><span class="result-value">${r.hooks} 个</span></div>`;
-                html += `<div class="result-item"><span class="result-label">梁混凝土</span><span class="result-value">${r.bC.toFixed(2)} m³</span></div>`;
-                html += `<div class="result-item"><span class="result-label">顶板混凝土</span><span class="result-value">${r.rC.toFixed(2)} m³</span></div>`;
-                html += `<div class="result-item"><span class="result-label">🧪 混凝土用量总计</span><span class="result-value">${r.cV.toFixed(2)} m³</span></div>`;
-                html += `<div class="result-item"><span class="result-label">💰 混凝土总价</span><span class="result-value price-value">${r.cCost.toFixed(2)} 元</span></div>`;
-                html += `<div class="result-item"><span class="result-label">保温板体积</span><span class="result-value">${r.iV.toFixed(4)} m³</span></div>`;
-                html += `<div class="result-item"><span class="result-label">保温板块数</span><span class="result-value">${r.iBlk} 块</span></div>`;
-                html += `<div class="result-item"><span class="result-label">保温板价格</span><span class="result-value price-value">${r.iCost.toFixed(2)} 元</span></div>`;
-                html += `<div class="result-item"><span class="result-label">箍筋总根数</span><span class="result-value">${r.sC} 根</span></div>`;
+                html += `<div class="result-section-title">${f}层</div><div class="result-grid">`;
+                html += blockHtml('25墙模块', [
+                    metricHtml('面积', `${r.a25.toFixed(2)} m²`, 'important'),
+                    metricHtml('总块数', `${r.blk25} 块`, 'important'),
+                    metricHtml('90直板', `${r.c90_25} 块`),
+                    metricHtml('60直板', `${r.c60_25} 块`),
+                    metricHtml('大角 / 小角', `${r.b25} / ${r.s25}`),
+                    metricHtml('大T / 小T', `${r.bt25} / ${r.st25}`),
+                    metricHtml('模块金额', `<span class="price-value">${r.mC25.toFixed(2)} 元</span>`, 'total-line')
+                ]);
+                html += blockHtml('32墙模块', [
+                    metricHtml('面积', `${r.a32.toFixed(2)} m²`, 'important'),
+                    metricHtml('总块数', `${r.blk32} 块`, 'important'),
+                    metricHtml('90直板', `${r.c90_32} 块`),
+                    metricHtml('60直板', `${r.c60_32} 块`),
+                    metricHtml('大角 / 小角', `${r.b32} / ${r.s32}`),
+                    metricHtml('大T / 小T', `${r.bt32} / ${r.st32}`),
+                    metricHtml('模块金额', `<span class="price-value">${r.mC32.toFixed(2)} 元</span>`, 'total-line')
+                ]);
+                html += blockHtml('建房配件', [
+                    metricHtml('洞口插板 25 / 32', `${r.oi25} / ${r.oi32}`, 'important'),
+                    metricHtml('钢丝勾', `${r.hooks} 个`)
+                ]);
+                html += blockHtml('混凝土、保温板、箍筋', [
+                    metricHtml('梁混凝土', `${r.bC.toFixed(2)} m³`),
+                    metricHtml('构造柱混凝土', `${r.colC.toFixed(2)} m³`),
+                    metricHtml('顶板混凝土', `${r.rC.toFixed(2)} m³`),
+                    metricHtml('本层混凝土合计', `${r.cV.toFixed(2)} m³`, 'important'),
+                    metricHtml('混凝土金额', `<span class="price-value">${r.cCost.toFixed(2)} 元</span>`, 'total-line'),
+                    metricHtml('保温板体积', `${r.iV.toFixed(4)} m³`),
+                    metricHtml('保温板块数', `${r.iBlk} 块`),
+                    metricHtml('保温板金额', `<span class="price-value">${r.iCost.toFixed(2)} 元</span>`),
+                    metricHtml('箍筋总根数', `${r.sC} 根`)
+                ], 'wide');
+                html += '</div>';
             }
 
-            html += `<div class="result-section-title">📊 合计</div>`;
-            html += `<div class="result-subtitle">🔵 25模块</div>`;
-            html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${totalMod25.area.toFixed(2)} m²</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${totalMod25.c90} 块</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${totalMod25.c60} 块</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${totalMod25.big} / ${totalMod25.small}</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${totalMod25.bT} / ${totalMod25.sT}</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${totalMod25.blk} 块</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　💰 25模块总价</span><span class="result-value price-value">${(totalMod25.area*p25).toFixed(2)} 元</span></div>`;
-            html += `<div class="result-subtitle">🔴 32模块</div>`;
-            html += `<div class="result-item"><span class="result-label">　面积</span><span class="result-value">${totalMod32.area.toFixed(2)} m²</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　90直板</span><span class="result-value">${totalMod32.c90} 块</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　60直板</span><span class="result-value">${totalMod32.c60} 块</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　大角/小角</span><span class="result-value">${totalMod32.big} / ${totalMod32.small}</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　大T/小T</span><span class="result-value">${totalMod32.bT} / ${totalMod32.sT}</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　📦 总块数</span><span class="result-value">${totalMod32.blk} 块</span></div>`;
-            html += `<div class="result-item"><span class="result-label">　💰 32模块总价</span><span class="result-value price-value">${(totalMod32.area*p32).toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">插板总价</span><span class="result-value price-value">${cI.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">钢丝勾总价</span><span class="result-value price-value">${cH.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">模块及配件合计</span><span class="result-value price-value">${cMP.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">墙体混凝土</span><span class="result-value">${tWC.toFixed(2)} m³</span></div>`;
-            html += `<div class="result-item"><span class="result-label">顶板混凝土</span><span class="result-value">${tRC.toFixed(2)} m³</span></div>`;
-            html += `<div class="result-item"><span class="result-label">梁混凝土</span><span class="result-value">${tBC.toFixed(2)} m³</span></div>`;
-            html += `<div class="result-item"><span class="result-label">🧪 混凝土用量合计</span><span class="result-value">${tC.toFixed(2)} m³</span></div>`;
-            html += `<div class="result-item"><span class="result-label">混凝土总价</span><span class="result-value price-value">${cCost.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item"><span class="result-label">保温板总价</span><span class="result-value price-value">${tIC.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-subtitle">⚙️ 钢筋总价明细 (按直径汇总)</div>`;
-            const sortedDias = Object.keys(rebarTons).map(Number).sort((a,b)=>a-b);
-            sortedDias.forEach(dia => {
-                const t = rebarTons[dia]; const cost = t * pRebar;
-                html += `<div class="result-item"><span class="result-label">　Φ${dia} 合计</span><span class="result-value">${t.toFixed(3)} t · <span class="price-value">￥${cost.toFixed(2)}</span></span></div>`;
+            html += '<div class="result-section-title">材料与费用合计</div><div class="result-grid">';
+            html += blockHtml('25墙模块合计', [
+                metricHtml('面积', `${totalMod25.area.toFixed(2)} m²`, 'important'),
+                metricHtml('总块数', `${totalMod25.blk} 块`, 'important'),
+                metricHtml('90直板', `${totalMod25.c90} 块`),
+                metricHtml('60直板', `${totalMod25.c60} 块`),
+                metricHtml('大角 / 小角', `${totalMod25.big} / ${totalMod25.small}`),
+                metricHtml('大T / 小T', `${totalMod25.bT} / ${totalMod25.sT}`),
+                metricHtml('模块金额', `<span class="price-value">${(totalMod25.area*p25).toFixed(2)} 元</span>`, 'total-line')
+            ]);
+            html += blockHtml('32墙模块合计', [
+                metricHtml('面积', `${totalMod32.area.toFixed(2)} m²`, 'important'),
+                metricHtml('总块数', `${totalMod32.blk} 块`, 'important'),
+                metricHtml('90直板', `${totalMod32.c90} 块`),
+                metricHtml('60直板', `${totalMod32.c60} 块`),
+                metricHtml('大角 / 小角', `${totalMod32.big} / ${totalMod32.small}`),
+                metricHtml('大T / 小T', `${totalMod32.bT} / ${totalMod32.sT}`),
+                metricHtml('模块金额', `<span class="price-value">${(totalMod32.area*p32).toFixed(2)} 元</span>`, 'total-line')
+            ]);
+            html += blockHtml('建房配件合计', [
+                metricHtml('洞口插板 25 / 32', `${tOI25} / ${tOI32}`, 'important'),
+                metricHtml('洞口插板金额', `<span class="price-value">${cI.toFixed(2)} 元</span>`),
+                metricHtml('钢丝勾金额', `<span class="price-value">${cH.toFixed(2)} 元</span>`),
+                metricHtml('模块及建房配件合计', `<span class="price-value">${cMP.toFixed(2)} 元</span>`, 'total-line')
+            ]);
+            html += blockHtml('混凝土合计', [
+                metricHtml('墙体混凝土', `${tWC.toFixed(2)} m³`),
+                metricHtml('顶板混凝土', `${tRC.toFixed(2)} m³`),
+                metricHtml('梁混凝土', `${tBC.toFixed(2)} m³`),
+                metricHtml('构造柱混凝土', `${tCC.toFixed(2)} m³`),
+                metricHtml('混凝土总量', `${tC.toFixed(2)} m³`, 'important'),
+                metricHtml('混凝土金额', `<span class="price-value">${cCost.toFixed(2)} 元</span>`, 'total-line')
+            ]);
+            html += blockHtml('保温板与总价', [
+                metricHtml('保温板金额', `<span class="price-value">${tIC.toFixed(2)} 元</span>`),
+                metricHtml('钢筋金额', `<span class="price-value">${totalRebarCostAll.toFixed(2)} 元</span>`),
+                metricHtml('合计总价', `<span class="price-value">${totalCost.toFixed(2)} 元</span>`, 'total-line')
+            ], 'wide');
+
+            const rebarQuickItems = [];
+            rebarPurchaseSummaries.forEach(s => {
+                const cost = s.purchaseWeight * pRebar;
+                rebarQuickItems.push(metricHtml(`Φ${s.dia}`, `${purchaseText(s.dia, s.len, s.stock, cutParams)} · ${s.purchaseWeight.toFixed(3)} t · <span class="price-value">${cost.toFixed(2)} 元</span>`));
             });
-            html += `<div class="result-item"><span class="result-label">箍筋总根数</span><span class="result-value">${tSC} 根</span></div>`;
-            html += `<div class="result-item total"><span class="result-label">💰 钢筋总价</span><span class="result-value price-value">${totalRebarCostAll.toFixed(2)} 元</span></div>`;
-            html += `<div class="result-item total-heavy"><span class="result-label">🧾 合计总价</span><span class="result-value price-value">${totalCost.toFixed(2)} 元</span></div>`;
+            rebarQuickItems.push(metricHtml('箍筋总根数', `${tSC} 根`));
+            rebarQuickItems.push(metricHtml('钢筋总价', `<span class="price-value">${totalRebarCostAll.toFixed(2)} 元</span>`, 'total-line'));
+            html += blockHtml('钢筋费用快览', rebarQuickItems, 'wide');
+            html += '</div>';
+            html += `<div id="rebarPrintSection" class="rebar-print-section">${rebarListHtml}</div>`;
             $('resultContent').innerHTML = html;
         }
 
         function saveToLocal() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
                 prices: { module25:priceInputs.module25.value, module32:priceInputs.module32.value, insert25:priceInputs.insert25.value, insert32:priceInputs.insert32.value, hook:priceInputs.hook.value, concrete:priceInputs.concrete.value, rebar:priceInputs.rebar.value },
+                cut: { stockLen:$('cutStockLen').value, wasteRate:$('cutWasteRate').value, wallHookD:$('cutWallHookD').value, mainHookD:$('cutMainHookD').value, roofHookD:$('cutRoofHookD').value, stirrupHookD:$('cutStirrupHookD').value },
                 floors: floorData
             }));
         }
@@ -562,15 +1445,23 @@
             try {
                 const saved = JSON.parse(raw);
                 if (saved.prices) { for (let k in saved.prices) { if (priceInputs[k]) priceInputs[k].value = saved.prices[k]; } }
-                if (saved.floors) { for (let f of [1,2]) if (saved.floors[f]) floorData[f] = { ...floorData[f], ...saved.floors[f] }; }
+                if (saved.cut) {
+                    const ids = { stockLen:'cutStockLen', wasteRate:'cutWasteRate', wallHookD:'cutWallHookD', mainHookD:'cutMainHookD', roofHookD:'cutRoofHookD', stirrupHookD:'cutStirrupHookD' };
+                    for (let k in ids) { if ($(ids[k]) && saved.cut[k] !== undefined) $(ids[k]).value = saved.cut[k]; }
+                }
+                if (saved.floors) { for (let f of [1,2]) if (saved.floors[f]) floorData[f] = { ...floorData[f], ...saved.floors[f], walls:saved.floors[f].walls || [], columns:saved.floors[f].columns || [] }; }
             } catch (e) {}
         }
         function init() {
             loadFromLocal();
-            renderFloorPanel(1); renderFloorPanel(2); renderOpenings(1); renderOpenings(2); renderBeams(1); renderBeams(2);
+            renderFloorPanel(1); renderFloorPanel(2); renderWalls(1); renderWalls(2); renderColumns(1); renderColumns(2); renderOpenings(1); renderOpenings(2); renderBeams(1); renderBeams(2);
             $('clearMaterialPrice').addEventListener('click', clearMaterialPrice);
             $('clearFloor1').addEventListener('click', () => clearFloor(1));
             $('clearFloor2').addEventListener('click', () => clearFloor(2));
+            $('exportMaterialCsv').addEventListener('click', exportMaterialCsv);
+            $('exportRebarCsv').addEventListener('click', exportRebarCsv);
+            $('printRebarPdf').addEventListener('click', printRebarPdf);
+            $('printResults').addEventListener('click', () => window.print());
             document.querySelectorAll('.floor-tab').forEach(btn => btn.addEventListener('click', function() {
                 const f = this.dataset.floor;
                 document.querySelectorAll('.floor-tab').forEach(b => b.classList.remove('active'));
